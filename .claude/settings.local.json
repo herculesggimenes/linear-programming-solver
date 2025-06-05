@@ -1,0 +1,43 @@
+{
+  "permissions": {
+    "allow": [
+      "WebFetch(domain:openbase.com)",
+      "WebFetch(domain:react-chartjs.github.io)",
+      "WebFetch(domain:visx-demo.vercel.app)",
+      "WebFetch(domain:recharts.org)",
+      "WebFetch(domain:npmjs.com)",
+      "Bash(pnpm add:*)",
+      "Bash(pnpm install:*)",
+      "Bash(pnpm test:*)",
+      "Bash(npx jest:*)",
+      "Bash(ls:*)",
+      "Bash(npx vitest:*)",
+      "Bash(chmod:*)",
+      "Bash(./run-tests.sh:*)",
+      "Bash(npm install:*)",
+      "Bash(npm test)",
+      "Bash(grep:*)",
+      "Bash(npm run test:conversion:*)",
+      "Bash(rm:*)",
+      "Bash(find:*)",
+      "Bash(npm test:*)",
+      "Bash(rg:*)",
+      "Bash(npm run test:*)",
+      "Bash(/Users/hgimenes/.nvm/versions/node/v20.19.0/lib/node_modules/@anthropic-ai/claude-code/vendor/ripgrep/arm64-darwin/rg \"generatePhaseTransitionExplanation\" -A 15 -B 2)",
+      "Bash(/Users/hgimenes/.nvm/versions/node/v20.19.0/lib/node_modules/@anthropic-ai/claude-code/vendor/ripgrep/arm64-darwin/rg \"export function createPhaseOneTableau\" -A 50)",
+      "Bash(/Users/hgimenes/.nvm/versions/node/v20.19.0/lib/node_modules/@anthropic-ai/claude-code/vendor/ripgrep/arm64-darwin/rg \"Phase II\" -B 2 -A 2 /Users/hgimenes/Documents/Programming/personal-playground/linear-programming/linear-programming/src/components/SimplexVisualizer.tsx)",
+      "Bash(/Users/hgimenes/.nvm/versions/node/v20.19.0/lib/node_modules/@anthropic-ai/claude-code/vendor/ripgrep/arm64-darwin/rg \"standard_form.*Phase|Standard Form.*Phase\" -B 3 -A 3 /Users/hgimenes/Documents/Programming/personal-playground/linear-programming/linear-programming/src/components/SimplexVisualizer.tsx)",
+      "Bash(mv:*)",
+      "Bash(cat:*)",
+      "Bash(npx tsx:*)",
+      "Bash(npm run build:*)",
+      "Bash(/Users/hgimenes/.nvm/versions/node/v20.19.0/lib/node_modules/@anthropic-ai/claude-code/vendor/ripgrep/arm64-darwin/rg -n \"objective.*push|push.*objective\" src/lib/standard-form-conversion.ts)",
+      "Bash(/Users/hgimenes/.nvm/versions/node/v20.19.0/lib/node_modules/@anthropic-ai/claude-code/vendor/ripgrep/arm64-darwin/rg -B5 -A5 \"objectiveRow|phase.*I.*objective\" src/lib/phase-one-solver.ts)",
+      "Bash(/Users/hgimenes/.nvm/versions/node/v20.19.0/lib/node_modules/@anthropic-ai/claude-code/vendor/ripgrep/arm64-darwin/rg -B10 -A10 \"negate.*objective|multiply.*by.*-1\" src/lib/phase-one-solver.ts)",
+      "Bash(/Users/hgimenes/.nvm/versions/node/v20.19.0/lib/node_modules/@anthropic-ai/claude-code/vendor/ripgrep/arm64-darwin/rg -B3 -A3 \"export function generatePhaseOneOptimalExplanation\" src/lib/phase-one-solver.ts)",
+      "Bash(/Users/hgimenes/.nvm/versions/node/v20.19.0/lib/node_modules/@anthropic-ai/claude-code/vendor/ripgrep/arm64-darwin/rg -B5 -A20 \"<option\" src/app.tsx)",
+      "Bash(npm run lint)"
+    ],
+    "deny": []
+  }
+}
