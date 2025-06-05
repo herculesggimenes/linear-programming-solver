@@ -1,70 +1,142 @@
-# Interactive Simplex Method Learning Application
+# Aplicação Interativa de Aprendizado do Método Simplex
 
-An interactive, visual application for learning the simplex method and linear programming concepts.
+Uma aplicação visual e interativa para aprender o método simplex, programação linear e teoria da dualidade.
 
-## Features
+## Funcionalidades
 
-- **Interactive Simplex Tableau Visualization**: Step through the simplex method with tableau operations visually highlighted.
-- **D3.js-Powered Geometric Visualization**: See how the simplex method moves through the feasible region in 2D problems.
-- **Step-by-Step Learning**: Follow along with detailed explanations at each step of the algorithm.
-- **Example Problems**: Try different pre-loaded example problems to understand various cases.
-- **Modern UI with shadcn/ui**: Clean, responsive interface using Tailwind CSS and shadcn/ui components.
+- **Visualização Interativa do Tableau Simplex**: Acompanhe cada passo do método simplex com operações destacadas visualmente
+- **Visualização Geométrica com Visx**: Veja como o método simplex navega pela região viável em problemas 2D
+- **Modo de Dualidade**: Converta problemas primais para seus duais e explore a teoria da dualidade
+- **Aprendizado Passo a Passo**: Siga explicações detalhadas em cada etapa do algoritmo
+- **Problemas de Exemplo**: Experimente diferentes problemas pré-carregados para entender vários casos
+- **Entrada Personalizada**: Insira seus próprios problemas de programação linear com suporte para variáveis irrestritas
+- **Interface Moderna com shadcn/ui**: Interface limpa e responsiva usando Tailwind CSS e componentes shadcn/ui
+- **Totalmente em Português**: Interface e explicações completamente traduzidas para português brasileiro
 
-## Project Structure
+## Estrutura do Projeto
 
 ```
 linear-programming/
 ├── src/
 │   ├── components/
-│   │   ├── GeometricVisualizerD3.tsx   # D3.js visualization of feasible region
-│   │   ├── LearningContent.tsx         # Educational content and tutorials
-│   │   ├── SimplexVisualizer.tsx       # Main visualization component
-│   │   ├── StepController.tsx          # Navigation through simplex steps
-│   │   ├── TableauVisualizer.tsx       # Tableau display and highlights
-│   │   └── ui/                         # shadcn/ui components
+│   │   ├── BasisExplanation.tsx        # Explicação sobre base e variáveis básicas
+│   │   ├── CustomProblemInput.tsx      # Entrada personalizada de problemas
+│   │   ├── DualityNarrative.tsx        # Narrativa interativa sobre dualidade
+│   │   ├── DualityVisualizer.tsx       # Visualização da conversão primal-dual
+│   │   ├── GeometricVisualizerVisx.tsx # Visualização geométrica com Visx
+│   │   ├── LearningContent.tsx         # Conteúdo educacional e tutoriais
+│   │   ├── SimplexVisualizer.tsx       # Componente principal de visualização
+│   │   ├── StandardFormExplanation.tsx # Explicação da conversão para forma padrão
+│   │   ├── StepController.tsx          # Navegação pelos passos do simplex
+│   │   ├── StepExplanation.tsx         # Explicações detalhadas de cada passo
+│   │   ├── StructuredProblemForm.tsx   # Formulário estruturado para entrada
+│   │   ├── TableauVisualizer.tsx       # Visualização e destaque do tableau
+│   │   └── ui/                         # Componentes shadcn/ui
 │   ├── lib/
-│   │   └── simplex-solver.ts           # Core simplex algorithm implementation
-│   ├── app.tsx                         # Main application component
-│   └── main.tsx                        # Entry point
+│   │   ├── duality-converter.ts        # Conversão primal-dual
+│   │   ├── phase-one-solver.ts         # Implementação da Fase 1 do Simplex
+│   │   ├── phase-two-solver.ts         # Implementação da Fase 2 do Simplex
+│   │   ├── simplex-solver.ts           # Algoritmo simplex principal
+│   │   └── standard-form-conversion.ts # Conversão para forma padrão
+│   ├── app.tsx                         # Componente principal da aplicação
+│   └── main.tsx                        # Ponto de entrada
 ```
 
-## Technologies Used
+## Tecnologias Utilizadas
 
-- React with TypeScript
-- Tailwind CSS for styling
-- shadcn/ui for UI components
-- D3.js for interactive visualizations
+- React com TypeScript
+- Tailwind CSS para estilização
+- shadcn/ui para componentes de UI
+- Visx (anteriormente D3.js) para visualizações interativas
+- Vite para build e desenvolvimento
 
-## Learning Path
+## Caminho de Aprendizado
 
-The application is structured to guide users through the simplex method in these key stages:
+A aplicação está estruturada para guiar os usuários através do método simplex e dualidade em etapas-chave:
 
-1. **Understanding Linear Programming**: Learn about decision variables, objective functions, and constraints.
-2. **Simplex Method Basics**: Understand the tableau structure and basic feasible solutions.
-3. **Pivot Operations**: Learn how to select entering/leaving variables and perform pivots.
-4. **Geometric Interpretation**: Visualize how the simplex method navigates through vertices of the feasible region.
-5. **Special Cases**: Learn about multiple optimal solutions, unboundedness, and infeasibility.
+1. **Entendendo Programação Linear**: Aprenda sobre variáveis de decisão, funções objetivo e restrições
+2. **Básicos do Método Simplex**: Entenda a estrutura do tableau e soluções básicas viáveis
+3. **Operações de Pivô**: Aprenda a selecionar variáveis que entram/saem e realizar pivôs
+4. **Interpretação Geométrica**: Visualize como o método simplex navega pelos vértices da região viável
+5. **Casos Especiais**: Aprenda sobre múltiplas soluções ótimas, ilimitação e inviabilidade
+6. **Teoria da Dualidade**: Converta problemas primais para duais e entenda suas relações
 
-## Interactive Visualizations
+## Visualizações Interativas
 
-- **Tableau View**: Interactive table that highlights entering variables, leaving variables, and pivot elements.
-- **Geometric View**: D3.js visualization of the feasible region, constraints, and current solution point.
-- **Step-by-Step Controls**: Navigate through the algorithm's steps with play/pause controls and speed adjustment.
+### Modo Simplex
+- **Visualização do Tableau**: Tabela interativa que destaca variáveis que entram, variáveis que saem e elementos pivô
+- **Visualização Geométrica**: Visualização Visx da região viável, restrições e ponto de solução atual
+- **Controles Passo a Passo**: Navegue pelos passos do algoritmo com controles de avançar/retroceder
+- **Explicações Detalhadas**: Cada passo inclui explicações sobre o que está acontecendo e por quê
 
-## Example Problems
+### Modo Dualidade
+- **Conversão Primal-Dual**: Visualize a conversão do problema primal para seu dual
+- **Narrativa Interativa**: História personalizada baseada no tipo de problema selecionado
+- **Cálculos Detalhados**: Veja todos os passos da conversão com explicações
+- **Teoremas Visuais**: Visualizações dos teoremas da dualidade fraca, forte e folga complementar
 
-The application includes pre-configured examples to demonstrate different scenarios:
+## Problemas de Exemplo
 
-- **Example 1**: Basic maximization problem with two variables and two constraints.
-- **Example 2**: Alternative maximization problem with different constraint structures.
-- **Example 3**: Problem with different objective function coefficients.
-- **Unbounded Problem**: Demonstrates a case where the objective value can increase indefinitely.
+A aplicação inclui exemplos pré-configurados para demonstrar diferentes cenários:
 
-## Requirements and Installation
+### Problemas Simplex
+- **Exemplo 1-3**: Problemas básicos de maximização com duas variáveis
+- **Problema Ilimitado**: Demonstra um caso onde o valor objetivo pode crescer indefinidamente
+- **Variáveis Livres**: Problema com variáveis irrestritas (sem restrição de sinal)
+- **Conversão para Forma Padrão**: Exemplos mostrando diferentes tipos de conversão
+- **Minimização**: Problemas de minimização com diferentes estruturas de restrições
 
-To run the application:
+### Problemas de Dualidade
+- **Problema de Produção**: Maximização com recursos limitados
+- **Problema de Dieta**: Minimização com requisitos mínimos
+- **Exemplos com Variáveis Irrestritas**: Demonstra conversão dual com variáveis livres
 
-1. Clone the repository
-2. Install dependencies with `npm install` or `pnpm install`
-3. Run the development server with `npm run dev` or `pnpm dev`
-4. Open http://localhost:5173 to view the application
+## Entrada Personalizada
+
+A aplicação suporta entrada personalizada de problemas com as seguintes funcionalidades:
+
+### Formato Suportado
+```
+Maximizar (ou Minimizar)
+3x1 + 2x2
+
+Sujeito a
+2x1 + x2 <= 10
+x1 + 2x2 >= 8
+x1 + x2 = 5
+x1 >= 0, x2 irrestrito
+```
+
+### Características
+- **Tipos de Restrições**: Suporta ≤, ≥, e = 
+- **Variáveis Irrestritas**: Use "irrestrito", "livre" ou "unrestricted"
+- **Conversão Automática**: Converte automaticamente para forma padrão quando necessário
+- **Validação**: Verifica erros de sintaxe e fornece feedback útil
+
+## Requisitos e Instalação
+
+Para executar a aplicação:
+
+1. Clone o repositório
+2. Instale as dependências com `npm install` ou `pnpm install`
+3. Execute o servidor de desenvolvimento com `npm run dev` ou `pnpm dev`
+4. Abra http://localhost:5173 para visualizar a aplicação
+
+## Scripts Disponíveis
+
+- `npm run dev` - Inicia o servidor de desenvolvimento
+- `npm run build` - Compila a aplicação para produção
+- `npm run lint` - Executa o linter para verificar problemas de código
+- `npm test` - Executa os testes (usando Vitest)
+
+## Autor
+
+Criado por [Hercules Gimenes](https://www.linkedin.com/in/herculesgg/)
+
+## Contribuições
+
+Contribuições são bem-vindas! Por favor, sinta-se à vontade para submeter um Pull Request.
+
+## Licença
+
+Este projeto está sob a licença MIT.
