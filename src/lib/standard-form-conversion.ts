@@ -289,7 +289,7 @@ export function convertToStandardFormWithExplanation(lp: LinearProgram): {
       
     } else {
       // Equality constraint
-      explanation += 'This is already an equality constraint, so no slack or surplus variable is needed.\n\n';
+      explanation += 'Esta já é uma restrição de igualdade, então nenhuma variável de folga ou excesso é necessária.\n\n';
       
       // For equality constraints, ensure RHS is non-negative
       if (standardLP.constraints[index].rhs < 0) {
@@ -298,7 +298,7 @@ export function convertToStandardFormWithExplanation(lp: LinearProgram): {
         standardLP.constraints[index].coefficients = standardLP.constraints[index].coefficients.map(coeff => -coeff);
         standardLP.constraints[index].rhs = -standardLP.constraints[index].rhs;
         
-        explanation += `After multiplying by -1:\n`;
+        explanation += `Após multiplicar por -1:\n`;
         explanation += `${formatConstraint({ 
           coefficients: standardLP.constraints[index].coefficients, 
           rhs: standardLP.constraints[index].rhs, 
