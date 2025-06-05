@@ -250,12 +250,14 @@ function App() {
   };
 
   return (
-    <div className="max-w-6xl mx-auto p-3 sm:p-5 font-sans">
+    <main className="max-w-6xl mx-auto p-3 sm:p-5 font-sans">
       <Analytics />
       <header className="text-center mb-8">
-        <h1 className="text-3xl font-bold text-blue-600 mb-3">Visualizador Interativo do Método Simplex</h1>
+        <h1 className="text-3xl font-bold text-blue-600 mb-3">Simplex Solver - Aprenda Simplex Online</h1>
         <p className="text-gray-600 max-w-2xl mx-auto leading-relaxed">
-          Aprenda conceitos de programação linear através da visualização passo a passo do algoritmo simplex.
+          <strong>Simplex solver gratuito</strong> para <strong>learn simplex</strong> (aprender simplex) de forma interativa. 
+          Use nosso <strong>solver simplex</strong> para resolver problemas de <strong>programação linear</strong> com visualização passo a passo. 
+          Analise <strong>dualidade</strong>, converta para <strong>forma padrão</strong> e entenda a <strong>geometria</strong> das soluções.
         </p>
       </header>
 
@@ -266,7 +268,8 @@ function App() {
         </TabsList>
         
         <TabsContent value="examples" className="mt-4">
-          <h2 className="text-2xl font-semibold text-gray-800 text-center mb-4">Selecione um Problema de Exemplo</h2>
+          <section>
+            <h2 className="text-2xl font-semibold text-gray-800 text-center mb-4">Selecione um Problema de Exemplo</h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-5">
             {Object.keys(EXAMPLE_PROBLEMS).map((key) => (
               <div 
@@ -333,6 +336,7 @@ function App() {
               </div>
             ))}
           </div>
+          </section>
         </TabsContent>
         
         <TabsContent value="custom" className="mt-4">
@@ -367,9 +371,9 @@ function App() {
       </div>
 
       <footer className="mt-10 py-5 text-center text-gray-500 border-t border-gray-200">
-        <p className="mb-2">Ferramenta Interativa de Aprendizado de Programação Linear</p>
-        <p className="text-sm">
-          Criado por{' '}
+        <p className="mb-2">Simplex Solver Online - Learn Simplex | Calculadora Método Simplex</p>
+        <p className="text-sm mb-3">
+          Desenvolvido por{' '}
           <a 
             href="https://www.linkedin.com/in/herculesgg/" 
             target="_blank" 
@@ -379,8 +383,12 @@ function App() {
             Hercules Gimenes
           </a>
         </p>
+        <nav className="text-xs text-gray-400">
+          <p>Simplex Solver Features: Two-Phase Simplex | Duality Analysis | Standard Form | Unrestricted Variables</p>
+          <p className="mt-1">Perfect for learning simplex method - Ideal para Pesquisa Operacional, Engenharia de Produção e Administração</p>
+        </nav>
       </footer>
-    </div>
+    </main>
   );
 }
 
