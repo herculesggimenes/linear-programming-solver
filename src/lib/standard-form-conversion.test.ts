@@ -360,6 +360,49 @@ describe('Standard Form Conversion', () => {
     expect(explanation).toContain('multiply the entire constraint by -1');
   });
   
+  test('handles mixed constraints example correctly', () => {
+    const lp: LinearProgram = {
+      objective: [6, -1],
+      isMaximization: true, // max z = 6x1 - x2
+      constraints: [
+        { coefficients: [4, 1], rhs: 21, operator: '<=' },   // 4x1 + x2 ≤ 21
+        { coefficients: [2, 3], rhs: 13, operator: '>=' },   // 2x1 + 3x2 ≥ 13
+        { coefficients: [1, -1], rhs: -1, operator: '=' }    // x1 - x2 = -1
+      ],
+      variables: ['x1', 'x2'],
+      variableRestrictions: [true, true] // x1, x2 ≥ 0
+    };
+    
+    const { standardLP, explanation } = convertToStandardFormWithExplanation(lp);
+    
+    // Check objective was negated (max to min)
+    expect(standardLP.objective[0]).toBe(-6);
+    expect(standardLP.objective[1]).toBe(1);
+    
+    // Check constraint 1: 4x1 + x2 + s1 = 21
+    expect(standardLP.constraints[0].coefficients[0]).toBe(4);
+    expect(standardLP.constraints[0].coefficients[1]).toBe(1);
+    expect(standardLP.constraints[0].coefficients[2]).toBe(1); // s1
+    expect(standardLP.constraints[0].rhs).toBe(21);
+    
+    // Check constraint 2: 2x1 + 3x2 - s2 = 13
+    expect(standardLP.constraints[1].coefficients[0]).toBe(2);
+    expect(standardLP.constraints[1].coefficients[1]).toBe(3);
+    expect(standardLP.constraints[1].coefficients[3]).toBe(-1); // s2
+    expect(standardLP.constraints[1].rhs).toBe(13);
+    
+    // Check constraint 3: x1 - x2 = -1 → -x1 + x2 = 1 (multiplied by -1)
+    expect(standardLP.constraints[2].coefficients[0]).toBe(-1);
+    expect(standardLP.constraints[2].coefficients[1]).toBe(1);
+    expect(standardLP.constraints[2].rhs).toBe(1);
+    expect(standardLP.constraints[2].operator).toBe('=');
+    
+    // Check that the explanation mentions the multiplication for constraint 3
+    expect(explanation).toContain('x1 - x2 = -1');
+    expect(explanation).toContain('multiply the entire constraint by -1');
+    expect(explanation).toContain('- x1 + x2 = 1');
+  });
+  
   test('handles objective function RHS', () => {
     const lp: LinearProgram = {
       objective: [3, 2],
