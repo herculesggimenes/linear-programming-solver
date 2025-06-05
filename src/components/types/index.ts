@@ -3,14 +3,16 @@
  */
 
 // Define and export necessary types
+interface Constraint {
+  coefficients: number[];
+  rhs: number;
+  operator: '<=' | '>=' | '=';
+}
+
 interface LinearProgram {
   objective: number[];
   objectiveRHS?: number; // RHS value for the objective function (if any)
-  constraints: {
-    coefficients: number[];
-    rhs: number;
-    operator: '<=' | '>=' | '=';
-  }[];
+  constraints: Constraint[];
   isMaximization: boolean;
   variables: string[];
   variableRestrictions?: boolean[]; // true = non-negative, false = unrestricted
@@ -52,4 +54,4 @@ interface SimplexStep {
 }
 
 
-export type { LinearProgram, SimplexTableau, SimplexStep, PhaseITableau, PhaseIITableau, BaseTableau };
+export type { LinearProgram, Constraint, SimplexTableau, SimplexStep, PhaseITableau, PhaseIITableau, BaseTableau };

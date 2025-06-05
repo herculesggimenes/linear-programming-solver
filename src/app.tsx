@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import SimplexVisualizer from '@/components/SimplexVisualizer';
 import StructuredProblemForm from '@/components/StructuredProblemForm';
+import { DualityVisualizer } from '@/components/DualityVisualizer';
 import type { LinearProgram } from '@/components/types';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { convertToStandardFormWithExplanation } from '@/lib/standard-form-conversion';
-import ReactMarkdown from 'react-markdown';
+import { Analytics } from '@vercel/analytics/react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 
 const EXAMPLE_PROBLEMS: { [key: string]: LinearProgram } = {
@@ -185,19 +186,43 @@ const EXAMPLE_PROBLEMS: { [key: string]: LinearProgram } = {
     ],
     variables: ['x1', 'x2'],
     variableRestrictions: [true, true] // x1, x2 ≥ 0
+  },
+  dualityExample1: {
+    objective: [4, 3],
+    isMaximization: true,
+    constraints: [
+      { coefficients: [2, 1], rhs: 10, operator: '<=' },  // 2x1 + x2 ≤ 10 (recurso A)
+      { coefficients: [1, 1], rhs: 8, operator: '<=' },   // x1 + x2 ≤ 8 (recurso B)
+      { coefficients: [1, 0], rhs: 4, operator: '<=' }    // x1 ≤ 4 (capacidade máxima)
+    ],
+    variables: ['x1', 'x2'],
+    variableRestrictions: [true, true]
+  },
+  dualityExample2: {
+    objective: [20, 30, 25],
+    isMaximization: false, // Minimização (dieta)
+    constraints: [
+      { coefficients: [2, 3, 1], rhs: 60, operator: '>=' },  // Proteína mínima
+      { coefficients: [1, 2, 3], rhs: 40, operator: '>=' },  // Vitamina mínima
+      { coefficients: [3, 1, 2], rhs: 50, operator: '>=' }   // Minerais mínimos
+    ],
+    variables: ['x1', 'x2', 'x3'],
+    variableRestrictions: [true, true, true]
   }
 };
 
 function App() {
   const [selectedProblem, setSelectedProblem] = useState<string>('example1');
   const [inputMode, setInputMode] = useState<'examples' | 'custom'>('examples');
+  const [visualizationMode, setVisualizationMode] = useState<'simplex' | 'duality'>('simplex');
   const [customProblem, setCustomProblem] = useState<LinearProgram | null>(null);
+  const [customProblemOriginal, setCustomProblemOriginal] = useState<LinearProgram | null>(null);
   const [standardFormExplanation, setStandardFormExplanation] = useState<string | null>(null);
   const [exampleStandardFormExplanation, setExampleStandardFormExplanation] = useState<{[key: string]: string}>({});
   
-  // Determine which problem to use
+  // Determine which problem to use based on mode
   const currentProblem = inputMode === 'custom' && customProblem ? 
-    customProblem : 
+    (visualizationMode === 'duality' ? customProblemOriginal! : customProblem) : 
     EXAMPLE_PROBLEMS[selectedProblem];
     
   // Generate standard form explanations for example problems
@@ -214,7 +239,10 @@ function App() {
   
   // Handle custom problem submission
   const handleCustomProblemSubmit = (problem: LinearProgram) => {
-    // Convert to standard form with explanation
+    // Store the original problem for duality mode
+    setCustomProblemOriginal(problem);
+    
+    // Convert to standard form with explanation for simplex mode
     const { standardLP, explanation } = convertToStandardFormWithExplanation(problem);
     setCustomProblem(standardLP);
     setStandardFormExplanation(explanation);
@@ -223,6 +251,7 @@ function App() {
 
   return (
     <div className="max-w-6xl mx-auto p-3 sm:p-5 font-sans">
+      <Analytics />
       <header className="text-center mb-8">
         <h1 className="text-3xl font-bold text-blue-600 mb-3">Visualizador Interativo do Método Simplex</h1>
         <p className="text-gray-600 max-w-2xl mx-auto leading-relaxed">
@@ -267,6 +296,8 @@ function App() {
                    key === 'phaseIDebugExample' ? 'Outro Exemplo de Fase I' :
                    key === 'productionPlanningPhaseI' ? 'Planejamento de Produção (Fase I)' :
                    key === 'mixedConstraints' ? 'Restrições Mistas (≤, ≥, =)' :
+                   key === 'dualityExample1' ? 'Dualidade: Produção' :
+                   key === 'dualityExample2' ? 'Dualidade: Dieta' :
                    `Exemplo ${key.replace('example', '')}`}
                 </h3>
                 <div className="text-sm">
@@ -309,10 +340,30 @@ function App() {
         </TabsContent>
       </Tabs>
       
-      {/* Standard form explanation is now shown within the SimplexVisualizer as a step */}
+      {/* Visualization Mode Selector */}
+      <div className="mb-6">
+        <Card>
+          <CardHeader>
+            <CardTitle>Modo de Visualização</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <Tabs value={visualizationMode} onValueChange={(value) => setVisualizationMode(value as 'simplex' | 'duality')}>
+              <TabsList className="grid w-full grid-cols-2">
+                <TabsTrigger value="simplex">Método Simplex</TabsTrigger>
+                <TabsTrigger value="duality">Análise de Dualidade</TabsTrigger>
+              </TabsList>
+            </Tabs>
+          </CardContent>
+        </Card>
+      </div>
       
+      {/* Visualization Content */}
       <div className="mt-6 border border-gray-200 rounded-lg p-3 sm:p-5 bg-white shadow-sm overflow-hidden">
-        <SimplexVisualizer lp={currentProblem} showGeometric={true} width={900} height={400} />
+        {visualizationMode === 'simplex' ? (
+          <SimplexVisualizer lp={currentProblem} showGeometric={true} width={900} height={400} />
+        ) : (
+          <DualityVisualizer problem={currentProblem} />
+        )}
       </div>
 
       <footer className="mt-10 py-5 text-center text-gray-500 border-t border-gray-200">

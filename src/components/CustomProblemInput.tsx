@@ -18,7 +18,7 @@ const EXAMPLE_FORMAT = `Maximizar
 Sujeito a
 2x₁ + x₂ <= 10
 x₁ + 2x₂ <= 8
-x₁, x₂ >= 0`;
+x₁ >= 0, x₂ irrestrito`;
 
 const CustomProblemInput: React.FC<CustomProblemInputProps> = ({ onSubmit }) => {
   const [inputText, setInputText] = useState<string>('');
@@ -63,15 +63,27 @@ const CustomProblemInput: React.FC<CustomProblemInputProps> = ({ onSubmit }) => 
       // Extract constraints (all lines after "Subject to" until the end or another keyword)
       const constraintLines = lines.slice(subjectToIndex + 1);
       const constraints = [];
-      const nonNegativity = [];
+      const variableRestrictions: boolean[] = new Array(variables.length).fill(true); // Default all variables to >= 0
       
       for (const line of constraintLines) {
         // Skip empty lines
         if (!line.trim()) continue;
         
-        // Check if this is a non-negativity constraint
+        // Check if this is a variable restriction line
         if (line.includes('>=') && line.includes('0') && !line.includes('+') && !line.includes('-')) {
-          // This is likely a non-negativity constraint like "x₁, x₂ >= 0"
+          // This is a non-negativity constraint like "x₁, x₂ >= 0"
+          // Already handled by default
+          continue;
+        } else if (line.toLowerCase().includes('irrestrito') || line.toLowerCase().includes('unrestricted') || line.toLowerCase().includes('livre')) {
+          // Parse unrestricted variables
+          const varPattern = /[a-zα-ω₀-₉][₀-₉₀-₉]*/g;
+          const matches = line.match(varPattern) || [];
+          for (const varName of matches) {
+            const varIndex = variables.indexOf(varName);
+            if (varIndex !== -1) {
+              variableRestrictions[varIndex] = false; // Mark as unrestricted
+            }
+          }
           continue;
         }
         
@@ -85,7 +97,8 @@ const CustomProblemInput: React.FC<CustomProblemInputProps> = ({ onSubmit }) => 
         objective,
         constraints,
         isMaximization,
-        variables
+        variables,
+        variableRestrictions
       };
       
       setParsed(linearProgram);
