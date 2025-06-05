@@ -357,7 +357,7 @@ describe('Standard Form Conversion', () => {
     expect(standardLP.constraints[0].operator).toBe('=');
     
     // Check that the explanation mentions the multiplication
-    expect(explanation).toContain('multiply the entire constraint by -1');
+    expect(explanation).toContain('multiplicamos toda a restrição por -1');
   });
   
   test('handles mixed constraints example correctly', () => {
@@ -399,7 +399,7 @@ describe('Standard Form Conversion', () => {
     
     // Check that the explanation mentions the multiplication for constraint 3
     expect(explanation).toContain('x1 - x2 = -1');
-    expect(explanation).toContain('multiply the entire constraint by -1');
+    expect(explanation).toContain('multiplicamos toda a restrição por -1');
     expect(explanation).toContain('- x1 + x2 = 1');
   });
   

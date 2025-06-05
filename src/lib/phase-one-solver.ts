@@ -259,31 +259,31 @@ export function createCanonicalSteps(originalTableau: PhaseITableau): PhaseITabl
  * @returns Explanation string
  */
 export function generateCanonicalStepExplanation(stepIndex: number, tableau: PhaseITableau, artificialVarName: string): string {
-  let explanation = `### Canonicalizing the Objective Row - Step ${stepIndex + 1}\n\n`;
+  let explanation = `### Canonicalizando a Linha Objetivo - Passo ${stepIndex + 1}\n\n`;
   
   const artVarIndex = tableau.artificialVariableIndices[stepIndex];
   const constraintRow = stepIndex + 1;
   const objCoeff = tableau.matrix[0][artVarIndex];
   
-  explanation += `**Eliminating ${artificialVarName} from the objective row**\n\n`;
+  explanation += `**Eliminando ${artificialVarName} da linha objetivo**\n\n`;
   
-  explanation += `Current objective coefficient for ${artificialVarName}: ${objCoeff}\n`;
-  explanation += `${artificialVarName} is basic in constraint ${constraintRow}\n\n`;
+  explanation += `Coeficiente objetivo atual para ${artificialVarName}: ${objCoeff}\n`;
+  explanation += `${artificialVarName} é básica na restrição ${constraintRow}\n\n`;
   
-  explanation += `To make the coefficient 0, we perform:\n`;
-  explanation += `Row 0 = Row 0 - (${objCoeff}) × Row ${constraintRow}\n\n`;
+  explanation += `Para tornar o coeficiente 0, realizamos:\n`;
+  explanation += `Linha 0 = Linha 0 - (${objCoeff}) × Linha ${constraintRow}\n\n`;
   
-  explanation += `This operation ensures that the basic variable ${artificialVarName} has coefficient 0 in the objective row, `;
-  explanation += `maintaining the canonical form required for the simplex method.\n\n`;
+  explanation += `Esta operação garante que a variável básica ${artificialVarName} tenha coeficiente 0 na linha objetivo, `;
+  explanation += `mantendo a forma canônica necessária para o método simplex.\n\n`;
   
   // Show the row operation details
-  explanation += `**Row operation details:**\n`;
+  explanation += `**Detalhes da operação de linha:**\n`;
   const row0 = tableau.matrix[0];
   const rowN = tableau.matrix[constraintRow];
   
-  explanation += `- Original Row 0: [${row0.map(v => v.toFixed(1)).join(', ')}]\n`;
-  explanation += `- Row ${constraintRow}: [${rowN.map(v => v.toFixed(1)).join(', ')}]\n`;
-  explanation += `- ${objCoeff} × Row ${constraintRow}: [${rowN.map(v => (objCoeff * v).toFixed(1)).join(', ')}]\n`;
+  explanation += `- Linha 0 Original: [${row0.map(v => v.toFixed(1)).join(', ')}]\n`;
+  explanation += `- Linha ${constraintRow}: [${rowN.map(v => v.toFixed(1)).join(', ')}]\n`;
+  explanation += `- ${objCoeff} × Linha ${constraintRow}: [${rowN.map(v => (objCoeff * v).toFixed(1)).join(', ')}]\n`;
   
   return explanation;
 }
@@ -294,49 +294,49 @@ export function generateCanonicalStepExplanation(stepIndex: number, tableau: Pha
 export function generateArtificialVarsExplanation(tableau: PhaseITableau, standardLP: LinearProgram): string {
   const { artificialVariableNames, matrix, variableNames, artificialVariableIndices } = tableau;
   
-  let explanation = "### Adding Artificial Variables\n\n";
-  explanation += `We need to add ${artificialVariableNames.length} artificial variable${artificialVariableNames.length > 1 ? 's' : ''} `;
-  explanation += "to create an initial basic feasible solution.\n\n";
+  let explanation = "### Adicionando Variáveis Artificiais\n\n";
+  explanation += `Precisamos adicionar ${artificialVariableNames.length} variável${artificialVariableNames.length > 1 ? ' artificial' : ' artificial'} `;
+  explanation += "para criar uma solução básica viável inicial.\n\n";
   
-  explanation += "#### Why Can't We Form an Initial Basis?\n\n";
-  explanation += "For the simplex method to start, we need an **identity matrix** within the constraint coefficient matrix. ";
-  explanation += "Each constraint needs a variable that:\n";
-  explanation += "- Has coefficient 1 in that constraint\n";
-  explanation += "- Has coefficient 0 in all other constraints\n";
-  explanation += "- Has coefficient 0 in the objective function\n\n";
+  explanation += "#### Por que Não Podemos Formar uma Base Inicial?\n\n";
+  explanation += "Para o método simplex começar, precisamos de uma **matriz identidade** dentro da matriz de coeficientes das restrições. ";
+  explanation += "Cada restrição precisa de uma variável que:\n";
+  explanation += "- Tenha coeficiente 1 nessa restrição\n";
+  explanation += "- Tenha coeficiente 0 em todas as outras restrições\n";
+  explanation += "- Tenha coeficiente 0 na função objetivo\n\n";
   
-  explanation += "**When slack variables don't work:**\n\n";
-  explanation += "1. **Equality constraints (=)**: No slack variables are added, so no identity columns exist\n";
-  explanation += "   - Example: `x₁ + x₂ = 4` has no slack variable\n\n";
-  explanation += "2. **Greater-than constraints (≥)**: Surplus variables have coefficient -1, not +1\n";
-  explanation += "   - Example: `x₁ + x₂ ≥ 5` becomes `x₁ + x₂ - s₁ = 5`\n";
-  explanation += "   - The surplus variable s₁ has coefficient -1, which doesn't form an identity column\n\n";
+  explanation += "**Quando variáveis de folga não funcionam:**\n\n";
+  explanation += "1. **Restrições de igualdade (=)**: Nenhuma variável de folga é adicionada, então não existem colunas identidade\n";
+  explanation += "   - Exemplo: `x₁ + x₂ = 4` não tem variável de folga\n\n";
+  explanation += "2. **Restrições do tipo maior-ou-igual (≥)**: Variáveis de excesso têm coeficiente -1, não +1\n";
+  explanation += "   - Exemplo: `x₁ + x₂ ≥ 5` torna-se `x₁ + x₂ - s₁ = 5`\n";
+  explanation += "   - A variável de excesso s₁ tem coeficiente -1, que não forma uma coluna identidade\n\n";
   
-  explanation += "3. **Less-than constraints (≤)**: These DO create identity columns with slack variables\n";
-  explanation += "   - Example: `2x₁ + 3x₂ ≤ 10` becomes `2x₁ + 3x₂ + s₁ = 10`\n";
-  explanation += "   - The slack variable s₁ has coefficient +1, forming an identity column\n\n";
+  explanation += "3. **Restrições do tipo menor-ou-igual (≤)**: Estas CRIAM colunas identidade com variáveis de folga\n";
+  explanation += "   - Exemplo: `2x₁ + 3x₂ ≤ 10` torna-se `2x₁ + 3x₂ + s₁ = 10`\n";
+  explanation += "   - A variável de folga s₁ tem coeficiente +1, formando uma coluna identidade\n\n";
   
-  explanation += "Since we cannot form an initial basis from the available slack variables alone, ";
-  explanation += "we need to introduce artificial variables to create a starting point for the simplex method.\n\n";
+  explanation += "Como não podemos formar uma base inicial apenas com as variáveis de folga disponíveis, ";
+  explanation += "precisamos introduzir variáveis artificiais para criar um ponto de partida para o método simplex.\n\n";
   
-  explanation += "#### The Textbook Approach\n\n";
-  explanation += "We add artificial variables to ALL constraints to create a uniform initial basic feasible solution. ";
-  explanation += "This ensures:\n";
-  explanation += "- A consistent method that works for any type of constraint\n";
-  explanation += "- All artificial variables form an identity matrix\n";
-  explanation += "- Easy identification of the initial basis\n\n";
+  explanation += "#### A Abordagem do Livro-Texto\n\n";
+  explanation += "Adicionamos variáveis artificiais a TODAS as restrições para criar uma solução básica viável inicial uniforme. ";
+  explanation += "Isso garante:\n";
+  explanation += "- Um método consistente que funciona para qualquer tipo de restrição\n";
+  explanation += "- Todas as variáveis artificiais formam uma matriz identidade\n";
+  explanation += "- Fácil identificação da base inicial\n\n";
   
-  explanation += "**How artificial variables create an identity matrix:**\n";
+  explanation += "**Como variáveis artificiais criam uma matriz identidade:**\n";
   explanation += "```\n";
-  explanation += "Original constraints:    After adding artificial variables:\n";
+  explanation += "Restrições originais:    Após adicionar variáveis artificiais:\n";
   explanation += "x₁ + x₂ = 4             x₁ + x₂ + a₁ = 4\n";
   explanation += "2x₁ + x₂ = 8            2x₁ + x₂ + a₂ = 8\n\n";
-  explanation += "Coefficient matrix for [x₁, x₂, a₁, a₂]:\n";
-  explanation += "[1  1  1  0]   <- a₁ has coefficient 1 here, 0 elsewhere\n";
-  explanation += "[2  1  0  1]   <- a₂ has coefficient 1 here, 0 elsewhere\n";
+  explanation += "Matriz de coeficientes para [x₁, x₂, a₁, a₂]:\n";
+  explanation += "[1  1  1  0]   <- a₁ tem coeficiente 1 aqui, 0 em outros lugares\n";
+  explanation += "[2  1  0  1]   <- a₂ tem coeficiente 1 aqui, 0 em outros lugares\n";
   explanation += "```\n\n";
-  explanation += "The artificial variables (a₁, a₂) form a perfect identity matrix, ";
-  explanation += "giving us an initial basis: a₁ = 4, a₂ = 8, with all other variables = 0.\n\n";
+  explanation += "As variáveis artificiais (a₁, a₂) formam uma matriz identidade perfeita, ";
+  explanation += "nos dando uma base inicial: a₁ = 4, a₂ = 8, com todas as outras variáveis = 0.\n\n";
   
   // Show which constraints get artificial variables
   explanation += "#### Constraint Analysis:\n\n";

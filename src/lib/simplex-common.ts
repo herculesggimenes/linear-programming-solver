@@ -153,27 +153,27 @@ export function generateIterationExplanation(
   leavingVar: number | null,
   iteration: number
 ): string {
-  let explanation = `### Iteration ${iteration}\n\n`;
+  let explanation = `### Iteração ${iteration}\n\n`;
   
   if (enteringVar !== null && leavingVar !== null) {
     const enteringVarName = tableau.variableNames[enteringVar];
     const basicVarIndex = tableau.basicVariables[leavingVar - 1];
     const leavingVarName = tableau.variableNames[basicVarIndex];
     
-    explanation += `**Entering Variable**: ${enteringVarName} (column ${enteringVar})\n`;
-    explanation += `**Leaving Variable**: ${leavingVarName} (row ${leavingVar})\n\n`;
+    explanation += `**Variável Entrante**: ${enteringVarName} (coluna ${enteringVar})\n`;
+    explanation += `**Variável que Sai**: ${leavingVarName} (linha ${leavingVar})\n\n`;
     
-    explanation += "The entering variable was selected because it has the most negative coefficient ";
-    explanation += "in the objective row, indicating it will improve the objective value.\n\n";
+    explanation += "A variável entrante foi selecionada porque tem o coeficiente mais negativo ";
+    explanation += "na linha objetivo, indicando que melhorará o valor objetivo.\n\n";
     
-    explanation += "The leaving variable was determined using the minimum ratio test ";
-    explanation += "to maintain feasibility of the solution.";
+    explanation += "A variável que sai foi determinada usando o teste de razão mínima ";
+    explanation += "para manter a viabilidade da solução.";
   } else if (enteringVar === null) {
-    explanation += "No entering variable can be found with a negative coefficient in the objective row.\n";
-    explanation += "This indicates that the current solution is optimal.";
+    explanation += "Nenhuma variável entrante pode ser encontrada com coeficiente negativo na linha objetivo.\n";
+    explanation += "Isso indica que a solução atual é ótima.";
   } else {
-    explanation += "No leaving variable can be found (all coefficients in the entering column are non-positive).\n";
-    explanation += "This indicates that the problem is unbounded.";
+    explanation += "Nenhuma variável de saída pode ser encontrada (todos os coeficientes na coluna entrante são não-positivos).\n";
+    explanation += "Isso indica que o problema é ilimitado.";
   }
   
   return explanation;

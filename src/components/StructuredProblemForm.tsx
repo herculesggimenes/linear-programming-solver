@@ -191,7 +191,7 @@ const StructuredProblemForm: React.FC<StructuredProblemFormProps> = ({ onSubmit 
     try {
       // Check for valid variable names
       if (new Set(variableNames).size !== variableNames.length) {
-        throw new Error("Variable names must be unique");
+        throw new Error("Os nomes das variáveis devem ser únicos");
       }
       
       // Create the LinearProgram object
@@ -217,7 +217,7 @@ const StructuredProblemForm: React.FC<StructuredProblemFormProps> = ({ onSubmit 
 
   // Format the problem as a string for display
   const formatProblem = () => {
-    let result = `${problemType === 'maximize' ? 'Maximize' : 'Minimize'}\n`;
+    let result = `${problemType === 'maximize' ? 'Maximizar' : 'Minimizar'}\n`;
     
     // Format objective function
     result += objectiveCoeffs.map((coeff, i) => 
@@ -231,7 +231,7 @@ const StructuredProblemForm: React.FC<StructuredProblemFormProps> = ({ onSubmit 
     
     result += '\n\n';
     
-    result += 'Subject to\n';
+    result += 'Sujeito a\n';
     
     // Format constraints
     constraints.forEach((constraint) => {
@@ -249,7 +249,7 @@ const StructuredProblemForm: React.FC<StructuredProblemFormProps> = ({ onSubmit 
     }
     
     if (unrestrictedVars.length > 0) {
-      result += `${unrestrictedVars.join(', ')} unrestricted`;
+      result += `${unrestrictedVars.join(', ')} livres`;
     }
     
     return result;
@@ -258,16 +258,16 @@ const StructuredProblemForm: React.FC<StructuredProblemFormProps> = ({ onSubmit 
   return (
     <Card className="w-full">
       <CardHeader>
-        <CardTitle className="text-xl mb-2">Create Custom Linear Programming Problem</CardTitle>
+        <CardTitle className="text-xl mb-2">Criar Problema de Programação Linear Personalizado</CardTitle>
         <p className="text-gray-600 text-sm">
-          Fill in the form below to define your linear programming problem.
+          Preencha o formulário abaixo para definir seu problema de programação linear.
         </p>
       </CardHeader>
       <CardContent>
         <form onSubmit={handleSubmit} className="space-y-6">
           {/* Problem Type */}
           <div className="space-y-2">
-            <Label>Problem Type</Label>
+            <Label>Tipo de Problema</Label>
             <RadioGroup 
               value={problemType} 
               onValueChange={(value) => setProblemType(value as 'maximize' | 'minimize')}
@@ -275,11 +275,11 @@ const StructuredProblemForm: React.FC<StructuredProblemFormProps> = ({ onSubmit 
             >
               <div className="flex items-center space-x-2">
                 <RadioGroupItem value="maximize" id="maximize" />
-                <Label htmlFor="maximize">Maximize</Label>
+                <Label htmlFor="maximize">Maximizar</Label>
               </div>
               <div className="flex items-center space-x-2">
                 <RadioGroupItem value="minimize" id="minimize" />
-                <Label htmlFor="minimize">Minimize</Label>
+                <Label htmlFor="minimize">Minimizar</Label>
               </div>
             </RadioGroup>
           </div>
@@ -287,14 +287,14 @@ const StructuredProblemForm: React.FC<StructuredProblemFormProps> = ({ onSubmit 
           {/* Variables */}
           <div className="space-y-3">
             <div className="flex items-center justify-between">
-              <Label>Variables</Label>
+              <Label>Variáveis</Label>
               <Select 
                 value={variableCount.toString()} 
                 onChange={handleVariableCountChange}
                 className="w-24"
               >
                 {[2, 3, 4, 5].map(n => (
-                  <option key={n} value={n}>{n} variables</option>
+                  <option key={n} value={n}>{n} variáveis</option>
                 ))}
               </Select>
             </div>
@@ -307,14 +307,14 @@ const StructuredProblemForm: React.FC<StructuredProblemFormProps> = ({ onSubmit 
                     onChange={e => handleVariableNameChange(i, e.target.value)}
                     className="w-20 font-mono"
                     placeholder={`x${i + 1}`}
-                    title="Variable name"
+                    title="Nome da variável"
                   />
                   <div 
                     className={`cursor-pointer p-1 rounded-md border ${variableRestrictions[i] ? 'bg-blue-50 border-blue-200' : 'bg-gray-50 border-gray-200'}`} 
                     onClick={() => toggleVariableRestriction(i)}
                   >
                     <span className="text-sm">
-                      {variableRestrictions[i] ? '≥ 0' : 'unrestricted'}
+                      {variableRestrictions[i] ? '≥ 0' : 'livre'}
                     </span>
                   </div>
                 </div>
@@ -324,7 +324,7 @@ const StructuredProblemForm: React.FC<StructuredProblemFormProps> = ({ onSubmit 
           
           {/* Objective Function */}
           <div className="space-y-3">
-            <Label>Objective Function ({problemType === 'maximize' ? 'Maximize' : 'Minimize'})</Label>
+            <Label>Função Objetivo ({problemType === 'maximize' ? 'Maximizar' : 'Minimizar'})</Label>
             <div className="flex flex-wrap items-center gap-2">
               {objectiveCoeffs.map((coeff, i) => (
                 <React.Fragment key={i}>
@@ -335,7 +335,7 @@ const StructuredProblemForm: React.FC<StructuredProblemFormProps> = ({ onSubmit 
                     value={coeff}
                     onChange={e => handleObjectiveCoeffChange(i, e.target.value)}
                     className="w-16 font-mono"
-                    title={`Coefficient for ${variableNames[i]}`}
+                    title={`Coeficiente para ${variableNames[i]}`}
                   />
                   <span className="mr-1">{variableNames[i]}</span>
                 </React.Fragment>
@@ -357,23 +357,23 @@ const StructuredProblemForm: React.FC<StructuredProblemFormProps> = ({ onSubmit 
                 }}
                 className="w-16 font-mono"
                 placeholder="0"
-                title="Constant term (optional)"
+                title="Termo constante (opcional)"
               />
-              <span className="text-sm text-gray-500">(constant term)</span>
+              <span className="text-sm text-gray-500">(termo constante)</span>
             </div>
           </div>
           
           {/* Constraints */}
           <div className="space-y-4">
             <div className="flex items-center justify-between">
-              <Label className="text-md font-semibold">Constraints</Label>
+              <Label className="text-md font-semibold">Restrições</Label>
               <Button 
                 type="button" 
                 size="sm" 
                 onClick={addConstraint}
                 className="flex items-center gap-1"
               >
-                <Plus className="h-4 w-4" /> Add Constraint
+                <Plus className="h-4 w-4" /> Adicionar Restrição
               </Button>
             </div>
             
@@ -385,7 +385,7 @@ const StructuredProblemForm: React.FC<StructuredProblemFormProps> = ({ onSubmit 
                   variant="ghost"
                   className="absolute top-1 right-1 h-8 w-8 p-0"
                   onClick={() => removeConstraint(constraintIndex)}
-                  title="Remove constraint"
+                  title="Remover restrição"
                 >
                   <X className="h-4 w-4" />
                 </Button>
@@ -400,7 +400,7 @@ const StructuredProblemForm: React.FC<StructuredProblemFormProps> = ({ onSubmit 
                         value={coeff}
                         onChange={e => handleConstraintCoeffChange(constraintIndex, varIndex, e.target.value)}
                         className="w-16 font-mono"
-                        title={`Coefficient for ${variableNames[varIndex]}`}
+                        title={`Coeficiente para ${variableNames[varIndex]}`}
                       />
                       <span className="mr-1">{variableNames[varIndex]}</span>
                     </React.Fragment>
@@ -425,7 +425,7 @@ const StructuredProblemForm: React.FC<StructuredProblemFormProps> = ({ onSubmit 
                     value={constraint.rhs}
                     onChange={e => handleConstraintRhsChange(constraintIndex, e.target.value)}
                     className="w-16 font-mono"
-                    title="Right-hand side value"
+                    title="Valor do lado direito"
                   />
                 </div>
               </Card>
@@ -435,14 +435,14 @@ const StructuredProblemForm: React.FC<StructuredProblemFormProps> = ({ onSubmit 
           {/* Error display */}
           {error && (
             <Alert variant="destructive" className="bg-red-50 border-red-200">
-              <AlertTitle className="text-red-700">Error</AlertTitle>
+              <AlertTitle className="text-red-700">Erro</AlertTitle>
               <AlertDescription className="text-red-600">{error}</AlertDescription>
             </Alert>
           )}
           
           {/* Preview */}
           <div className="pt-4 border-t border-gray-200">
-            <h3 className="text-lg font-medium mb-2">Problem Preview</h3>
+            <h3 className="text-lg font-medium mb-2">Pré-visualização do Problema</h3>
             <div className="bg-gray-50 p-4 rounded font-mono text-sm whitespace-pre-wrap">
               {formatProblem()}
             </div>
@@ -450,7 +450,7 @@ const StructuredProblemForm: React.FC<StructuredProblemFormProps> = ({ onSubmit 
           
           {/* Submit */}
           <Button type="submit" className="w-full">
-            Create Visualization
+            Criar Visualização
           </Button>
         </form>
       </CardContent>

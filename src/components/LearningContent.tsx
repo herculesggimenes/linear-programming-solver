@@ -14,34 +14,34 @@ const LearningContent: React.FC<LearningContentProps> = ({ onClose }) => {
   
   const sections: LearningSection[] = [
     {
-      title: "Introduction to Linear Programming",
+      title: "Introdução à Programação Linear",
       content: (
         <div>
-          <h3>What is Linear Programming?</h3>
+          <h3>O que é Programação Linear?</h3>
           <p>
-            Linear programming is a mathematical optimization technique used to find the best outcome in a mathematical model
-            whose requirements are represented by linear relationships.
+            Programação linear é uma técnica de otimização matemática usada para encontrar o melhor resultado em um modelo matemático
+            cujos requisitos são representados por relações lineares.
           </p>
           
-          <h3>Key Components</h3>
+          <h3>Componentes Principais</h3>
           <ul>
-            <li><strong>Decision Variables:</strong> The values we're trying to determine (e.g., x₁, x₂)</li>
-            <li><strong>Objective Function:</strong> The value we're trying to maximize or minimize</li>
-            <li><strong>Constraints:</strong> Limitations on the possible values of the decision variables</li>
+            <li><strong>Variáveis de Decisão:</strong> Os valores que estamos tentando determinar (ex: x₁, x₂)</li>
+            <li><strong>Função Objetivo:</strong> O valor que estamos tentando maximizar ou minimizar</li>
+            <li><strong>Restrições:</strong> Limitações sobre os valores possíveis das variáveis de decisão</li>
           </ul>
           
           <div className="mermaid-diagram">
             <img
               src="https://mermaid.ink/img/pako:eNptksFuwjAMhl8l8mknkDptY4LBpGnTDtPOPThNGrfQpEocEKh99yWF0nWcnMTf_-fY8gWUVhY4QnJmDeo0CVtj2Wq025qPB-Gp-BYbNJ8wadpZKtlno5nIWsXZeKLki2h1EyWhVE2YdKYhW46kUop1I8FrUUvpkbAGTXJpDR0Io6xdgpFHVoc263vQ1npp8AT25D2EwOazuk7Pbu-eEP1OqsZaoiH-YRFHFf0u5WpnLI7zjPBFHNWEG3kxabsoSyL8z_HzMtAYCJVH-D3JJBmUd5ViGIVrZZQk5YLt6gG-wEU-Hd01f9R6yJlnbwnIcqOVf3vvSiJKGDW1VHDcmsv-4CvMjf2tgfw4deWVKyq4QVAXnXqS-G4iqONh_-qpEA65rqDxukLv7f07qBm2vbPIUB58Uwmk1-aMY02xAqMgev4C9yCf-w?type=png"
-              alt="Linear Programming Components"
+              alt="Componentes da Programação Linear"
             />
           </div>
           
-          <h3>Standard Form</h3>
-          <p>Linear programs are typically written in standard form:</p>
+          <h3>Forma Padrão</h3>
+          <p>Programas lineares são tipicamente escritos na forma padrão:</p>
           <div className="math-display">
-            Maximize: c₁x₁ + c₂x₂ + ... + cₙxₙ<br />
-            Subject to:<br />
+            Maximizar: c₁x₁ + c₂x₂ + ... + cₙxₙ<br />
+            Sujeito a:<br />
             a₁₁x₁ + a₁₂x₂ + ... + a₁ₙxₙ ≤ b₁<br />
             a₂₁x₁ + a₂₂x₂ + ... + a₂ₙxₙ ≤ b₂<br />
             ...<br />
@@ -52,59 +52,59 @@ const LearningContent: React.FC<LearningContentProps> = ({ onClose }) => {
       )
     },
     {
-      title: "Understanding the Simplex Algorithm",
+      title: "Entendendo o Algoritmo Simplex",
       content: (
         <div>
-          <h3>Key Insight of Simplex Method</h3>
+          <h3>Visão Principal do Método Simplex</h3>
           <p>
-            The simplex algorithm relies on two important properties of linear programs:
+            O algoritmo simplex se baseia em duas propriedades importantes dos programas lineares:
           </p>
           <ol>
-            <li>The optimal solution (if one exists) occurs at a vertex of the feasible region.</li>
-            <li>We can systematically move from vertex to vertex, improving the objective value each time.</li>
+            <li>A solução ótima (se existir) ocorre em um vértice da região viável.</li>
+            <li>Podemos mover sistematicamente de vértice em vértice, melhorando o valor objetivo a cada vez.</li>
           </ol>
           
           <div className="mermaid-diagram">
             <img
               src="https://mermaid.ink/img/pako:eNptksGOgjAQhl-lmb3shfZgZtM1EA-GT-ABT14IDNQmUG3bjbAnffdCwYgR5tJm5vv_TsvMCUrDDMeQnNkWdZqEe2PZwbD9yI8H4an4FC3az5jU9SIVbLVvGclSidl0oeSDOLgkiofSFGHSqoY8cUTxIObNqRMVzdJg177NWB1Yrj2NuscbY5TdJ2jkkdmhyfoeVMu9MngCO_MeQkjzRVX5s9tau4Pkd0LVsibq_sUNMefi8wdvnXeexsY3RXm5_c1YHZcF4ZvYV4QbeXNStouy5MmF_PxxNAZC5RF-T-6SDMqnEoZheKmMkghWbC9b-AL3-TzMdf-o9QjAlw_UkOVGK__xXlU8SmgbueSKxunQnROXNDf2v4byY9eVN5iO4ApB3erUI8d3U0A1DfuXTw2FE9c1NN7W6L19egY1w6Z3Btm8KPmhgvRaXXBqKGZgFESvfwIkrwI?type=png"
-              alt="Simplex Method Key Insights"
+              alt="Visões Principais do Método Simplex"
             />
           </div>
           
-          <h3>Step-by-Step Process</h3>
+          <h3>Processo Passo a Passo</h3>
           <ol>
-            <li>Convert the problem to standard form and add slack variables</li>
-            <li>Set up an initial basic feasible solution (BFS)</li>
-            <li>Check for optimality by examining reduced costs</li>
-            <li>If not optimal, select an entering variable (pivot column)</li>
-            <li>Perform ratio test to determine leaving variable (pivot row)</li>
-            <li>Perform pivot operation to move to a new BFS</li>
-            <li>Repeat until optimal solution is found</li>
+            <li>Converter o problema para forma padrão e adicionar variáveis de folga</li>
+            <li>Configurar uma solução básica viável inicial (SBV)</li>
+            <li>Verificar otimalidade examinando custos reduzidos</li>
+            <li>Se não for ótimo, selecionar uma variável entrante (coluna pivô)</li>
+            <li>Realizar teste de razão para determinar variável que sai (linha pivô)</li>
+            <li>Realizar operação de pivoteamento para mover para uma nova SBV</li>
+            <li>Repetir até encontrar a solução ótima</li>
           </ol>
           
           <div className="mermaid-diagram">
             <img
               src="https://mermaid.ink/img/pako:eNpdksFugzAMhl8l8qkn2KGHHTZxoKKqNGk9VOqNA2RpWgph6QpDvPvigYC2ybL9-_-c2BeojGLgCPmFdWjyLDwby84di3f-eRKB8h_Rov2OWdMeUkL6ZRmTZaPEcjaX8lUcXRrFQzEmTJrQiKYjapeIakOUxqa2qLjVrD4X3ogzG9fykyf2zgxvSJcPboEUnWK7hpHsxE7MIXgaW_IOQsj6vW7Ciu3t-gzJc6waa4n6-JtFnF34P6NMdy3Z0hriKOFOCx8VnWj3Cl9htRMm41DDdzDkLT-qM3r_n-bjOG5rIyUJduyoLvANHsrFeDf8VusxVl6CfUKzajSMpfVQEVHKpGukhKLdjaKxUPTVP5gneBBXtbZdRXCDQPRKPUv8NBrY9OxRXroX5rqGJugaQ0r3n6BnOBfHIofy5MdKqO46F5w66iswCpKPPw7hj2k?type=png"
-              alt="Simplex Algorithm Flow"
+              alt="Fluxo do Algoritmo Simplex"
             />
           </div>
           
-          <h3>Tableau Representation</h3>
+          <h3>Representação em Tableau</h3>
           <p>
-            The simplex method uses a tabular format called a "tableau" to perform calculations.
-            Each row represents a constraint, and columns represent variables and the right-hand side (RHS).
+            O método simplex usa um formato tabular chamado "tableau" para realizar cálculos.
+            Cada linha representa uma restrição, e as colunas representam variáveis e o lado direito (LD).
           </p>
           
           <div className="tableau-example">
             <table>
               <thead>
                 <tr>
-                  <th>Basic</th>
+                  <th>Básica</th>
                   <th>x₁</th>
                   <th>x₂</th>
                   <th>s₁</th>
                   <th>s₂</th>
-                  <th>RHS</th>
+                  <th>LD</th>
                 </tr>
               </thead>
               <tbody>
@@ -139,50 +139,50 @@ const LearningContent: React.FC<LearningContentProps> = ({ onClose }) => {
       )
     },
     {
-      title: "The Pivot Operation",
+      title: "A Operação de Pivoteamento",
       content: (
         <div>
-          <h3>Understanding the Pivot Operation</h3>
+          <h3>Entendendo a Operação de Pivoteamento</h3>
           <p>
-            The pivot operation is the core of the simplex method. It's how we move from one basic feasible solution
-            to another with a better objective value.
+            A operação de pivoteamento é o núcleo do método simplex. É como movemos de uma solução básica viável
+            para outra com um valor objetivo melhor.
           </p>
           
-          <h3>Step 1: Select Entering Variable</h3>
+          <h3>Passo 1: Selecionar Variável Entrante</h3>
           <p>
-            Choose the non-basic variable with the most negative coefficient in the objective row (for maximization).
-            This variable will enter the basis.
+            Escolha a variável não-básica com o coeficiente mais negativo na linha objetivo (para maximização).
+            Esta variável entrará na base.
           </p>
           
-          <h3>Step 2: Select Leaving Variable</h3>
+          <h3>Passo 2: Selecionar Variável que Sai</h3>
           <p>
-            Determine which basic variable should leave the basis using the minimum ratio test:
+            Determine qual variável básica deve sair da base usando o teste de razão mínima:
           </p>
           <ul>
-            <li>Calculate ratio = RHS / coefficient of entering variable (only for positive coefficients)</li>
-            <li>Choose the basic variable with the smallest positive ratio</li>
+            <li>Calcular razão = LD / coeficiente da variável entrante (apenas para coeficientes positivos)</li>
+            <li>Escolher a variável básica com a menor razão positiva</li>
           </ul>
           
           <div className="mermaid-diagram">
             <img
               src="https://mermaid.ink/img/pako:eNpdksGOgjAQhl-lmb3sRfZgMhs2Qjjs4R18AL3NhmJtoFq2C2FP-u6FgohEOzX95_-mnemcQWlmMcHszPZosizujeXpzd77-XgQgYov0aL9iEmzXaSCfWktE1mjOBsvlXwRR5fG8VBMiJMtGvLkGXCBybTZ0RLPNgUgYz2zRR04sexkbWfp8ANdFyZcE7ukDzikFWGkBmPrnrAGy_JgLV3oSJDD9GFpSz6BzautybsO4rzdQJvU1z24E0dDktXv9cscsWftmvxvwWXeKuy2hiSu8KDFQVUncr6H77B9YXec6ktvx-PxqI2UJLixozrBBd6VKx6v32s9Rs1LMBjQrDc6RlM7pYgoYzK1UsJsf-dmLLJPb-5OvCuuau3hivAOkejVeiXx02lgPbgjeeV-mOsGmmBrDA537xFNM5yLY5FDdfPjJVR3nQtODfU1GA3Z8y-ggpU6?type=png"
-              alt="Pivot Operation"
+              alt="Operação de Pivoteamento"
             />
           </div>
           
-          <h3>Step 3: Perform Pivot</h3>
+          <h3>Passo 3: Realizar Pivoteamento</h3>
           <p>
-            Once you've identified the pivot element (the intersection of the entering column and leaving row),
-            perform these row operations:
+            Uma vez que você identificou o elemento pivô (a interseção da coluna entrante e linha que sai),
+            realize estas operações de linha:
           </p>
           <ol>
-            <li>Divide the pivot row by the pivot element to make the pivot element 1</li>
-            <li>For each other row, subtract a multiple of the new pivot row to make its entering column value 0</li>
+            <li>Divida a linha pivô pelo elemento pivô para torná-lo 1</li>
+            <li>Para cada outra linha, subtraia um múltiplo da nova linha pivô para tornar seu valor da coluna entrante 0</li>
           </ol>
           
           <div className="example-pivot">
-            <h4>Example Pivot:</h4>
-            <p>Starting tableau with pivot element circled:</p>
+            <h4>Exemplo de Pivoteamento:</h4>
+            <p>Tableau inicial com elemento pivô circulado:</p>
             <div className="tableau">
               <table>
                 <tbody>
@@ -214,7 +214,7 @@ const LearningContent: React.FC<LearningContentProps> = ({ onClose }) => {
               </table>
             </div>
             
-            <p>After pivot:</p>
+            <p>Após pivoteamento:</p>
             <div className="tableau">
               <table>
                 <tbody>
@@ -249,86 +249,86 @@ const LearningContent: React.FC<LearningContentProps> = ({ onClose }) => {
           
           <div className="note">
             <p>
-              <strong>Note:</strong> Each pivot operation moves us from one vertex of the feasible region to an adjacent vertex
-              with a better objective value.
+              <strong>Nota:</strong> Cada operação de pivoteamento nos move de um vértice da região viável para um vértice adjacente
+              com um valor objetivo melhor.
             </p>
           </div>
         </div>
       )
     },
     {
-      title: "Geometric Interpretation",
+      title: "Interpretação Geométrica",
       content: (
         <div>
-          <h3>Visualizing the Simplex Method</h3>
+          <h3>Visualizando o Método Simplex</h3>
           <p>
-            For problems with two decision variables, we can visualize the simplex method geometrically.
+            Para problemas com duas variáveis de decisão, podemos visualizar o método simplex geometricamente.
           </p>
           
-          <h3>The Feasible Region</h3>
+          <h3>A Região Viável</h3>
           <p>
-            The feasible region is the set of all points that satisfy all constraints. For a 2D problem, it's a polygon.
+            A região viável é o conjunto de todos os pontos que satisfazem todas as restrições. Para um problema 2D, é um polígono.
           </p>
           
           <div className="image-container">
             <img 
               src="https://upload.wikimedia.org/wikipedia/commons/thumb/d/d4/Simplex-method-3-dimensions.png/400px-Simplex-method-3-dimensions.png"
-              alt="Feasible Region Example"
+              alt="Exemplo de Região Viável"
             />
-            <p className="caption">A feasible region with the simplex method path highlighted</p>
+            <p className="caption">Uma região viável com o caminho do método simplex destacado</p>
           </div>
           
-          <h3>Vertices and Edges</h3>
+          <h3>Vértices e Arestas</h3>
           <p>
-            The simplex method works by moving from vertex to vertex along the edges of the feasible region.
-            Each vertex corresponds to a basic feasible solution in the tableau.
+            O método simplex funciona movendo-se de vértice em vértice ao longo das arestas da região viável.
+            Cada vértice corresponde a uma solução básica viável no tableau.
           </p>
           
-          <h3>Objective Function Contours</h3>
+          <h3>Contornos da Função Objetivo</h3>
           <p>
-            The objective function can be visualized as a family of parallel lines (or planes in higher dimensions).
-            The simplex method moves in the direction of improving the objective value.
+            A função objetivo pode ser visualizada como uma família de linhas paralelas (ou planos em dimensões maiores).
+            O método simplex move-se na direção de melhorar o valor objetivo.
           </p>
           
           <div className="mermaid-diagram">
             <img
               src="https://mermaid.ink/img/pako:eNptkk9rwzAMxb-KMbvsINnBoYeNHTqWrcfCYLeLD4ntxiS2i-3-Yd9905Ila9bgP5Ze3pOeZMEptVKwBX9mLWaB5yfJ012Yj5fg0P8QLebPmKxiW5ScZfticX-Hz-lRP9hocXtc3CUhrpg_-EXE6Wm_KBf3OO-OUL4J8yHidjwuls_l4o1VoqJ8nmzCJBbCrMoruMxDUZXxJhV5vNmdUA9F_NRHb_7O0v0ulCQf6zAaZ2wwDzwnU0ZS8pZr07IacUat68fEZzAQyk7udQkgJNrohhGYZe7KUPIibmuOWCkLHyiqdcMS0N6j0K5W2HnTEHGprGlqRZZ3mk39OA1GppOVuDNsmANtB2vFYqugbZqPducXmDP2fxdGux7bfmvUel8aQ-vaw1ayolEt0MmvyVvuauj6yuKOtG2xtn39AyODYe-kkHJ1Vjrw97Nn2wo6AqXBfPwBHOOzpA?type=png"
-              alt="Objective Function Contours"
+              alt="Contornos da Função Objetivo"
             />
           </div>
           
-          <h3>Connecting Tableau to Geometry</h3>
+          <h3>Conectando Tableau à Geometria</h3>
           <table className="compare-table">
             <thead>
               <tr>
-                <th>Tableau Concept</th>
-                <th>Geometric Interpretation</th>
+                <th>Conceito do Tableau</th>
+                <th>Interpretação Geométrica</th>
               </tr>
             </thead>
             <tbody>
               <tr>
-                <td>Basic variables</td>
-                <td>Coordinates defining the current vertex</td>
+                <td>Variáveis básicas</td>
+                <td>Coordenadas definindo o vértice atual</td>
               </tr>
               <tr>
-                <td>Non-basic variables</td>
-                <td>Variables currently at zero (not contributing)</td>
+                <td>Variáveis não-básicas</td>
+                <td>Variáveis atualmente em zero (não contribuindo)</td>
               </tr>
               <tr>
-                <td>Entering variable</td>
-                <td>Direction to move from current vertex</td>
+                <td>Variável entrante</td>
+                <td>Direção para mover do vértice atual</td>
               </tr>
               <tr>
-                <td>Leaving variable</td>
-                <td>Constraint that will become binding</td>
+                <td>Variável que sai</td>
+                <td>Restrição que se tornará ativa</td>
               </tr>
               <tr>
-                <td>Pivot operation</td>
-                <td>Moving from one vertex to an adjacent one</td>
+                <td>Operação de pivoteamento</td>
+                <td>Movendo de um vértice para um adjacente</td>
               </tr>
               <tr>
-                <td>Objective row</td>
-                <td>Rate of change of objective along edges</td>
+                <td>Linha objetivo</td>
+                <td>Taxa de mudança do objetivo ao longo das arestas</td>
               </tr>
             </tbody>
           </table>
@@ -336,76 +336,76 @@ const LearningContent: React.FC<LearningContentProps> = ({ onClose }) => {
       )
     },
     {
-      title: "Special Cases and Troubleshooting",
+      title: "Casos Especiais e Solução de Problemas",
       content: (
         <div>
-          <h3>Special Cases in Linear Programming</h3>
+          <h3>Casos Especiais em Programação Linear</h3>
           
           <div className="case-block">
-            <h4>1. Multiple Optimal Solutions</h4>
+            <h4>1. Múltiplas Soluções Ótimas</h4>
             <p>
-              Occurs when a non-basic variable has a zero coefficient in the objective row at optimality.
-              This means there's an edge of the feasible region where the objective value is constant.
+              Ocorre quando uma variável não-básica tem coeficiente zero na linha objetivo na otimalidade.
+              Isso significa que há uma aresta da região viável onde o valor objetivo é constante.
             </p>
             <div className="mermaid-diagram">
               <img
                 src="https://mermaid.ink/img/pako:eNptksFugzAMhl8l8qnSAN1hh-3SHaZN0ibtsgOHQAxEJGTKASHefXECVLTNlvzb3_87tnGByhgLGeRn0aHJ82QH4OxcyIP_PUlP5VE0AJ-Qm7qtSC19bSy1jVbTYablQbZmEiVDaZow6UIjmmZcjls0T3LR4HJQcw4lGNFydgLr5MUYbY_JvgctO4BDyBZnW1BKbSrqYLZ7MFyCcO3ibVFcQJPfat92Gt8av2G3jFnWyD1aV0fyXcrl7gNG-UjVO4vRSjVuGd5RmhY3sxK47YSj18baMy6E0SHO66lZm8bZudEs7Tu0YQmlbNQTtOhTJDBQyuerw_vEcErJsogvNgPNgUgHRN-TvyTi8r3SKozSrTZaUbJgx8bCB7zL594v_KLW47CM3fvf0GZ76-Lb-6joqQRaRePhYAjySV2IPrSInZr_TVB-mgb7boImHCsAzZ3nkdJvMxTCLe3b4P-YjK-gi6ZC5-3za1BTbHsbUBx9M1RcXptzwTr6NTgD-esPXl6h9w?type=png"
-                alt="Multiple Optimal Solutions"
+                alt="Múltiplas Soluções Ótimas"
               />
             </div>
           </div>
           
           <div className="case-block">
-            <h4>2. Unbounded Problem</h4>
+            <h4>2. Problema Ilimitado</h4>
             <p>
-              Occurs when a non-basic variable has a negative coefficient in the objective row (for maximization),
-              but all constraints have non-positive coefficients for that variable. The objective can increase indefinitely.
+              Ocorre quando uma variável não-básica tem coeficiente negativo na linha objetivo (para maximização),
+              mas todas as restrições têm coeficientes não-positivos para essa variável. O objetivo pode aumentar indefinidamente.
             </p>
             <p>
-              <strong>Detection:</strong> During ratio test, if all coefficients in the entering column are ≤ 0,
-              the problem is unbounded.
+              <strong>Detecção:</strong> Durante o teste de razão, se todos os coeficientes na coluna entrante são ≤ 0,
+              o problema é ilimitado.
             </p>
             <div className="mermaid-diagram">
               <img
                 src="https://mermaid.ink/img/pako:eNptksFugzAMhl8l8mmn0h12QO3SHTatoE3abQcOgRiIlpB1HBDi3RcnMEFbbcmf_f2_Y8sXKLWyEEM8sTXqOAq2SrONVpud-xyEE_FD1Kr-xKhuZ-7QyKdGUVspNp7MVLyKpZ5F0VBMCJPOa8TrPlnohDdT9Fm3NdZK9X-U0rDm_DL7Hj-L88ZoiJe55xrq-BV79DV2cqQTuJAstK16pfMemU1-20AtNvExjdjDqhRTrJQ7mJPWm0g-Uxp3FxjkAyVvDXrF6jDl9Ile10SsVlpZW-KMa-XjfF6a1XFo7ZVmbdej8UugZS2eYIUuhQNT1Hy6RbxPDYeYzEngthNg3hOJgOh7spfEXLxXShpG6Vppaij6YCc-H9_gXTwd_cQLWvcpGTv3v6FJtzWFt_eh0UmE2oVOZlvoeIgbYoQtJmdl_4vg8Jz69d30jTjUoDr3OXL6taZCuLn9GvwXk_AVrEVVonX2-QXUGNvOBjI-sk0lxKU5E6KjXILSED__AmrInpM?type=png"
-                alt="Unbounded Problem"
+                alt="Problema Ilimitado"
               />
             </div>
           </div>
           
           <div className="case-block">
-            <h4>3. Infeasible Problem</h4>
+            <h4>3. Problema Inviável</h4>
             <p>
-              Occurs when there's no solution that satisfies all constraints. The feasible region is empty.
+              Ocorre quando não há solução que satisfaça todas as restrições. A região viável é vazia.
             </p>
             <p>
-              <strong>Detection:</strong> When using Phase I of the simplex method, if artificial variables
-              remain in the basis with positive values, the problem is infeasible.
+              <strong>Detecção:</strong> Ao usar a Fase I do método simplex, se variáveis artificiais
+              permanecem na base com valores positivos, o problema é inviável.
             </p>
           </div>
           
           <div className="case-block">
-            <h4>4. Degeneracy</h4>
+            <h4>4. Degenerescença</h4>
             <p>
-              Occurs when a basic variable has a value of zero. This can cause cycling in the simplex algorithm.
+              Ocorre quando uma variável básica tem valor zero. Isso pode causar ciclagem no algoritmo simplex.
             </p>
             <p>
-              <strong>Symptoms:</strong> Multiple minimum ratios during the ratio test, or iterations that don't
-              improve the objective value.
+              <strong>Sintomas:</strong> Múltiplas razões mínimas durante o teste de razão, ou iterações que não
+              melhoram o valor objetivo.
             </p>
             <p>
-              <strong>Solution:</strong> Use anti-cycling techniques like Bland's rule (choose the lowest-indexed variable
-              when there are ties).
+              <strong>Solução:</strong> Use técnicas anti-ciclagem como a regra de Bland (escolha a variável de menor índice
+              quando houver empates).
             </p>
           </div>
           
-          <h3>Troubleshooting Tips</h3>
+          <h3>Dicas de Solução de Problemas</h3>
           <ul>
-            <li>Always double-check your tableau operations for arithmetic errors</li>
-            <li>Make sure you've correctly converted the problem to standard form</li>
-            <li>Verify that all variables are non-negative</li>
-            <li>If the problem is infeasible, check your constraints for errors</li>
-            <li>If getting unexpected results, try graphing the problem (for 2D problems)</li>
+            <li>Sempre verifique suas operações de tableau para erros aritméticos</li>
+            <li>Certifique-se de ter convertido corretamente o problema para forma padrão</li>
+            <li>Verifique se todas as variáveis são não-negativas</li>
+            <li>Se o problema é inviável, verifique suas restrições por erros</li>
+            <li>Se obtiver resultados inesperados, tente grafar o problema (para problemas 2D)</li>
           </ul>
         </div>
       )
@@ -415,10 +415,10 @@ const LearningContent: React.FC<LearningContentProps> = ({ onClose }) => {
   return (
     <div className="learning-content">
       <div className="learning-header">
-        <h2>Linear Programming: Learning Materials</h2>
+        <h2>Programação Linear: Materiais de Aprendizagem</h2>
         {onClose && (
           <button onClick={onClose} className="close-button">
-            Close
+            Fechar
           </button>
         )}
       </div>
@@ -445,7 +445,7 @@ const LearningContent: React.FC<LearningContentProps> = ({ onClose }) => {
             className="arrow-button prev"
             onClick={() => setActiveSection(activeSection - 1)}
           >
-            ← Previous: {sections[activeSection - 1].title}
+            ← Anterior: {sections[activeSection - 1].title}
           </button>
         )}
         
@@ -454,7 +454,7 @@ const LearningContent: React.FC<LearningContentProps> = ({ onClose }) => {
             className="arrow-button next"
             onClick={() => setActiveSection(activeSection + 1)}
           >
-            Next: {sections[activeSection + 1].title} →
+            Próximo: {sections[activeSection + 1].title} →
           </button>
         )}
       </div>

@@ -84,7 +84,7 @@ const StandardFormExplanationDetailed: React.FC<StandardFormExplanationDetailedP
           <div className="my-1">{nonNegativeVars.join(', ')} ≥ 0</div>
         )}
         {unrestrictedVars.length > 0 && (
-          <div className="my-1">{unrestrictedVars.join(', ')} unrestricted</div>
+          <div className="my-1">{unrestrictedVars.join(', ')} livres</div>
         )}
       </div>
     );
@@ -93,24 +93,24 @@ const StandardFormExplanationDetailed: React.FC<StandardFormExplanationDetailedP
   return (
     <div className="space-y-8">
       <div>
-        <h3 className="text-xl font-semibold text-blue-700 mb-3">Original Problem</h3>
+        <h3 className="text-xl font-semibold text-blue-700 mb-3">Problema Original</h3>
         <div className="bg-gray-50 p-4 rounded-md border border-gray-200">
           <div className="mb-3">
             <span className="font-semibold mr-2">
-              {originalLP.isMaximization ? 'Maximize:' : 'Minimize:'}
+              {originalLP.isMaximization ? 'Maximizar:' : 'Minimizar:'}
             </span>
             {formatObjective(originalLP)}
           </div>
           
           <div className="mb-3">
-            <div className="font-semibold mb-2">Subject to:</div>
+            <div className="font-semibold mb-2">Sujeito a:</div>
             <div className="pl-4">
               {formatConstraints(originalLP)}
             </div>
           </div>
           
           <div>
-            <div className="font-semibold mb-1">Variable restrictions:</div>
+            <div className="font-semibold mb-1">Restrições das variáveis:</div>
             <div className="pl-4">
               {formatVariableRestrictions(originalLP)}
             </div>
@@ -119,17 +119,17 @@ const StandardFormExplanationDetailed: React.FC<StandardFormExplanationDetailedP
       </div>
       
       <div className="space-y-4">
-        <h3 className="text-xl font-semibold text-blue-700 mb-3">Conversion Process</h3>
+        <h3 className="text-xl font-semibold text-blue-700 mb-3">Processo de Conversão</h3>
         
         {/* Step 1: Objective Function Conversion */}
         <div className="bg-blue-50 p-4 rounded-md border border-blue-200">
-          <h4 className="font-semibold mb-2 text-gray-800">Step 1: Objective Function</h4>
+          <h4 className="font-semibold mb-2 text-gray-800">Passo 1: Função Objetivo</h4>
           
           {originalLP.isMaximization !== standardLP.isMaximization ? (
             <div className="space-y-2">
               <p className="text-gray-700">
-                Converting {originalLP.isMaximization ? 'maximization' : 'minimization'} to {standardLP.isMaximization ? 'maximization' : 'minimization'} 
-                by multiplying the objective function by -1:
+                Convertendo {originalLP.isMaximization ? 'maximização' : 'minimização'} para {standardLP.isMaximization ? 'maximização' : 'minimização'} 
+                multiplicando a função objetivo por -1:
               </p>
               <div className="flex items-center space-x-4">
                 <div>
@@ -145,7 +145,7 @@ const StandardFormExplanationDetailed: React.FC<StandardFormExplanationDetailedP
             </div>
           ) : (
             <p className="text-gray-700">
-              The objective function is already in the correct form (no conversion needed).
+              A função objetivo já está na forma correta (nenhuma conversão necessária).
             </p>
           )}
         </div>
@@ -153,9 +153,9 @@ const StandardFormExplanationDetailed: React.FC<StandardFormExplanationDetailedP
         {/* Step 2: Handle Unrestricted Variables */}
         {originalLP.variableRestrictions && originalLP.variableRestrictions.some(r => !r) ? (
           <div className="bg-blue-50 p-4 rounded-md border border-blue-200">
-            <h4 className="font-semibold mb-2 text-gray-800">Step 2: Unrestricted Variables</h4>
+            <h4 className="font-semibold mb-2 text-gray-800">Passo 2: Variáveis Livres</h4>
             <p className="text-gray-700 mb-2">
-              Unrestricted variables are replaced with the difference of two non-negative variables:
+              Variáveis livres são substituídas pela diferença de duas variáveis não-negativas:
             </p>
             
             <div className="space-y-2 pl-4">
@@ -164,7 +164,7 @@ const StandardFormExplanationDetailed: React.FC<StandardFormExplanationDetailedP
                   const varName = originalLP.variables[idx];
                   return (
                     <div key={idx} className="font-mono">
-                      {varName} = {varName}⁺ - {varName}⁻ where {varName}⁺ ≥ 0, {varName}⁻ ≥ 0
+                      {varName} = {varName}⁺ - {varName}⁻ onde {varName}⁺ ≥ 0, {varName}⁻ ≥ 0
                     </div>
                   );
                 }
@@ -174,16 +174,16 @@ const StandardFormExplanationDetailed: React.FC<StandardFormExplanationDetailedP
           </div>
         ) : (
           <div className="bg-blue-50 p-4 rounded-md border border-blue-200">
-            <h4 className="font-semibold mb-2 text-gray-800">Step 2: Unrestricted Variables</h4>
+            <h4 className="font-semibold mb-2 text-gray-800">Passo 2: Variáveis Livres</h4>
             <p className="text-gray-700">
-              All variables are already non-negative. No substitution is needed.
+              Todas as variáveis já são não-negativas. Nenhuma substituição é necessária.
             </p>
           </div>
         )}
         
         {/* Step 3: Convert Constraints */}
         <div className="bg-blue-50 p-4 rounded-md border border-blue-200">
-          <h4 className="font-semibold mb-2 text-gray-800">Step 3: Convert Constraints</h4>
+          <h4 className="font-semibold mb-2 text-gray-800">Passo 3: Converter Restrições</h4>
           
           <div className="space-y-3">
             {originalLP.constraints.map((constraint, idx) => {
@@ -214,11 +214,11 @@ const StandardFormExplanationDetailed: React.FC<StandardFormExplanationDetailedP
                     {/* Converted constraint explanation */}
                     <div>
                       {operator === '<=' ? (
-                        <span>Add slack variable {slackVar} ≥ 0</span>
+                        <span>Adicionar variável de folga {slackVar} ≥ 0</span>
                       ) : operator === '>=' ? (
-                        <span>Add surplus variable {slackVar} ≥ 0 with coefficient -1</span>
+                        <span>Adicionar variável de excesso {slackVar} ≥ 0 com coeficiente -1</span>
                       ) : (
-                        <span>Already an equality constraint</span>
+                        <span>Já é uma restrição de igualdade</span>
                       )}
                     </div>
                   </div>
@@ -230,24 +230,24 @@ const StandardFormExplanationDetailed: React.FC<StandardFormExplanationDetailedP
       </div>
       
       <div>
-        <h3 className="text-xl font-semibold text-blue-700 mb-3">Standard Form Result</h3>
+        <h3 className="text-xl font-semibold text-blue-700 mb-3">Resultado em Forma Padrão</h3>
         <div className="bg-green-50 p-4 rounded-md border border-green-200">
           <div className="mb-3">
             <span className="font-semibold mr-2">
-              {standardLP.isMaximization ? 'Maximize:' : 'Minimize:'}
+              {standardLP.isMaximization ? 'Maximizar:' : 'Minimizar:'}
             </span>
             {formatObjective(standardLP)}
           </div>
           
           <div className="mb-3">
-            <div className="font-semibold mb-2">Subject to:</div>
+            <div className="font-semibold mb-2">Sujeito a:</div>
             <div className="pl-4 space-y-1">
               {formatConstraints(standardLP)}
             </div>
           </div>
           
           <div>
-            <div className="font-semibold mb-1">All variables:</div>
+            <div className="font-semibold mb-1">Todas as variáveis:</div>
             <div className="pl-4">
               {/* Only show original variables and any substitution variables (like x₁⁺, x₁⁻), not slack/surplus variables */}
               {standardLP.variables
@@ -255,7 +255,7 @@ const StandardFormExplanationDetailed: React.FC<StandardFormExplanationDetailedP
                 .join(', ')} ≥ 0
               {/* Add a separate section for slack variables */}
               {standardLP.variables.some(v => v.startsWith('s')) && (
-                <div className="mt-1">All slack/surplus variables ≥ 0</div>
+                <div className="mt-1">Todas as variáveis de folga/excesso ≥ 0</div>
               )}
             </div>
           </div>

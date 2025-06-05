@@ -52,8 +52,8 @@ const StepController: React.FC<StepControllerProps> = ({
         <div className="flex flex-col space-y-4">
           <div className="flex items-center justify-between">
             <div className="text-sm font-medium">
-              Step <Badge variant="outline" className="ml-1 mr-1 font-bold">{currentStep + 1}</Badge> 
-              of 
+              Passo <Badge variant="outline" className="ml-1 mr-1 font-bold">{currentStep + 1}</Badge> 
+              de 
               <Badge variant="outline" className="ml-1 font-bold">{totalSteps}</Badge>
             </div>
           </div>
@@ -74,7 +74,7 @@ const StepController: React.FC<StepControllerProps> = ({
               size="icon"
               onClick={handleFirst}
               disabled={disabled || currentStep === 0}
-              title="First step"
+              title="Primeiro passo"
               className="h-9 w-9"
             >
               <SkipBack className="h-4 w-4" />
@@ -85,7 +85,7 @@ const StepController: React.FC<StepControllerProps> = ({
               size="icon"
               onClick={handlePrevious}
               disabled={disabled || currentStep === 0}
-              title="Previous step"
+              title="Passo anterior"
               className="h-9 w-9"
             >
               <Rewind className="h-4 w-4" />
@@ -97,7 +97,7 @@ const StepController: React.FC<StepControllerProps> = ({
               size="icon"
               onClick={handleNext}
               disabled={disabled || currentStep === totalSteps - 1}
-              title="Next step"
+              title="Próximo passo"
               className="h-9 w-9"
             >
               <FastForward className="h-4 w-4" />
@@ -108,7 +108,7 @@ const StepController: React.FC<StepControllerProps> = ({
               size="icon"
               onClick={handleLast}
               disabled={disabled || currentStep === totalSteps - 1}
-              title="Last step"
+              title="Último passo"
               className="h-9 w-9"
             >
               <SkipForward className="h-4 w-4" />

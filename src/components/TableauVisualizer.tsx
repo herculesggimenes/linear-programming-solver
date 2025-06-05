@@ -81,7 +81,7 @@ const TableauVisualizer: React.FC<TableauVisualizerProps> = ({ step, showDetails
   const getColumnHeaderName = (colIndex: number) => {
     // Check if we're at the RHS column
     if (colIndex === cols - 1) {
-      return 'RHS';
+      return 'LD';
     }
     
     // Check if this is an artificial variable (for Phase I)
@@ -106,7 +106,7 @@ const TableauVisualizer: React.FC<TableauVisualizerProps> = ({ step, showDetails
       {tableau.phase === 'phase1' && (
         <div className="mb-2 flex justify-end">
           <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
-            Phase I
+            Fase I
           </span>
         </div>
       )}
@@ -114,7 +114,7 @@ const TableauVisualizer: React.FC<TableauVisualizerProps> = ({ step, showDetails
       <Table className="border-collapse w-full min-w-[600px]">
         <TableHeader>
           <TableRow>
-            <TableHead className="text-center border bg-gray-100 font-bold">Basic</TableHead>
+            <TableHead className="text-center border bg-gray-100 font-bold">Básica</TableHead>
             {Array.from({ length: cols }, (_, j) => (
               <TableHead 
                 key={`header-${j}`}
@@ -123,7 +123,7 @@ const TableauVisualizer: React.FC<TableauVisualizerProps> = ({ step, showDetails
                   enteringVariable === j && "bg-green-200"
                 )}
               >
-                {j < cols - 1 ? getColumnHeaderName(j) : 'RHS'}
+                {j < cols - 1 ? getColumnHeaderName(j) : 'LD'}
               </TableHead>
             ))}
           </TableRow>
@@ -163,16 +163,16 @@ const TableauVisualizer: React.FC<TableauVisualizerProps> = ({ step, showDetails
       {showDetails && (step.status === 'optimal' || step.status === 'phase1_start' || step.status === 'phase2_start' || step.status === 'infeasible') && (
         <div className="mt-4 p-4 bg-gray-50 border rounded-md">
           <h4 className="text-lg font-medium mb-2">
-            {step.status === 'optimal' ? 'Optimal Solution' : 
-             step.status === 'infeasible' ? 'Infeasible Problem' : 
-             step.status === 'phase1_start' ? 'Phase I Initial Tableau' : 
-             'Phase II Initial Tableau'}
+            {step.status === 'optimal' ? 'Solução Ótima' : 
+             step.status === 'infeasible' ? 'Problema Inviável' : 
+             step.status === 'phase1_start' ? 'Tableau Inicial da Fase I' : 
+             'Tableau Inicial da Fase II'}
           </h4>
           <div className="text-sm">
             <p className="font-medium mb-2">
               {step.status === 'phase1_start' ? 
-                'Phase I Objective (minimize sum of artificial variables):' :
-                'Objective value:'} <span className={step.status === 'infeasible' ? 'text-red-600' : 'text-emerald-600'}>{tableau.objectiveValue.toFixed(2)}</span>
+                'Objetivo da Fase I (minimizar soma das variáveis artificiais):' :
+                'Valor objetivo:'} <span className={step.status === 'infeasible' ? 'text-red-600' : 'text-emerald-600'}>{tableau.objectiveValue.toFixed(2)}</span>
             </p>
             <div className="flex flex-wrap gap-2">
               {/* Display all variables with their values */}
@@ -211,7 +211,7 @@ const TableauVisualizer: React.FC<TableauVisualizerProps> = ({ step, showDetails
             
             {step.status === 'infeasible' && (
               <p className="mt-4 text-red-600 font-medium">
-                Problem is infeasible: Artificial variables cannot be driven to zero.
+                Problema é inviável: As variáveis artificiais não podem ser levadas a zero.
               </p>
             )}
           </div>

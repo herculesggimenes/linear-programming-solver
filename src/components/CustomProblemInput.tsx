@@ -13,9 +13,9 @@ interface CustomProblemInputProps {
 }
 
 // Example problem format as a guide for users
-const EXAMPLE_FORMAT = `Maximize
+const EXAMPLE_FORMAT = `Maximizar
 3x₁ + 2x₂
-Subject to
+Sujeito a
 2x₁ + x₂ <= 10
 x₁ + 2x₂ <= 8
 x₁, x₂ >= 0`;
@@ -37,23 +37,23 @@ const CustomProblemInput: React.FC<CustomProblemInputProps> = ({ onSubmit }) => 
       
       // Find the objective function line(s)
       const objectiveIndex = lines.findIndex(line => 
-        line.toLowerCase() === 'maximize' || line.toLowerCase() === 'minimize'
+        line.toLowerCase() === 'maximizar' || line.toLowerCase() === 'minimizar' || line.toLowerCase() === 'maximize' || line.toLowerCase() === 'minimize'
       );
       
       if (objectiveIndex === -1) {
-        throw new Error('Could not find "Maximize" or "Minimize" keyword');
+        throw new Error('Não foi possível encontrar a palavra-chave "Maximizar" ou "Minimizar"');
       }
       
       // Determine if it's a maximization or minimization problem
-      const isMaximization = lines[objectiveIndex].toLowerCase() === 'maximize';
+      const isMaximization = lines[objectiveIndex].toLowerCase() === 'maximizar' || lines[objectiveIndex].toLowerCase() === 'maximize';
       
       // Find the "Subject to" line
       const subjectToIndex = lines.findIndex(line => 
-        line.toLowerCase() === 'subject to' || line.toLowerCase() === 'st' || line.toLowerCase() === 's.t.'
+        line.toLowerCase() === 'sujeito a' || line.toLowerCase() === 'subject to' || line.toLowerCase() === 'st' || line.toLowerCase() === 's.t.'
       );
       
       if (subjectToIndex === -1 || subjectToIndex <= objectiveIndex) {
-        throw new Error('Could not find "Subject to" after the objective function');
+        throw new Error('Não foi possível encontrar "Sujeito a" após a função objetivo');
       }
       
       // Extract the objective function (should be in the line after "Maximize"/"Minimize")
@@ -102,7 +102,7 @@ const CustomProblemInput: React.FC<CustomProblemInputProps> = ({ onSubmit }) => 
     const terms = cleaned.match(/[+\-]?\d*[a-zα-ω₀-₉][\u2080-\u2089₀-₉]*/g) || [];
     
     if (!terms.length) {
-      throw new Error(`Could not parse expression: "${expr}"`);
+      throw new Error(`Não foi possível analisar a expressão: "${expr}"`);
     }
     
     // Extract variable names (assuming format like "x₁" or "x1")
@@ -174,21 +174,21 @@ const CustomProblemInput: React.FC<CustomProblemInputProps> = ({ onSubmit }) => 
     } else if (constraintStr.includes('=')) {
       operator = '=';
     } else {
-      throw new Error(`Could not find operator (<=, >=, =) in constraint: "${constraintStr}"`);
+      throw new Error(`Não foi possível encontrar operador (<=, >=, =) na restrição: "${constraintStr}"`);
     }
     
     // Split by the operator
     const [lhs, rhsStr] = constraintStr.split(operator as string).map(s => s.trim());
     
     if (!lhs || !rhsStr) {
-      throw new Error(`Invalid constraint format: "${constraintStr}"`);
+      throw new Error(`Formato de restrição inválido: "${constraintStr}"`);
     }
     
     // Parse the right-hand side
     const rhs = parseFloat(rhsStr);
     
     if (isNaN(rhs)) {
-      throw new Error(`Could not parse RHS value from: "${rhsStr}"`);
+      throw new Error(`Não foi possível analisar o valor do lado direito de: "${rhsStr}"`);
     }
     
     // Parse the left-hand side
@@ -202,7 +202,7 @@ const CustomProblemInput: React.FC<CustomProblemInputProps> = ({ onSubmit }) => 
       if (varIndex !== -1) {
         coefficients[varIndex] = unfilteredCoeffs[i];
       } else {
-        throw new Error(`Variable "${unfilteredVars[i]}" in constraint is not defined in the objective function`);
+        throw new Error(`Variável "${unfilteredVars[i]}" na restrição não está definida na função objetivo`);
       }
     }
     
@@ -211,14 +211,14 @@ const CustomProblemInput: React.FC<CustomProblemInputProps> = ({ onSubmit }) => 
 
   // Format the parsed problem back as readable text
   const formatLinearProgram = (lp: LinearProgram): string => {
-    let result = `${lp.isMaximization ? 'Maximize' : 'Minimize'}\n`;
+    let result = `${lp.isMaximization ? 'Maximizar' : 'Minimizar'}\n`;
     
     // Format objective function
     result += lp.objective.map((coeff, i) => 
       `${i > 0 && coeff >= 0 ? '+ ' : ''}${coeff === 1 ? '' : coeff === -1 ? '-' : coeff}${lp.variables[i]}`
     ).join(' ') + '\n\n';
     
-    result += 'Subject to\n';
+    result += 'Sujeito a\n';
     
     // Format constraints
     lp.constraints.forEach(constraint => {
@@ -236,37 +236,37 @@ const CustomProblemInput: React.FC<CustomProblemInputProps> = ({ onSubmit }) => 
   return (
     <Card className="w-full">
       <CardHeader>
-        <CardTitle className="text-xl mb-2">Custom Linear Programming Problem</CardTitle>
+        <CardTitle className="text-xl mb-2">Problema de Programação Linear Personalizado</CardTitle>
         <p className="text-gray-600 text-sm">
-          Enter your linear programming problem below. The parser will attempt to interpret it and create a visualization.
+          Digite seu problema de programação linear abaixo. O analisador tentará interpretá-lo e criar uma visualização.
         </p>
       </CardHeader>
       <CardContent className="space-y-4">
         <div className="flex flex-col lg:flex-row gap-6">
           <div className="flex-1">
             <Label htmlFor="lpInput" className="mb-2 block font-medium text-gray-700">
-              Problem Input
+              Entrada do Problema
               <Button 
                 variant="link" 
                 size="sm" 
                 className="ml-2 p-0 h-auto" 
                 onClick={() => setShowHelp(!showHelp)}
               >
-                {showHelp ? 'Hide Help' : 'Show Help'}
+                {showHelp ? 'Ocultar Ajuda' : 'Mostrar Ajuda'}
               </Button>
             </Label>
             
             {showHelp && (
               <Alert className="mb-2">
-                <AlertTitle>Format Example</AlertTitle>
+                <AlertTitle>Exemplo de Formato</AlertTitle>
                 <AlertDescription>
                   <pre className="text-xs mt-2 bg-gray-50 p-2 rounded-md whitespace-pre-wrap">
                     {EXAMPLE_FORMAT}
                   </pre>
                   <p className="text-sm mt-2">
-                    Start with "Maximize" or "Minimize", followed by your objective function.
-                    Then write "Subject to" and list your constraints line by line.
-                    Variables should be in the format x₁, x₂, etc.
+                    Comece com "Maximizar" ou "Minimizar", seguido pela sua função objetivo.
+                    Depois escreva "Sujeito a" e liste suas restrições linha por linha.
+                    As variáveis devem estar no formato x₁, x₂, etc.
                   </p>
                 </AlertDescription>
               </Alert>
@@ -288,16 +288,16 @@ const CustomProblemInput: React.FC<CustomProblemInputProps> = ({ onSubmit }) => 
               >
                 <div className="flex items-center space-x-2">
                   <RadioGroupItem value="maximize" id="maximize" />
-                  <Label htmlFor="maximize">Maximize</Label>
+                  <Label htmlFor="maximize">Maximizar</Label>
                 </div>
                 <div className="flex items-center space-x-2">
                   <RadioGroupItem value="minimize" id="minimize" />
-                  <Label htmlFor="minimize">Minimize</Label>
+                  <Label htmlFor="minimize">Minimizar</Label>
                 </div>
               </RadioGroup>
               
               <Button onClick={parseProblem} className="ml-auto">
-                Create Visualization
+                Criar Visualização
               </Button>
             </div>
           </div>
@@ -305,7 +305,7 @@ const CustomProblemInput: React.FC<CustomProblemInputProps> = ({ onSubmit }) => 
           {parsed && (
             <div className="flex-1">
               <Label className="mb-2 block font-medium text-gray-700">
-                Parsed Problem
+                Problema Analisado
               </Label>
               <div className="p-4 bg-gray-50 rounded-md h-48 overflow-auto font-mono text-sm whitespace-pre-wrap">
                 {formatLinearProgram(parsed)}
@@ -313,9 +313,9 @@ const CustomProblemInput: React.FC<CustomProblemInputProps> = ({ onSubmit }) => 
               
               <div className="mt-4">
                 <Alert variant="success" className="bg-green-50 border-green-200">
-                  <AlertTitle className="text-green-700">Problem Parsed Successfully</AlertTitle>
+                  <AlertTitle className="text-green-700">Problema Analisado com Sucesso</AlertTitle>
                   <AlertDescription className="text-green-600">
-                    Your problem has been parsed and will be visualized below.
+                    Seu problema foi analisado e será visualizado abaixo.
                   </AlertDescription>
                 </Alert>
               </div>
@@ -325,23 +325,23 @@ const CustomProblemInput: React.FC<CustomProblemInputProps> = ({ onSubmit }) => 
           {error && !parsed && (
             <div className="flex-1">
               <Label className="mb-2 block font-medium text-gray-700">
-                Error
+                Erro
               </Label>
               <Alert variant="destructive" className="bg-red-50 border-red-200">
-                <AlertTitle className="text-red-700">Failed to Parse Problem</AlertTitle>
+                <AlertTitle className="text-red-700">Falha ao Analisar o Problema</AlertTitle>
                 <AlertDescription className="text-red-600 whitespace-pre-wrap">
                   {error}
                 </AlertDescription>
               </Alert>
               
               <div className="mt-4 p-4 bg-gray-50 rounded-md">
-                <h4 className="font-semibold text-gray-700 mb-2">Tips for Fixing:</h4>
+                <h4 className="font-semibold text-gray-700 mb-2">Dicas para Corrigir:</h4>
                 <ul className="list-disc ml-5 text-sm text-gray-600 space-y-1">
-                  <li>Make sure you include "Maximize" or "Minimize" on its own line</li>
-                  <li>Include "Subject to" on its own line</li>
-                  <li>Write each constraint on a separate line</li>
-                  <li>Use operators like &lt;=, &gt;=, or = for constraints</li>
-                  <li>Use consistent variable names throughout</li>
+                  <li>Certifique-se de incluir "Maximizar" ou "Minimizar" em sua própria linha</li>
+                  <li>Inclua "Sujeito a" em sua própria linha</li>
+                  <li>Escreva cada restrição em uma linha separada</li>
+                  <li>Use operadores como &lt;=, &gt;=, ou = para restrições</li>
+                  <li>Use nomes de variáveis consistentes em todo o problema</li>
                 </ul>
               </div>
             </div>

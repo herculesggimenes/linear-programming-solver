@@ -331,30 +331,30 @@ export function generatePhaseIICanonicalStepExplanation(
   basicVarName: string,
   objCoeff: number
 ): string {
-  let explanation = `### Phase II Canonicalization - Step ${stepIndex + 1}\n\n`;
+  let explanation = `### Canonicalização da Fase II - Passo ${stepIndex + 1}\n\n`;
   
   const basicVar = tableau.basicVariables[stepIndex];
   const constraintRow = stepIndex + 1;
   
-  explanation += `**Eliminating ${basicVarName} from the objective row**\n\n`;
+  explanation += `**Eliminando ${basicVarName} da linha objetivo**\n\n`;
   
-  explanation += `Current objective coefficient for ${basicVarName}: ${objCoeff}\n`;
-  explanation += `${basicVarName} is basic in row ${constraintRow}\n\n`;
+  explanation += `Coeficiente objetivo atual para ${basicVarName}: ${objCoeff}\n`;
+  explanation += `${basicVarName} é básica na linha ${constraintRow}\n\n`;
   
-  explanation += `To make the coefficient 0, we perform:\n`;
-  explanation += `**Row 0 = Row 0 - (${objCoeff}) × Row ${constraintRow}**\n\n`;
+  explanation += `Para tornar o coeficiente 0, realizamos:\n`;
+  explanation += `**Linha 0 = Linha 0 - (${objCoeff}) × Linha ${constraintRow}**\n\n`;
   
   // Show the row operation details
-  explanation += `**Row operation details:**\n`;
+  explanation += `**Detalhes da operação de linha:**\n`;
   const row0 = tableau.matrix[0];
   const rowN = tableau.matrix[constraintRow];
   
-  explanation += `- Original Row 0: [${row0.map(v => v.toFixed(2)).join(', ')}]\n`;
-  explanation += `- Row ${constraintRow}: [${rowN.map(v => v.toFixed(2)).join(', ')}]\n`;
-  explanation += `- ${objCoeff} × Row ${constraintRow}: [${rowN.map(v => (objCoeff * v).toFixed(2)).join(', ')}]\n\n`;
+  explanation += `- Linha 0 Original: [${row0.map(v => v.toFixed(2)).join(', ')}]\n`;
+  explanation += `- Linha ${constraintRow}: [${rowN.map(v => v.toFixed(2)).join(', ')}]\n`;
+  explanation += `- ${objCoeff} × Linha ${constraintRow}: [${rowN.map(v => (objCoeff * v).toFixed(2)).join(', ')}]\n\n`;
   
-  explanation += `After this operation, ${basicVarName} will have coefficient 0 in the objective row, `;
-  explanation += `maintaining the canonical form required for the simplex method.`;
+  explanation += `Após esta operação, ${basicVarName} terá coeficiente 0 na linha objetivo, `;
+  explanation += `mantendo a forma canônica necessária para o método simplex.`;
   
   return explanation;
 }
@@ -363,13 +363,13 @@ export function generatePhaseIICanonicalStepExplanation(
  * Generate explanation for Phase II transition
  */
 export function generatePhaseTransitionExplanation(phaseOneTableau: PhaseITableau, phaseTwoTableau: PhaseIITableau, standardLP: LinearProgram): string {
-  let explanation = "### Transition to Phase II\n\n";
+  let explanation = "### Transição para a Fase II\n\n";
   
-  explanation += "Phase I has successfully found a feasible solution (w = 0). Now we replace the Phase I objective with the original objective function.\n\n";
+  explanation += "A Fase I encontrou com sucesso uma solução viável (w = 0). Agora substituímos o objetivo da Fase I pela função objetivo original.\n\n";
   
-  explanation += "#### Step 1: Replace Objective Function\n\n";
-  explanation += "The standard form objective function is:\n";
-  explanation += "Minimize: ";
+  explanation += "#### Passo 1: Substituir Função Objetivo\n\n";
+  explanation += "A função objetivo em forma padrão é:\n";
+  explanation += "Minimizar: ";
   for (let i = 0; i < standardLP.objective.length; i++) {
     if (i > 0 && standardLP.objective[i] >= 0) explanation += " + ";
     explanation += `${standardLP.objective[i]}${phaseTwoTableau.variableNames[i]}`;
@@ -379,11 +379,11 @@ export function generatePhaseTransitionExplanation(phaseOneTableau: PhaseITablea
   }
   explanation += "\n\n";
   
-  explanation += "#### Step 2: Canonicalization\n\n";
-  explanation += "**What is canonicalization?** In the simplex method, the tableau must be in canonical form with respect to the current basis. ";
-  explanation += "This means that each basic variable must have a coefficient of 0 in the objective row and form an identity matrix in the constraint rows.\n\n";
+  explanation += "#### Passo 2: Canonicalização\n\n";
+  explanation += "**O que é canonicalização?** No método simplex, o tableau deve estar em forma canônica em relação à base atual. ";
+  explanation += "Isso significa que cada variável básica deve ter um coeficiente de 0 na linha objetivo e formar uma matriz identidade nas linhas de restrição.\n\n";
   
-  explanation += "Current basic variables: " + phaseTwoTableau.basicVariables.map(idx => phaseTwoTableau.variableNames[idx]).join(', ') + "\n\n";
+  explanation += "Variáveis básicas atuais: " + phaseTwoTableau.basicVariables.map(idx => phaseTwoTableau.variableNames[idx]).join(', ') + "\n\n";
   
   // Show the canonicalization calculations
   const phaseIMatrix = phaseOneTableau.matrix;
@@ -395,10 +395,10 @@ export function generatePhaseTransitionExplanation(phaseOneTableau: PhaseITablea
   }
   initialObjective[initialObjective.length - 1] = standardLP.objectiveRHS || 0;
   
-  explanation += "Initial objective row (before canonicalization):\n";
+  explanation += "Linha objetivo inicial (antes da canonicalização):\n";
   explanation += `[${initialObjective.map(v => v.toFixed(2)).join(', ')}]\n\n`;
   
-  explanation += "**Canonicalization process:**\n\n";
+  explanation += "**Processo de canonicalização:**\n\n";
   
   // Show calculations for each basic variable
   for (let i = 0; i < phaseTwoTableau.basicVariables.length; i++) {
@@ -407,16 +407,16 @@ export function generatePhaseTransitionExplanation(phaseOneTableau: PhaseITablea
     const coeff = initialObjective[basicVarCol];
     
     if (Math.abs(coeff) > 1e-10) {
-      explanation += `- Basic variable ${varName} (column ${basicVarCol}) has coefficient ${coeff}\n`;
-      explanation += `  To eliminate: Row 0 = Row 0 - (${coeff}) × Row ${i + 1}\n`;
-      explanation += `  Row ${i + 1}: [${phaseIMatrix[i + 1].map(v => v.toFixed(2)).join(', ')}]\n\n`;
+      explanation += `- Variável básica ${varName} (coluna ${basicVarCol}) tem coeficiente ${coeff}\n`;
+      explanation += `  Para eliminar: Linha 0 = Linha 0 - (${coeff}) × Linha ${i + 1}\n`;
+      explanation += `  Linha ${i + 1}: [${phaseIMatrix[i + 1].map(v => v.toFixed(2)).join(', ')}]\n\n`;
     }
   }
   
-  explanation += "Final objective row (after canonicalization):\n";
+  explanation += "Linha objetivo final (após canonicalização):\n";
   explanation += `[${phaseTwoTableau.matrix[0].map(v => v.toFixed(2)).join(', ')}]\n\n`;
   
-  explanation += "The tableau is now ready for Phase II iterations to optimize the original objective function.\n";
+  explanation += "O tableau agora está pronto para as iterações da Fase II para otimizar a função objetivo original.\n";
   
   // Return marker for component to parse additional info
   const basicVarIndices = phaseTwoTableau.basicVariables.join(',');
@@ -428,21 +428,21 @@ export function generatePhaseTransitionExplanation(phaseOneTableau: PhaseITablea
  * Generate explanation for non-canonical Phase II tableau
  */
 export function generatePhaseIINonCanonicalExplanation(phaseOneTableau: PhaseITableau, phaseTwoTableau: PhaseIITableau, standardLP: LinearProgram): string {
-  let explanation = "### Transition to Phase II - Non-Canonical Form\n\n";
+  let explanation = "### Transição para Fase II - Forma Não-Canônica\n\n";
   
-  explanation += "Phase I has successfully found a feasible solution with w = 0. Now we:\n";
-  explanation += "1. **Drop the artificial variable columns** - they are no longer needed\n";
-  explanation += "2. **Replace the Phase I objective** with the original objective function\n\n";
+  explanation += "A Fase I encontrou com sucesso uma solução viável com w = 0. Agora nós:\n";
+  explanation += "1. **Removemos as colunas das variáveis artificiais** - elas não são mais necessárias\n";
+  explanation += "2. **Substituímos o objetivo da Fase I** pela função objetivo original\n";
   
   // Show which columns were dropped
   const droppedVars = phaseOneTableau.artificialVariableNames;
   if (droppedVars.length > 0) {
-    explanation += `**Dropped columns:** ${droppedVars.join(', ')}\n\n`;
+    explanation += `**Colunas removidas:** ${droppedVars.join(', ')}\n\n`;
   }
   
-  explanation += "#### Original Objective Function (Standard Form)\n\n";
-  explanation += "The standard form objective function is:\n";
-  explanation += "**Minimize:** ";
+  explanation += "### Função Objetivo Original (Forma Padrão)\n\n";
+  explanation += "A função objetivo em forma padrão é:\n";
+  explanation += "**Minimizar:** ";
   
   // Show the objective function
   const terms = [];
@@ -464,17 +464,17 @@ export function generatePhaseIINonCanonicalExplanation(phaseOneTableau: PhaseITa
   }
   explanation += "\n\n";
   
-  explanation += "#### Non-Canonical Tableau\n\n";
-  explanation += "We replace the Phase I objective row with the original objective coefficients:\n\n";
+  explanation += "### Tableau Não-Canônico\n\n";
+  explanation += "Substituímos a linha objetivo da Fase I pelos coeficientes objetivos originais:\n\n";
   
   // Show the new objective row
-  explanation += "**New objective row:** [";
+  explanation += "**Nova linha objetivo:** [";
   explanation += phaseTwoTableau.matrix[0].map(v => v.toFixed(2)).join(', ');
   explanation += "]\n\n";
   
-  explanation += "⚠️ **Note:** This tableau is NOT in canonical form yet because the basic variables ";
-  explanation += "have non-zero coefficients in the objective row. We need to perform row operations to ";
-  explanation += "make the coefficients of basic variables equal to zero.\n\n";
+  explanation += "⚠️ **Nota:** Este tableau ainda NÃO está em forma canônica porque as variáveis básicas ";
+  explanation += "têm coeficientes não-zero na linha objetivo. Precisamos realizar operações de linha para ";
+  explanation += "tornar os coeficientes das variáveis básicas iguais a zero.\n\n";
   
   // Show which basic variables have non-zero coefficients
   const basicVarsWithNonZero = [];
@@ -491,9 +491,9 @@ export function generatePhaseIINonCanonicalExplanation(phaseOneTableau: PhaseITa
   }
   
   if (basicVarsWithNonZero.length > 0) {
-    explanation += "Basic variables with non-zero coefficients:\n";
+    explanation += "Variáveis básicas com coeficientes não-zero:\n";
     for (const basicVar of basicVarsWithNonZero) {
-      explanation += `- ${basicVar.name}: coefficient = ${basicVar.coeff} (in row ${basicVar.row})\n`;
+      explanation += `- ${basicVar.name}: coeficiente = ${basicVar.coeff} (na linha ${basicVar.row})\n`;
     }
   }
   
@@ -504,12 +504,12 @@ export function generatePhaseIINonCanonicalExplanation(phaseOneTableau: PhaseITa
  * Generate explanation for canonical Phase II tableau
  */
 export function generatePhaseIICanonicalExplanation(nonCanonicalTableau: PhaseIITableau, canonicalTableau: PhaseIITableau, standardLP: LinearProgram): string {
-  let explanation = "### Canonicalizing the Phase II Tableau\n\n";
+  let explanation = "### Canonicalizando o Tableau da Fase II\n\n";
   
-  explanation += "To continue with Phase II, we must canonicalize the tableau by making the coefficients ";
-  explanation += "of basic variables equal to zero in the objective row.\n\n";
+  explanation += "Para continuar com a Fase II, devemos canonicalizar o tableau tornando os coeficientes ";
+  explanation += "das variáveis básicas iguais a zero na linha objetivo.\n\n";
   
-  explanation += "#### Canonicalization Operations\n\n";
+  explanation += "#### Operações de Canonicalização\n\n";
   
   // Find which operations need to be performed
   const operations = [];
@@ -529,33 +529,33 @@ export function generatePhaseIICanonicalExplanation(nonCanonicalTableau: PhaseII
   }
   
   if (operations.length > 0) {
-    explanation += "We perform the following row operations:\n\n";
+    explanation += "Realizamos as seguintes operações de linha:\n\n";
     for (const op of operations) {
       explanation += `**${op.operation}**\n`;
-      explanation += `This eliminates the coefficient ${op.coeff} of basic variable ${op.varName}\n\n`;
+      explanation += `Isso elimina o coeficiente ${op.coeff} da variável básica ${op.varName}\n\n`;
       
       // Show the calculation details
-      explanation += "Row " + op.rowNum + " values: [";
+      explanation += "Valores da linha " + op.rowNum + ": [";
       explanation += nonCanonicalTableau.matrix[op.rowNum].map(v => v.toFixed(2)).join(', ');
       explanation += "]\n";
       
-      explanation += "Multiply by " + op.coeff + ": [";
+      explanation += "Multiplicar por " + op.coeff + ": [";
       explanation += nonCanonicalTableau.matrix[op.rowNum].map(v => (v * op.coeff).toFixed(2)).join(', ');
       explanation += "]\n\n";
     }
   }
   
-  explanation += "#### Canonical Tableau\n\n";
-  explanation += "After performing these operations, we get the canonical tableau:\n\n";
+  explanation += "#### Tableau Canônico\n\n";
+  explanation += "Após realizar essas operações, obtemos o tableau canônico:\n\n";
   
-  explanation += "**Final objective row:** [";
+  explanation += "**Linha objetivo final:** [";
   explanation += canonicalTableau.matrix[0].map(v => v.toFixed(2)).join(', ');
   explanation += "]\n\n";
   
-  explanation += "✅ The tableau is now in canonical form with respect to the current basis. ";
-  explanation += "All basic variables have coefficient 0 in the objective row.\n\n";
+  explanation += "✅ O tableau agora está em forma canônica em relação à base atual. ";
+  explanation += "Todas as variáveis básicas têm coeficiente 0 na linha objetivo.\n\n";
   
-  explanation += "We can now continue with Phase II iterations to optimize the original objective function.";
+  explanation += "Agora podemos continuar com as iterações da Fase II para otimizar a função objetivo original.";
   
   return explanation;
 }
@@ -564,11 +564,11 @@ export function generatePhaseIICanonicalExplanation(nonCanonicalTableau: PhaseII
  * Generate explanation for standard form
  */
 export function generateStandardFormExplanation(lp: LinearProgram): string {
-  let explanation = "### Standard Form Conversion\n\n";
-  explanation += "The linear program has been converted to standard form:\n\n";
-  explanation += "- All constraints are now equalities (using slack/surplus variables)\n";
-  explanation += "- All variables are non-negative\n";
-  explanation += "- The objective is in minimization form\n\n";
+  let explanation = "### Conversão para Forma Padrão\n\n";
+  explanation += "O programa linear foi convertido para forma padrão:\n\n";
+  explanation += "- Todas as restrições agora são igualdades (usando variáveis de folga/excesso)\n";
+  explanation += "- Todas as variáveis são não-negativas\n";
+  explanation += "- O objetivo está em forma de minimização\n\n";
   
   // Count slack variables
   let slackCount = 0;
@@ -579,15 +579,15 @@ export function generateStandardFormExplanation(lp: LinearProgram): string {
   }
   
   if (slackCount > 0) {
-    explanation += `Added ${slackCount} slack/surplus variable${slackCount > 1 ? 's' : ''} to convert inequalities to equalities.\n\n`;
+    explanation += `Adicionada${slackCount > 1 ? 's' : ''} ${slackCount} variáve${slackCount > 1 ? 'is' : 'l'} de folga/excesso para converter desigualdades em igualdades.\n\n`;
   }
   
   const needsPhaseOne = lp.constraints.some(c => c.operator === '=' || c.operator === '>=');
   if (needsPhaseOne) {
-    explanation += "However, we cannot form an initial basis from the slack variables alone, ";
-    explanation += "so we need to use the Two-Phase method.";
+    explanation += "No entanto, não podemos formar uma base inicial apenas com as variáveis de folga, ";
+    explanation += "então precisamos usar o método de Duas Fases.";
   } else {
-    explanation += "The slack variables form an identity matrix, providing an initial basic feasible solution.";
+    explanation += "As variáveis de folga formam uma matriz identidade, fornecendo uma solução básica viável inicial.";
   }
   
   return explanation;

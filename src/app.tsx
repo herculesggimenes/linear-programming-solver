@@ -224,20 +224,20 @@ function App() {
   return (
     <div className="max-w-6xl mx-auto p-3 sm:p-5 font-sans">
       <header className="text-center mb-8">
-        <h1 className="text-3xl font-bold text-blue-600 mb-3">Interactive Simplex Method Visualizer</h1>
+        <h1 className="text-3xl font-bold text-blue-600 mb-3">Visualizador Interativo do Método Simplex</h1>
         <p className="text-gray-600 max-w-2xl mx-auto leading-relaxed">
-          Learn linear programming concepts through step-by-step visualization of the simplex algorithm.
+          Aprenda conceitos de programação linear através da visualização passo a passo do algoritmo simplex.
         </p>
       </header>
 
       <Tabs defaultValue="examples" className="mb-8" onValueChange={(value) => setInputMode(value as 'examples' | 'custom')}>
         <TabsList className="grid w-full grid-cols-2">
-          <TabsTrigger value="examples">Example Problems</TabsTrigger>
-          <TabsTrigger value="custom">Custom Problem</TabsTrigger>
+          <TabsTrigger value="examples">Problemas de Exemplo</TabsTrigger>
+          <TabsTrigger value="custom">Problema Personalizado</TabsTrigger>
         </TabsList>
         
         <TabsContent value="examples" className="mt-4">
-          <h2 className="text-2xl font-semibold text-gray-800 text-center mb-4">Select Example Problem</h2>
+          <h2 className="text-2xl font-semibold text-gray-800 text-center mb-4">Selecione um Problema de Exemplo</h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-5">
             {Object.keys(EXAMPLE_PROBLEMS).map((key) => (
               <div 
@@ -253,25 +253,25 @@ function App() {
                 }}
               >
                 <h3 className="text-xl font-medium text-blue-600 mb-3">
-                  {key === 'unbounded' ? 'Unbounded Problem' : 
-                   key === 'unrestricted' ? 'Unrestricted Problem' :
-                   key === 'example4' ? 'Standard Form Conversion 1' :
-                   key === 'example5' ? 'Standard Form Conversion 2' :
-                   key === 'objectiveRHS' ? 'Objective with Constant' :
-                   key === 'newProblem1' ? 'Min with ≥ Constraint' :
-                   key === 'newProblem2' ? 'Max with ≤ Constraints' :
-                   key === 'newProblem3' ? 'Max with Resource Constraints' :
-                   key === 'newProblem4' ? 'Max with Multiple Constraints' :
-                   key === 'phaseIExample' ? 'Phase I Example' :
-                   key === 'infeasibleExample' ? 'Infeasible Problem Example' :
-                   key === 'phaseIDebugExample' ? 'Phase I Debug Example' :
-                   key === 'productionPlanningPhaseI' ? 'Production Planning (Phase I)' :
-                   key === 'mixedConstraints' ? 'Mixed Constraints (≤, ≥, =)' :
-                   `Example ${key.replace('example', '')}`}
+                  {key === 'unbounded' ? 'Problema Ilimitado' : 
+                   key === 'unrestricted' ? 'Problema com Variáveis Livres' :
+                   key === 'example4' ? 'Conversão para Forma Padrão 1' :
+                   key === 'example5' ? 'Conversão para Forma Padrão 2' :
+                   key === 'objectiveRHS' ? 'Objetivo com Constante' :
+                   key === 'newProblem1' ? 'Min com Restrição ≥' :
+                   key === 'newProblem2' ? 'Max com Restrições ≤' :
+                   key === 'newProblem3' ? 'Max com Restrições de Recursos' :
+                   key === 'newProblem4' ? 'Max com Múltiplas Restrições' :
+                   key === 'phaseIExample' ? 'Exemplo de Fase I' :
+                   key === 'infeasibleExample' ? 'Exemplo de Problema Inviável' :
+                   key === 'phaseIDebugExample' ? 'Outro Exemplo de Fase I' :
+                   key === 'productionPlanningPhaseI' ? 'Planejamento de Produção (Fase I)' :
+                   key === 'mixedConstraints' ? 'Restrições Mistas (≤, ≥, =)' :
+                   `Exemplo ${key.replace('example', '')}`}
                 </h3>
                 <div className="text-sm">
                   <p className="mb-2">
-                    <span className="font-semibold">{EXAMPLE_PROBLEMS[key].isMaximization ? 'Maximize:' : 'Minimize:'}</span>{" "}
+                    <span className="font-semibold">{EXAMPLE_PROBLEMS[key].isMaximization ? 'Maximizar:' : 'Minimizar:'}</span>{" "}
                     {EXAMPLE_PROBLEMS[key].objective.map((coeff, index) => 
                       `${coeff > 0 && index > 0 ? '+' : ''}${coeff}${EXAMPLE_PROBLEMS[key].variables[index]}`
                     ).join(' ')}
@@ -279,7 +279,7 @@ function App() {
                       `${EXAMPLE_PROBLEMS[key].objectiveRHS > 0 ? ' +' : ' '}${EXAMPLE_PROBLEMS[key].objectiveRHS}` : 
                       ''}
                   </p>
-                  <p className="font-semibold mb-1">Subject to:</p>
+                  <p className="font-semibold mb-1">Sujeito a:</p>
                   <ul className="list-disc pl-5 space-y-1">
                     {EXAMPLE_PROBLEMS[key].constraints.map((constraint, i) => (
                       <li key={i}>
@@ -292,7 +292,7 @@ function App() {
                     {EXAMPLE_PROBLEMS[key].variableRestrictions?.some(r => !r) ?
                       EXAMPLE_PROBLEMS[key].variables.map((v, idx) => (
                         <li key={`var-${idx}`}>
-                          {v} {EXAMPLE_PROBLEMS[key].variableRestrictions?.[idx] ? '≥ 0' : 'unrestricted'}
+                          {v} {EXAMPLE_PROBLEMS[key].variableRestrictions?.[idx] ? '≥ 0' : 'livre'}
                         </li>
                       )) : 
                       <li>{EXAMPLE_PROBLEMS[key].variables.join(', ')} ≥ 0</li>
@@ -316,7 +316,18 @@ function App() {
       </div>
 
       <footer className="mt-10 py-5 text-center text-gray-500 border-t border-gray-200">
-        <p>Interactive Linear Programming Learning Tool</p>
+        <p className="mb-2">Ferramenta Interativa de Aprendizado de Programação Linear</p>
+        <p className="text-sm">
+          Criado por{' '}
+          <a 
+            href="https://www.linkedin.com/in/herculesgg/" 
+            target="_blank" 
+            rel="noopener noreferrer"
+            className="text-blue-600 hover:text-blue-800 underline"
+          >
+            Hercules Gimenes
+          </a>
+        </p>
       </footer>
     </div>
   );

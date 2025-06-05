@@ -323,8 +323,8 @@ const GeometricVisualizerBase: React.FC<Required<GeometricVisualizerVisxProps>> 
               {/* Feasible region (polygon) */}
               {vertices.length > 2 && (
                 <Polygon
-                  points={vertices.map(([x, y]) => 
-                    new Point({ x: xScale(x), y: yScale(y) })
+                  points={vertices.map(([x, y]) =>
+                    [xScale(x), yScale(y)]
                   )}
                   fill="#3498db"
                   fillOpacity={0.2}
@@ -479,7 +479,7 @@ const GeometricVisualizerBase: React.FC<Required<GeometricVisualizerVisxProps>> 
             <button
               className="p-2 bg-white border border-gray-300 rounded-full shadow-sm hover:bg-gray-100 flex items-center justify-center"
               onClick={() => zoom.scale({ scaleX: 1.2, scaleY: 1.2 })}
-              aria-label="Zoom in"
+              aria-label="Aumentar zoom"
               style={{ touchAction: 'none' }} // Prevent touch events from scrolling the page
             >
               <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor">
@@ -489,7 +489,7 @@ const GeometricVisualizerBase: React.FC<Required<GeometricVisualizerVisxProps>> 
             <button
               className="p-2 bg-white border border-gray-300 rounded-full shadow-sm hover:bg-gray-100 flex items-center justify-center"
               onClick={() => zoom.scale({ scaleX: 0.8, scaleY: 0.8 })}
-              aria-label="Zoom out"
+              aria-label="Diminuir zoom"
               style={{ touchAction: 'none' }}
             >
               <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor">
@@ -499,7 +499,7 @@ const GeometricVisualizerBase: React.FC<Required<GeometricVisualizerVisxProps>> 
             <button
               className="p-2 bg-white border border-gray-300 rounded-full shadow-sm hover:bg-gray-100 flex items-center justify-center"
               onClick={zoom.reset}
-              aria-label="Reset view"
+              aria-label="Resetar visualização"
               style={{ touchAction: 'none' }}
             >
               <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor">
@@ -513,20 +513,20 @@ const GeometricVisualizerBase: React.FC<Required<GeometricVisualizerVisxProps>> 
             <div className="flex flex-col sm:flex-row sm:flex-wrap gap-2">
               <div className="flex items-center">
                 <div className="w-3 h-3 bg-blue-500 opacity-20 border border-blue-500 mr-1"></div>
-                <span>Feasible Region</span>
+                <span>Região Viável</span>
               </div>
               <div className="flex items-center">
                 <div className="w-3 h-3 bg-blue-500 rounded-none mr-1"></div>
-                <span>Constraints</span>
+                <span>Restrições</span>
               </div>
               <div className="flex items-center">
                 <div className="w-3 h-3 bg-red-500 rounded-full mr-1"></div>
-                <span>Current Solution</span>
+                <span>Solução Atual</span>
               </div>
               <div className="flex items-center">
                 <div className="w-6 h-0 border-t-2 border-orange-500 mr-1"></div>
                 <span>
-                  {lp.isMaximization ? "Max" : "Min"} Direction
+                  Direção de {lp.isMaximization ? "Max" : "Min"}
                   {lp.objectiveRHS ? ` (${lp.objective[0]}${xVarName} + ${lp.objective[1]}${yVarName} ${lp.objectiveRHS >= 0 ? '+' : ''} ${lp.objectiveRHS})` : ''}
                 </span>
               </div>

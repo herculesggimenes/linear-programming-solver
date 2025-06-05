@@ -165,7 +165,7 @@ export function solveWithSteps(lp: LinearProgram, isAlreadyStandardForm = false)
           leavingVariable: null,
           pivotElement: null,
           status: 'unbounded',
-          explanation: 'Phase I appears to be unbounded, which indicates an error in the formulation.'
+          explanation: 'A Fase I parece ser ilimitada, o que indica um erro na formulação.'
         });
         return steps;
       }
@@ -241,7 +241,7 @@ export function solveWithSteps(lp: LinearProgram, isAlreadyStandardForm = false)
       leavingVariable: null,
       pivotElement: null,
       status: 'initial',
-      explanation: 'Initial tableau created from standard form.'
+      explanation: 'Tableau inicial criado a partir da forma padrão.'
     });
   }
   
@@ -324,13 +324,13 @@ export function solveWithSteps(lp: LinearProgram, isAlreadyStandardForm = false)
  * Generate explanation for infeasibility detected in Phase II
  */
 function generatePhaseIIInfeasibilityExplanation(tableau: SimplexTableau): string {
-  let explanation = "### Problem is Infeasible\n\n";
+  let explanation = "### Problema é Inviável\n\n";
   
-  explanation += "The simplex algorithm has reached optimality, but artificial variables ";
-  explanation += "remain in the basis with positive values. This indicates that the original ";
-  explanation += "problem has no feasible solution.\n\n";
+  explanation += "O algoritmo simplex alcançou a otimalidade, mas variáveis artificiais ";
+  explanation += "permanecem na base com valores positivos. Isso indica que o problema ";
+  explanation += "original não tem solução viável.\n\n";
   
-  explanation += "#### Why is this problem infeasible?\n\n";
+  explanation += "#### Por que este problema é inviável?\n\n";
   
   // List artificial variables still in basis
   const artificialInBasis: string[] = [];
@@ -344,14 +344,14 @@ function generatePhaseIIInfeasibilityExplanation(tableau: SimplexTableau): strin
     }
   });
   
-  explanation += "Artificial variables still in basis: " + artificialInBasis.join(', ') + "\n\n";
+  explanation += "Variáveis artificiais ainda na base: " + artificialInBasis.join(', ') + "\n\n";
   
-  explanation += "In a feasible problem, all artificial variables would be driven to zero ";
-  explanation += "(out of the basis) during Phase II. Since they remain with positive values, ";
-  explanation += "the constraints are contradictory and cannot be satisfied simultaneously.\n\n";
+  explanation += "Em um problema viável, todas as variáveis artificiais seriam levadas a zero ";
+  explanation += "(fora da base) durante a Fase II. Como elas permanecem com valores positivos, ";
+  explanation += "as restrições são contraditórias e não podem ser satisfeitas simultaneamente.\n\n";
   
-  explanation += "**Recommendation**: Review the constraints to identify contradictions or ";
-  explanation += "adjust the right-hand side values to create a feasible region.";
+  explanation += "**Recomendação**: Revise as restrições para identificar contradições ou ";
+  explanation += "ajuste os valores do lado direito para criar uma região viável.";
   
   return explanation;
 }
@@ -360,12 +360,12 @@ function generatePhaseIIInfeasibilityExplanation(tableau: SimplexTableau): strin
  * Generate explanation for optimal solution
  */
 function generateOptimalExplanation(tableau: SimplexTableau): string {
-  let explanation = "### Optimal Solution Found\n\n";
+  let explanation = "### Solução Ótima Encontrada\n\n";
   
-  explanation += "All coefficients in the objective row are non-negative, ";
-  explanation += "which means no variable can enter the basis to improve the objective value.\n\n";
+  explanation += "Todos os coeficientes na linha objetivo são não-negativos, ";
+  explanation += "o que significa que nenhuma variável pode entrar na base para melhorar o valor objetivo.\n\n";
   
-  explanation += "**Solution Summary:**\n";
+  explanation += "**Resumo da Solução:**\n";
   
   // Get variable values
   const values: Record<string, number> = {};
@@ -393,7 +393,7 @@ function generateOptimalExplanation(tableau: SimplexTableau): string {
     }
   }
   
-  explanation += `\n**Optimal objective value**: ${Math.abs(tableau.objectiveValue).toFixed(2)}`;
+  explanation += `\n**Valor objetivo ótimo**: ${Math.abs(tableau.objectiveValue).toFixed(2)}`;
   
   return explanation;
 }
@@ -404,16 +404,16 @@ function generateOptimalExplanation(tableau: SimplexTableau): string {
 function generateUnboundedExplanation(tableau: SimplexTableau, enteringCol: number): string {
   const enteringVarName = tableau.variableNames[enteringCol];
   
-  let explanation = "### Problem is Unbounded\n\n";
+  let explanation = "### Problema é Ilimitado\n\n";
   
-  explanation += `The variable ${enteringVarName} can enter the basis, `;
-  explanation += "but there is no limit to how much it can increase.\n\n";
+  explanation += `A variável ${enteringVarName} pode entrar na base, `;
+  explanation += "mas não há limite para o quanto ela pode aumentar.\n\n";
   
-  explanation += "All coefficients in the entering column are non-positive, ";
-  explanation += "which means the objective value can be improved indefinitely.\n\n";
+  explanation += "Todos os coeficientes na coluna entrante são não-positivos, ";
+  explanation += "o que significa que o valor objetivo pode ser melhorado indefinidamente.\n\n";
   
-  explanation += "This typically indicates a modeling error - ";
-  explanation += "real-world problems usually have natural bounds on variables.";
+  explanation += "Isso geralmente indica um erro de modelagem - ";
+  explanation += "problemas do mundo real geralmente têm limites naturais nas variáveis.";
   
   return explanation;
 }

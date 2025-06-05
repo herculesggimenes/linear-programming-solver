@@ -31,13 +31,13 @@ export function convertToStandardFormWithExplanation(lp: LinearProgram): {
   };
 
   // Explanation will be built step by step
-  let explanation = '## Converting to Standard Form\n\n';
+  let explanation = '## Convertendo para Forma Padrão\n\n';
   
   // Step 1: Convert maximization to minimization if needed (following example strategy)
   if (standardLP.isMaximization) {
-    explanation += '### Step 1: Convert Maximization to Minimization\n\n';
-    explanation += 'Since this is a maximization problem, we convert it to a minimization problem by multiplying the objective function by -1:\n\n';
-    explanation += `**Original objective (maximize):** ${formatObjective(originalLP)}${originalLP.objectiveRHS ? ` + ${originalLP.objectiveRHS}` : ''}\n\n`;
+    explanation += '### Passo 1: Converter Maximização para Minimização\n\n';
+    explanation += 'Como este é um problema de maximização, convertemos para minimização multiplicando a função objetivo por -1:\n\n';
+    explanation += `**Objetivo original (maximizar):** ${formatObjective(originalLP)}${originalLP.objectiveRHS ? ` + ${originalLP.objectiveRHS}` : ''}\n\n`;
     
     standardLP.objective = standardLP.objective.map(coeff => -coeff);
     if (standardLP.objectiveRHS !== undefined) {
@@ -45,10 +45,10 @@ export function convertToStandardFormWithExplanation(lp: LinearProgram): {
     }
     standardLP.isMaximization = false;
     
-    explanation += `**Converted objective (minimize):** ${formatObjective(standardLP)}${standardLP.objectiveRHS ? ` + ${standardLP.objectiveRHS}` : ''}\n\n`;
+    explanation += `**Objetivo convertido (minimizar):** ${formatObjective(standardLP)}${standardLP.objectiveRHS ? ` + ${standardLP.objectiveRHS}` : ''}\n\n`;
   } else {
-    explanation += '### Step 1: Verify Objective Function Type\n\n';
-    explanation += 'This is already a minimization problem, so no conversion is needed for the objective function.\n\n';
+    explanation += '### Passo 1: Verificar Tipo da Função Objetivo\n\n';
+    explanation += 'Este já é um problema de minimização, então nenhuma conversão é necessária para a função objetivo.\n\n';
   }
   
   // Step 2: Handle unrestricted variables by substitution
@@ -66,13 +66,13 @@ export function convertToStandardFormWithExplanation(lp: LinearProgram): {
   }
   
   if (unrestrictedVars.length > 0) {
-    explanation += '### Step 2: Handle Unrestricted Variables\n\n';
-    explanation += 'For each unrestricted variable, we substitute it with the difference of two non-negative variables:\n\n';
+    explanation += '### Passo 2: Tratar Variáveis Irrestritas\n\n';
+    explanation += 'Para cada variável irrestrita, substituímos pela diferença de duas variáveis não-negativas:\n\n';
     
     // Process unrestricted variables
     for (const varIndex of unrestrictedVars) {
       const varName = originalLP.variables[varIndex];
-      explanation += `For unrestricted variable ${varName}, we substitute: ${varName} = ${varName}⁺ - ${varName}⁻ where ${varName}⁺ ≥ 0 and ${varName}⁻ ≥ 0\n\n`;
+      explanation += `Para a variável irrestrita ${varName}, substituímos: ${varName} = ${varName}⁺ - ${varName}⁻ onde ${varName}⁺ ≥ 0 e ${varName}⁻ ≥ 0\n\n`;
       
       // Add the substitution variables to the standard form LP
       const posVarName = `${varName}⁺`;
@@ -125,19 +125,19 @@ export function convertToStandardFormWithExplanation(lp: LinearProgram): {
         }
       }
       
-      explanation += `After substitution in the objective function: ${formatSubstitution(originalLP, standardLP, varIndex)}\n\n`;
-      explanation += `The variable ${varName} is replaced with ${posVarName} - ${negVarName} in all constraints.\n\n`;
+      explanation += `Após substituição na função objetivo: ${formatSubstitution(originalLP, standardLP, varIndex)}\n\n`;
+      explanation += `A variável ${varName} é substituída por ${posVarName} - ${negVarName} em todas as restrições.\n\n`;
     }
   } else {
-    explanation += '### Step 2: Check for Unrestricted Variables\n\n';
-    explanation += 'All variables are already non-negative, so no substitution is needed.\n\n';
+    explanation += '### Passo 2: Verificar Variáveis Irrestritas\n\n';
+    explanation += 'Todas as variáveis já são não-negativas, então nenhuma substituição é necessária.\n\n';
   }
   
   // Step 3: Process constraints
-  explanation += '### Step 3: Convert Constraints to Standard Form\n\n';
-  explanation += 'For each constraint, we need to:\n';
-  explanation += '- Convert inequalities to equations by adding slack/surplus variables\n';
-  explanation += '- Ensure all constraints have the form: ax₁ + bx₂ + ... + slack = rhs\n\n';
+  explanation += '### Passo 3: Converter Restrições para Forma Padrão\n\n';
+  explanation += 'Para cada restrição, precisamos:\n';
+  explanation += '- Converter desigualdades em equações adicionando variáveis de folga/excesso\n';
+  explanation += '- Garantir que todas as restrições tenham a forma: ax₁ + bx₂ + ... + folga = LD\n\n';
   
   // Process each constraint
   // Track the number of slack/surplus variables to ensure unique naming
@@ -174,7 +174,7 @@ export function convertToStandardFormWithExplanation(lp: LinearProgram): {
   for (let index = 0; index < standardLP.constraints.length; index++) {
     const constraint = standardLP.constraints[index];
     
-    explanation += `#### Constraint ${index + 1}: ${formatConstraint(constraint, standardLP.variables)}\n\n`;
+    explanation += `#### Restrição ${index + 1}: ${formatConstraint(constraint, standardLP.variables)}\n\n`;
     
     // Add slack/surplus variables based on constraint type
     if (constraint.operator === '<=') {
@@ -210,7 +210,7 @@ export function convertToStandardFormWithExplanation(lp: LinearProgram): {
       
       // For <= constraints, ensure RHS is non-negative
       if (standardLP.constraints[index].rhs < 0) {
-        explanation += `Since the right-hand side is negative (${standardLP.constraints[index].rhs}), we multiply the entire constraint by -1:\n\n`;
+        explanation += `Como o lado direito é negativo (${standardLP.constraints[index].rhs}), multiplicamos toda a restrição por -1:\n\n`;
         
         standardLP.constraints[index].coefficients = standardLP.constraints[index].coefficients.map(coeff => -coeff);
         standardLP.constraints[index].rhs = -standardLP.constraints[index].rhs;
@@ -268,7 +268,7 @@ export function convertToStandardFormWithExplanation(lp: LinearProgram): {
       // Multiply by -1 only if the RHS is negative
       // This ensures we maintain positive RHS values in standard form
       if (standardLP.constraints[index].rhs < 0) {
-        explanation += `Since the right-hand side is negative (${standardLP.constraints[index].rhs}), we multiply the entire constraint by -1:\n\n`;
+        explanation += `Como o lado direito é negativo (${standardLP.constraints[index].rhs}), multiplicamos toda a restrição por -1:\n\n`;
         
         standardLP.constraints[index].coefficients = standardLP.constraints[index].coefficients.map(coeff => -coeff);
         standardLP.constraints[index].rhs = -standardLP.constraints[index].rhs;
@@ -293,7 +293,7 @@ export function convertToStandardFormWithExplanation(lp: LinearProgram): {
       
       // For equality constraints, ensure RHS is non-negative
       if (standardLP.constraints[index].rhs < 0) {
-        explanation += `Since the right-hand side is negative (${standardLP.constraints[index].rhs}), we multiply the entire constraint by -1:\n\n`;
+        explanation += `Como o lado direito é negativo (${standardLP.constraints[index].rhs}), multiplicamos toda a restrição por -1:\n\n`;
         
         standardLP.constraints[index].coefficients = standardLP.constraints[index].coefficients.map(coeff => -coeff);
         standardLP.constraints[index].rhs = -standardLP.constraints[index].rhs;
