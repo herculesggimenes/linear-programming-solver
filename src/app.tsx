@@ -255,9 +255,7 @@ function App() {
       <header className="text-center mb-8">
         <h1 className="text-3xl font-bold text-blue-600 mb-3">Simplex Solver - Aprenda Simplex Online</h1>
         <p className="text-gray-600 max-w-2xl mx-auto leading-relaxed">
-          <strong>Simplex solver gratuito</strong> para <strong>learn simplex</strong> (aprender simplex) de forma interativa. 
-          Use nosso <strong>solver simplex</strong> para resolver problemas de <strong>programação linear</strong> com visualização passo a passo. 
-          Analise <strong>dualidade</strong>, converta para <strong>forma padrão</strong> e entenda a <strong>geometria</strong> das soluções.
+          Ferramenta gratuita feita por estudante para estudantes. Aprenda simplex e programação linear de um jeito visual.
         </p>
       </header>
 
@@ -371,9 +369,8 @@ function App() {
       </div>
 
       <footer className="mt-10 py-5 text-center text-gray-500 border-t border-gray-200">
-        <p className="mb-2">Simplex Solver Online - Learn Simplex | Calculadora Método Simplex</p>
-        <p className="text-sm mb-3">
-          Desenvolvido por{' '}
+        <p className="text-sm">
+          Feito por{' '}
           <a 
             href="https://www.linkedin.com/in/herculesgg/" 
             target="_blank" 
@@ -383,10 +380,6 @@ function App() {
             Hercules Gimenes
           </a>
         </p>
-        <nav className="text-xs text-gray-400">
-          <p>Simplex Solver Features: Two-Phase Simplex | Duality Analysis | Standard Form | Unrestricted Variables</p>
-          <p className="mt-1">Perfect for learning simplex method - Ideal para Pesquisa Operacional, Engenharia de Produção e Administração</p>
-        </nav>
       </footer>
     </main>
   );
