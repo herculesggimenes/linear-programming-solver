@@ -3,8 +3,7 @@ import type { LinearProgram } from '@/components/types';
 import { convertToDual, formatLinearProgram } from '../lib/duality-converter';
 import type { DualityExplanation } from '../lib/duality-converter';
 import { Card, CardContent, CardHeader, CardTitle } from './ui/card';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from './ui/tabs';
-import { ArrowRight, ArrowDown, Info } from 'lucide-react';
+import { ArrowRight } from 'lucide-react';
 import { DualityNarrative } from './DualityNarrative';
 
 interface DualityVisualizerProps {

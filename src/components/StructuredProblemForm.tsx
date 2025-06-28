@@ -7,14 +7,13 @@ import { Label } from '@/components/ui/label';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
-import { Trash2, Plus, X } from 'lucide-react';
+import { Plus, X } from 'lucide-react';
 
 interface StructuredProblemFormProps {
   onSubmit: (problem: LinearProgram) => void;
 }
 
 const DEFAULT_VARS_COUNT = 2;
-const DEFAULT_CONSTRAINTS_COUNT = 2;
 
 const StructuredProblemForm: React.FC<StructuredProblemFormProps> = ({ onSubmit }) => {
   // Problem type (maximize or minimize)

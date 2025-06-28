@@ -13,7 +13,6 @@ const TableauVisualizer: React.FC<TableauVisualizerProps> = ({ step, showDetails
   const { matrix, basicVariables, variableNames } = tableau;
   
   // Num of rows and cols in the matrix
-  const rows = matrix.length;
   const cols = matrix[0].length;
   
   // Helper function to determine cell highlighting

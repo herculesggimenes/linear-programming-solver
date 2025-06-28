@@ -255,7 +255,7 @@ function App() {
       <header className="text-center mb-8">
         <h1 className="text-3xl font-bold text-blue-600 mb-3">Simplex Solver - Aprenda Simplex Online</h1>
         <p className="text-gray-600 max-w-2xl mx-auto leading-relaxed">
-          Ferramenta gratuita feita por estudante para estudantes. Aprenda simplex e programação linear de um jeito visual.
+          Aprenda simplex e programação linear de um jeito visual.
         </p>
       </header>
 

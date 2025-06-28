@@ -1,6 +1,6 @@
 import { describe, test, expect } from 'vitest';
 import { convertToDual, formatLinearProgram } from './duality-converter';
-import { LinearProgram } from '@/components/types';
+import type { LinearProgram } from '@/components/types';
 
 describe('Duality Converter', () => {
   test('converts simple maximization problem to minimization dual', () => {
@@ -104,8 +104,8 @@ describe('Duality Converter', () => {
     
     // Check dual variable restrictions based on primal constraint types
     // For max problem: <= gives y >= 0, >= gives y <= 0, = gives y unrestricted
-    expect(result.dual.variableRestrictions[0]).toBe(true); // From <= constraint
-    expect(result.dual.variableRestrictions[1]).toBe(false); // From >= constraint (would need special handling)
-    expect(result.dual.variableRestrictions[2]).toBe(false); // From = constraint (unrestricted)
+    expect(result?.dual?.variableRestrictions?.[0]).toBe(true); // From <= constraint
+    expect(result?.dual?.variableRestrictions?.[1]).toBe(false); // From >= constraint (would need special handling)
+    expect(result?.dual?.variableRestrictions?.[2]).toBe(false); // From = constraint (unrestricted)
   });
 });

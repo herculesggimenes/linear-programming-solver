@@ -7,7 +7,6 @@ import { Marker } from '@visx/marker';
 import { Axis } from '@visx/axis';
 import { Grid } from '@visx/grid';
 import { Text } from '@visx/text';
-import { Point } from '@visx/point';
 import { Zoom } from '@visx/zoom';
 import { localPoint } from '@visx/event';
 
