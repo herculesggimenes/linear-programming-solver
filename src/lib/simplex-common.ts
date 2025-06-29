@@ -179,18 +179,3 @@ export function generateIterationExplanation(
   return explanation;
 }
 
-/**
- * Check if a solution is optimal
- */
-export function isOptimal(tableau: SimplexTableau): boolean {
-  const enteringVar = findEnteringVariable(tableau);
-  return enteringVar === null;
-}
-
-/**
- * Check if a problem is unbounded
- */
-export function isUnbounded(tableau: SimplexTableau, enteringCol: number): boolean {
-  const leavingVar = findLeavingVariable(tableau, enteringCol);
-  return leavingVar === null;
-}

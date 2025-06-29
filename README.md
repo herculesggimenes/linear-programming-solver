@@ -20,11 +20,9 @@ linear-programming/
 ├── src/
 │   ├── components/
 │   │   ├── BasisExplanation.tsx        # Explicação sobre base e variáveis básicas
-│   │   ├── CustomProblemInput.tsx      # Entrada personalizada de problemas
 │   │   ├── DualityNarrative.tsx        # Narrativa interativa sobre dualidade
 │   │   ├── DualityVisualizer.tsx       # Visualização da conversão primal-dual
 │   │   ├── GeometricVisualizerVisx.tsx # Visualização geométrica com Visx
-│   │   ├── LearningContent.tsx         # Conteúdo educacional e tutoriais
 │   │   ├── SimplexVisualizer.tsx       # Componente principal de visualização
 │   │   ├── StandardFormExplanation.tsx # Explicação da conversão para forma padrão
 │   │   ├── StepController.tsx          # Navegação pelos passos do simplex
