@@ -131,7 +131,7 @@ export function formatLinearProgram(lp: LinearProgram): string {
   
   // Format constraints
   formatted += 'Sujeito a:\n';
-  lp.constraints.forEach((constraint, i) => {
+  lp.constraints.forEach((constraint) => {
     const terms = constraint.coefficients.map((coef, j) => {
       if (coef === 0) return '';
       const sign = coef > 0 ? (j === 0 ? '' : ' + ') : ' - ';

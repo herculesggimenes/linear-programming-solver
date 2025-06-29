@@ -292,7 +292,7 @@ export function generateCanonicalStepExplanation(stepIndex: number, tableau: Pha
  * Generate explanation for artificial variables step
  */
 export function generateArtificialVarsExplanation(tableau: PhaseITableau, standardLP: LinearProgram): string {
-  const { artificialVariableNames, matrix, variableNames, artificialVariableIndices } = tableau;
+  const { artificialVariableNames, matrix, variableNames } = tableau;
   
   let explanation = "### Adicionando Variáveis Artificiais\n\n";
   explanation += `Precisamos adicionar ${artificialVariableNames.length} variável${artificialVariableNames.length > 1 ? ' artificial' : ' artificial'} `;
@@ -460,7 +460,7 @@ export function generatePhaseOneOptimalExplanation(tableau: PhaseITableau): stri
 /**
  * Generate explanation for infeasibility
  */
-export function generateInfeasibilityExplanation(tableau: PhaseITableau): string {
+export function generateInfeasibilityExplanation(): string {
   let explanation = "### Problem is Infeasible\n\n";
   
   explanation += "Phase I has terminated with a positive objective value, which means ";

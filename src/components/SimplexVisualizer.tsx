@@ -31,8 +31,7 @@ const SimplexVisualizer: React.FC<SimplexVisualizerProps> = ({
   const [steps, setSteps] = useState<SimplexStep[]>([]);
   const [currentStepIndex, setCurrentStepIndex] = useState(initialStep);
   const [isLoading, setIsLoading] = useState(true);
-  const [standardFormData, setStandardFormData] = useState<{originalLP: LinearProgram, standardLP: LinearProgram}>({} as any);
-  const [hasStandardFormStep, setHasStandardFormStep] = useState<boolean>(false);
+  const [standardFormData, setStandardFormData] = useState<{originalLP: LinearProgram, standardLP: LinearProgram} | null>(null);
   
   // Solve LP on component mount
   useEffect(() => {
@@ -70,13 +69,12 @@ const SimplexVisualizer: React.FC<SimplexVisualizerProps> = ({
             enteringVariable: null,
             leavingVariable: null,
             pivotElement: null,
-            status: 'standard_form' as any, // Type extension
+            status: 'standard_form' as SimplexStatus,
             explanation: explanation
           };
           
           // Insert at the beginning
           setSteps([standardFormStep, ...calculatedSteps]);
-          setHasStandardFormStep(true);
           setCurrentStepIndex(initialStep > 0 ? initialStep + 1 : initialStep);
         } else {
           setSteps(calculatedSteps);

@@ -38,7 +38,9 @@
       "Bash(/Users/hgimenes/.nvm/versions/node/v20.19.0/lib/node_modules/@anthropic-ai/claude-code/vendor/ripgrep/arm64-darwin/rg -B5 -A20 \"<option\" src/app.tsx)",
       "Bash(npm run lint)",
       "Bash(pnpm build:*)",
-      "Bash(pnpm lint:*)"
+      "Bash(pnpm lint:*)",
+      "Bash(npm run lint:*)",
+      "Bash(sed:*)"
     ],
     "deny": []
   }

@@ -333,7 +333,6 @@ export function generatePhaseIICanonicalStepExplanation(
 ): string {
   let explanation = `### Canonicalização da Fase II - Passo ${stepIndex + 1}\n\n`;
   
-  const basicVar = tableau.basicVariables[stepIndex];
   const constraintRow = stepIndex + 1;
   
   explanation += `**Eliminando ${basicVarName} da linha objetivo**\n\n`;
@@ -503,7 +502,7 @@ export function generatePhaseIINonCanonicalExplanation(phaseOneTableau: PhaseITa
 /**
  * Generate explanation for canonical Phase II tableau
  */
-export function generatePhaseIICanonicalExplanation(nonCanonicalTableau: PhaseIITableau, canonicalTableau: PhaseIITableau, standardLP: LinearProgram): string {
+export function generatePhaseIICanonicalExplanation(nonCanonicalTableau: PhaseIITableau, canonicalTableau: PhaseIITableau): string {
   let explanation = "### Canonicalizando o Tableau da Fase II\n\n";
   
   explanation += "Para continuar com a Fase II, devemos canonicalizar o tableau tornando os coeficientes ";

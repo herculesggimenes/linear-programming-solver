@@ -209,8 +209,8 @@ const StructuredProblemForm: React.FC<StructuredProblemFormProps> = ({ onSubmit 
       
       onSubmit(linearProgram);
       
-    } catch (err: any) {
-      setError(err.message);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'An error occurred');
     }
   };
 

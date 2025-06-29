@@ -6,7 +6,6 @@ import {
 import type { LinearProgram } from '@/components/types';
 import { convertToStandardFormWithExplanation } from './standard-form-conversion';
 import { describe, expect, test } from 'vitest';
-import { createPhaseIITableau } from './phase-two-solver';
 
 describe('Phase I Simplex Method Tests', () => {
   // Test 1: Problem that should need Phase I

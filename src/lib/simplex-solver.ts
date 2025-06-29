@@ -23,9 +23,7 @@ import {
   createPhaseIINonCanonicalTableau,
   createPhaseIICanonicalSteps,
   generateStandardFormExplanation,
-  generatePhaseTransitionExplanation,
   generatePhaseIINonCanonicalExplanation,
-  generatePhaseIICanonicalExplanation,
   generatePhaseIICanonicalStepExplanation
 } from './phase-two-solver';
 import {
@@ -47,8 +45,6 @@ export { needsPhaseOne, createPhaseOneTableau, createInitialTableau, createPhase
 export function solveWithSteps(lp: LinearProgram, isAlreadyStandardForm = false): SimplexStep[] {
   const steps: SimplexStep[] = [];
   
-  // Keep track of original LP for Phase II
-  const originalLP = lp;
   
   // Convert to standard form if needed
   let standardLP: LinearProgram;
@@ -118,7 +114,7 @@ export function solveWithSteps(lp: LinearProgram, isAlreadyStandardForm = false)
     
     // Step 5: Get the canonicalized Phase I tableau
     // Use the last canonical step as the starting point for Phase I iterations
-    let phaseITableau = canonicalSteps.length > 0 
+    const phaseITableau = canonicalSteps.length > 0 
       ? canonicalSteps[canonicalSteps.length - 1]
       : createPhaseOneTableau(standardLP);
     

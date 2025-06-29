@@ -153,13 +153,13 @@ function createNarrative(primal: LinearProgram, dual: LinearProgram): Narrative 
   let specificChapters: Chapter[] = [];
   switch (problemType) {
     case 'production':
-      specificChapters = createProductionChapters(primal, dual);
+      specificChapters = createProductionChapters(primal);
       break;
     case 'diet':
-      specificChapters = createDietChapters(primal, dual);
+      specificChapters = createDietChapters(primal);
       break;
     default:
-      specificChapters = createGenericChapters(primal, dual);
+      specificChapters = createGenericChapters();
   }
   
   // Add theorem chapters at the end
@@ -233,7 +233,7 @@ function getProblemContext(type: string, primal: LinearProgram): string {
 }
 
 // Production problem chapters
-function createProductionChapters(primal: LinearProgram, dual: LinearProgram): Chapter[] {
+function createProductionChapters(primal: LinearProgram): Chapter[] {
   return [
     {
       title: "Interpretação Econômica",
@@ -253,7 +253,7 @@ function createProductionChapters(primal: LinearProgram, dual: LinearProgram): C
 }
 
 // Diet problem chapters
-function createDietChapters(primal: LinearProgram, dual: LinearProgram): Chapter[] {
+function createDietChapters(primal: LinearProgram): Chapter[] {
   return [
     {
       title: "Interpretação Nutricional",
@@ -273,7 +273,7 @@ function createDietChapters(primal: LinearProgram, dual: LinearProgram): Chapter
 }
 
 // Generic problem chapters
-function createGenericChapters(primal: LinearProgram, dual: LinearProgram): Chapter[] {
+function createGenericChapters(): Chapter[] {
   return [
     {
       title: "Interpretação Geral",
@@ -298,7 +298,7 @@ const ChapterVisualization: React.FC<{
   primal: LinearProgram;
   dual: LinearProgram;
   chapterIndex: number;
-}> = ({ chapter, primal, dual, chapterIndex }) => {
+}> = ({ chapter, primal, dual }) => {
   switch (chapter.visualization) {
     // Conversion steps
     case 'conversion-rules':
@@ -375,7 +375,7 @@ const PrimalSetupViz: React.FC<{ primal: LinearProgram }> = ({ primal }) => {
 };
 
 // Dual problem setup visualization
-const DualSetupViz: React.FC<{ primal: LinearProgram; dual: LinearProgram }> = ({ primal, dual }) => {
+const DualSetupViz: React.FC<{ primal: LinearProgram; dual: LinearProgram }> = ({ primal }) => {
   return (
     <div className="space-y-4">
       <div className="grid grid-cols-2 gap-4">
@@ -415,7 +415,7 @@ const DualSetupViz: React.FC<{ primal: LinearProgram; dual: LinearProgram }> = (
 };
 
 // Shadow prices visualization
-const ShadowPricesViz: React.FC<{ primal: LinearProgram; dual: LinearProgram }> = ({ primal, dual }) => {
+const ShadowPricesViz: React.FC<{ primal: LinearProgram; dual: LinearProgram }> = ({ primal }) => {
   // Mock shadow prices for visualization
   const shadowPrices = primal.constraints.map((_, i) => i < 2 ? 2.5 - i * 0.7 : 0);
   
@@ -511,7 +511,7 @@ const EquilibriumViz: React.FC<{ primal: LinearProgram; dual: LinearProgram }> =
 };
 
 // Complementary slackness visualization
-const ComplementaryViz: React.FC<{ primal: LinearProgram; dual: LinearProgram }> = ({ primal, dual }) => {
+const ComplementaryViz: React.FC<{ primal: LinearProgram; dual: LinearProgram }> = () => {
   return (
     <div className="space-y-4">
       <div className="text-center mb-4">
@@ -719,7 +719,7 @@ const ConstraintsConversionViz: React.FC<{ primal: LinearProgram; dual: LinearPr
 };
 
 // Sign Rules Visualization
-const SignRulesViz: React.FC<{ primal: LinearProgram; dual: LinearProgram }> = ({ primal, dual }) => {
+const SignRulesViz: React.FC<{ primal: LinearProgram; dual: LinearProgram }> = ({ primal }) => {
   return (
     <div className="space-y-4">
       <div className="bg-white rounded-lg p-4">
@@ -826,7 +826,7 @@ const WeakDualityViz: React.FC<{ primal: LinearProgram; dual: LinearProgram }> =
 };
 
 // Strong Duality Visualization
-const StrongDualityViz: React.FC<{ primal: LinearProgram; dual: LinearProgram }> = ({ primal, dual }) => {
+const StrongDualityViz: React.FC<{ primal: LinearProgram; dual: LinearProgram }> = () => {
   return (
     <div className="space-y-4">
       <div className="bg-gradient-to-r from-blue-50 to-green-50 rounded-lg p-6">

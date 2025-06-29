@@ -35,7 +35,7 @@ export function findEnteringVariable(tableau: SimplexTableau): number | null {
  * @returns Row index of leaving variable or null if unbounded
  */
 export function findLeavingVariable(tableau: SimplexTableau, enteringCol: number): number | null {
-  const { matrix, basicVariables } = tableau;
+  const { matrix } = tableau;
   const rows = matrix.length;
   const cols = matrix[0].length;
   const rhs = cols - 1;
@@ -69,7 +69,7 @@ export function findLeavingVariable(tableau: SimplexTableau, enteringCol: number
  * @returns New tableau after pivot
  */
 export function pivot(tableau: SimplexTableau, pivotRow: number, pivotCol: number): SimplexTableau {
-  const { matrix, basicVariables, nonBasicVariables, variableNames } = tableau;
+  const { matrix, basicVariables, nonBasicVariables } = tableau;
   const rows = matrix.length;
   const cols = matrix[0].length;
   

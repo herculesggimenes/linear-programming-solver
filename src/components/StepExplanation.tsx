@@ -95,11 +95,7 @@ const StandardFormExplanation: React.FC<{ explanation: string }> = ({ explanatio
 };
 
 // Component for artificial variables explanation
-const ArtificialVarsExplanation: React.FC<{ explanation: string }> = ({ explanation }) => {
-  // Extract the number of artificial variables from the explanation
-  const artificialVarMatch = explanation.match(/add (\d+) artificial variable/);
-  const artificialVarCount = artificialVarMatch ? parseInt(artificialVarMatch[1]) : 'multiple';
-  
+const ArtificialVarsExplanation: React.FC<{ explanation: string }> = () => {
   return (
     <div className="space-y-6">
       <h3 className="text-xl font-semibold text-purple-700">Adicionando Variáveis Artificiais</h3>
@@ -143,7 +139,7 @@ const ArtificialVarsExplanation: React.FC<{ explanation: string }> = ({ explanat
 };
 
 // Component for initial tableau explanation
-const InitialTableauExplanation: React.FC<{ explanation: string }> = ({ explanation }) => {
+const InitialTableauExplanation: React.FC<{ explanation: string }> = () => {
   return (
     <div className="space-y-4">
       <h3 className="text-xl font-semibold text-blue-700">Configuração Inicial do Tableau</h3>
@@ -323,7 +319,6 @@ const IterationExplanation: React.FC<{ step: SimplexStep }> = ({ step }) => {
 // Component for optimal solution explanation
 const OptimalSolutionExplanation: React.FC<{ step: SimplexStep }> = ({ step }) => {
   const { matrix, basicVariables, nonBasicVariables, variableNames, objectiveValue, isMaximization } = step.tableau;
-  const numRows = matrix.length;
   const numCols = matrix[0].length;
   
   // Calculate solution values for display
@@ -344,7 +339,7 @@ const OptimalSolutionExplanation: React.FC<{ step: SimplexStep }> = ({ step }) =
   const hasLotsOfVariables = solutionItems.length > 5;
   
   if (hasLotsOfVariables) {
-    solutionItems = solutionItems.filter(([_, value]) => Math.abs(value) > 1e-10);
+    solutionItems = solutionItems.filter(([, value]) => Math.abs(value) > 1e-10);
   }
   
   const formattedSolution = solutionItems.map(([varName, value]) => (
@@ -406,7 +401,7 @@ const OptimalSolutionExplanation: React.FC<{ step: SimplexStep }> = ({ step }) =
             <p className="mb-1"><strong>Função objetivo avaliada na solução ótima:</strong></p>
             <p>
               {isMaximization ? "Max" : "Min"} z = {Object.entries(solution)
-                .filter(([varName, value]) => Math.abs(value) > 1e-10)
+                .filter(([, value]) => Math.abs(value) > 1e-10)
                 .map(([varName, value], idx) => {
                   const coef = step.tableau.variableNames.indexOf(varName) >= 0 ? 
                       (isMaximization ? 1 : -1) * matrix[0][step.tableau.variableNames.indexOf(varName)] : 0;
@@ -584,7 +579,7 @@ const CanonicalStepExplanation: React.FC<{ explanation: string }> = ({ explanati
 };
 
 // Component for negation step explanation
-const NegationStepExplanation: React.FC<{ explanation: string }> = ({ explanation }) => {
+const NegationStepExplanation: React.FC<{ explanation: string }> = () => {
   return (
     <div className="space-y-4">
       <div className="bg-gradient-to-r from-indigo-50 to-purple-50 p-6 rounded-lg border border-indigo-200 shadow-sm">
@@ -640,11 +635,7 @@ const NegationStepExplanation: React.FC<{ explanation: string }> = ({ explanatio
 };
 
 // Component for infeasible explanation
-const InfeasibleExplanation: React.FC<{ explanation: string }> = ({ explanation }) => {
-  // Try to extract information about which artificial variables couldn't be driven to zero
-  const artificialVarMatch = explanation.match(/artificial variables? (.+?) could not be/);
-  const artificialVarInfo = artificialVarMatch ? artificialVarMatch[1] : 'some';
-  
+const InfeasibleExplanation: React.FC<{ explanation: string }> = () => {
   return (
     <div className="space-y-6">
       <Alert variant="destructive">
@@ -872,11 +863,7 @@ const PhaseOneOptimalExplanation: React.FC<{ explanation: string }> = ({ explana
 };
 
 // Component for Phase One explanation
-const PhaseOneExplanation: React.FC<{ explanation: string }> = ({ explanation }) => {
-  // Extract artificial variable count from the explanation text
-  const artificialVarMatch = explanation.match(/added (\d+) artificial variables/);
-  const artificialVarCount = artificialVarMatch ? parseInt(artificialVarMatch[1]) : 'multiple';
-  
+const PhaseOneExplanation: React.FC<{ explanation: string }> = () => {
   return (
     <div className="space-y-6">
       <h3 className="text-xl font-semibold text-blue-700">Introdução à Fase I</h3>
@@ -959,7 +946,7 @@ const PhaseOneExplanation: React.FC<{ explanation: string }> = ({ explanation })
 };
 
 // Component for Phase I to Phase II transition explanation
-const PhaseTransitionExplanation: React.FC<{ explanation: string, step?: SimplexStep }> = ({ explanation, step }) => {
+const PhaseTransitionExplanation: React.FC<{ explanation: string, step?: SimplexStep }> = ({ explanation }) => {
   // Check if this is the new detailed format
   if (explanation.startsWith('PHASE_II_TRANSITION_DETAILED:')) {
     const parts = explanation.split(':');

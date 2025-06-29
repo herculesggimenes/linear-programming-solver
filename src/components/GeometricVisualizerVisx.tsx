@@ -85,9 +85,9 @@ const GeometricVisualizerBase: React.FC<Required<GeometricVisualizerVisxProps>> 
   // Calculate bounds for the plot based on constraints
   const { minX, maxX, minY, maxY, vertices } = useMemo(() => {
     // Start with default bounds
-    let minX = 0;
+    const minX = 0;
     let maxX = 10;
-    let minY = 0;
+    const minY = 0;
     let maxY = 10;
 
     // Collect constraints including non-negativity
@@ -175,12 +175,12 @@ const GeometricVisualizerBase: React.FC<Required<GeometricVisualizerVisxProps>> 
     maxY = Math.max(maxY, 5);
     
     // Create a convex hull from the vertices (simplified approach)
-    let sortedVertices: Array<[number, number]> = [...intersectionPoints];
+    const sortedVertices: Array<[number, number]> = [...intersectionPoints];
     
     // Sort vertices to form a convex polygon (simplified approach)
     // Find centroid
     const centroidX = sortedVertices.reduce((sum, [x]) => sum + x, 0) / sortedVertices.length;
-    const centroidY = sortedVertices.reduce((sum, [_, y]) => sum + y, 0) / sortedVertices.length;
+    const centroidY = sortedVertices.reduce((sum, [, y]) => sum + y, 0) / sortedVertices.length;
     
     // Sort by angle from centroid
     sortedVertices.sort((a, b) => {
@@ -363,12 +363,7 @@ const GeometricVisualizerBase: React.FC<Required<GeometricVisualizerVisxProps>> 
                 }
                 
                 // Format constraint label
-                const formatCoef = (value: number, varName: string) => {
-                  if (value === 0) return "";
-                  if (value === 1) return `+${varName}`;
-                  if (value === -1) return `-${varName}`;
-                  return `${value > 0 ? "+" : ""}${value}${varName}`;
-                };
+                // Format constraint label directly without unused function
                 
                 let labelText = '';
                 if (a !== 0) {

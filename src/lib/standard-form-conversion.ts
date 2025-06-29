@@ -243,9 +243,6 @@ export function convertToStandardFormWithExplanation(lp: LinearProgram): {
         explanation += `If the right-hand side is negative, we'll multiply the entire constraint by -1 to maintain non-negative values on the right side of the equation.\n\n`;
       }
       
-      // Make sure we use the correct variable name in our explanation
-      const currentVarName = standardLP.variables[standardLP.variables.length - 1];
-      
       // First ensure all constraints have the same number of coefficients (up to the current variable count - 1)
       for (let i = 0; i < standardLP.constraints.length; i++) {
         while (standardLP.constraints[i].coefficients.length < standardLP.variables.length - 1) {
@@ -336,7 +333,7 @@ export function convertToStandardFormWithExplanation(lp: LinearProgram): {
   explanation += '**Original Problem:**\n\n';
   explanation += `${originalLP.isMaximization ? 'Maximize' : 'Minimize'} ${formatObjective(originalLP)}${originalLP.objectiveRHS ? ` + ${originalLP.objectiveRHS}` : ''}\n\n`;
   explanation += 'Subject to:\n';
-  originalLP.constraints.forEach((constraint, idx) => {
+  originalLP.constraints.forEach((constraint) => {
     explanation += `${formatConstraint(constraint, originalLP.variables)}\n`;
   });
   
@@ -359,7 +356,7 @@ export function convertToStandardFormWithExplanation(lp: LinearProgram): {
   explanation += '**Standard Form:**\n\n';
   explanation += `Minimize ${formatObjective(standardLP)}${standardLP.objectiveRHS ? ` + ${standardLP.objectiveRHS}` : ''}\n\n`;
   explanation += 'Subject to:\n';
-  standardLP.constraints.forEach((constraint, idx) => {
+  standardLP.constraints.forEach((constraint) => {
     explanation += `${formatConstraint(constraint, standardLP.variables)}\n`;
   });
   explanation += `All variables (including slack/surplus variables) ≥ 0\n\n`;

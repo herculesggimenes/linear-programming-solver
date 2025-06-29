@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import SimplexVisualizer from '@/components/SimplexVisualizer';
 import StructuredProblemForm from '@/components/StructuredProblemForm';
 import { DualityVisualizer } from '@/components/DualityVisualizer';
@@ -217,25 +217,11 @@ function App() {
   const [visualizationMode, setVisualizationMode] = useState<'simplex' | 'duality'>('simplex');
   const [customProblem, setCustomProblem] = useState<LinearProgram | null>(null);
   const [customProblemOriginal, setCustomProblemOriginal] = useState<LinearProgram | null>(null);
-  const [standardFormExplanation, setStandardFormExplanation] = useState<string | null>(null);
-  const [exampleStandardFormExplanation, setExampleStandardFormExplanation] = useState<{[key: string]: string}>({});
   
   // Determine which problem to use based on mode
   const currentProblem = inputMode === 'custom' && customProblem ? 
     (visualizationMode === 'duality' ? customProblemOriginal! : customProblem) : 
     EXAMPLE_PROBLEMS[selectedProblem];
-    
-  // Generate standard form explanations for example problems
-  useEffect(() => {
-    // Generate explanations for all examples
-    const explanations: {[key: string]: string} = {};
-    Object.entries(EXAMPLE_PROBLEMS).forEach(([key, problem]) => {
-      const { standardLP, explanation } = convertToStandardFormWithExplanation(problem);
-      explanations[key] = explanation;
-    });
-    
-    setExampleStandardFormExplanation(explanations);
-  }, []);
   
   // Handle custom problem submission
   const handleCustomProblemSubmit = (problem: LinearProgram) => {
@@ -243,9 +229,8 @@ function App() {
     setCustomProblemOriginal(problem);
     
     // Convert to standard form with explanation for simplex mode
-    const { standardLP, explanation } = convertToStandardFormWithExplanation(problem);
+    const { standardLP } = convertToStandardFormWithExplanation(problem);
     setCustomProblem(standardLP);
-    setStandardFormExplanation(explanation);
     setInputMode('custom');
   };
 
@@ -279,7 +264,6 @@ function App() {
                 onClick={() => {
                   setSelectedProblem(key);
                   setInputMode('examples');
-                  setStandardFormExplanation(null);
                 }}
               >
                 <h3 className="text-xl font-medium text-blue-600 mb-3">
