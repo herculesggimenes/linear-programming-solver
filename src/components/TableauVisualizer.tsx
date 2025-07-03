@@ -6,9 +6,10 @@ import { cn } from '@/lib/utils';
 interface TableauVisualizerProps {
   step: SimplexStep;
   showDetails?: boolean;
+  compact?: boolean;
 }
 
-const TableauVisualizer: React.FC<TableauVisualizerProps> = ({ step, showDetails = true }) => {
+const TableauVisualizer: React.FC<TableauVisualizerProps> = ({ step, showDetails = true, compact = false }) => {
   const { tableau, enteringVariable, leavingVariable, pivotElement } = step;
   const { matrix, basicVariables, variableNames } = tableau;
   
@@ -110,16 +111,17 @@ const TableauVisualizer: React.FC<TableauVisualizerProps> = ({ step, showDetails
         </div>
       )}
       
-      <Table className="border-collapse w-full min-w-[600px]">
+      <Table className={cn("border-collapse w-full", compact ? "min-w-[400px]" : "min-w-[600px]")}>
         <TableHeader>
           <TableRow>
-            <TableHead className="text-center border bg-gray-100 font-bold">Básica</TableHead>
+            <TableHead className={cn("text-center border bg-gray-100 font-bold", compact && "text-xs py-1 px-2")}>Básica</TableHead>
             {Array.from({ length: cols }, (_, j) => (
               <TableHead 
                 key={`header-${j}`}
                 className={cn(
                   "text-center border bg-gray-100 font-bold",
-                  enteringVariable === j && "bg-green-200"
+                  enteringVariable === j && "bg-green-200",
+                  compact && "text-xs py-1 px-2"
                 )}
               >
                 {j < cols - 1 ? getColumnHeaderName(j) : 'LD'}
@@ -134,7 +136,7 @@ const TableauVisualizer: React.FC<TableauVisualizerProps> = ({ step, showDetails
               className={cn(leavingVariable === i && "bg-red-100")}
             >
               {/* Basic variable name */}
-              <TableCell className="border text-center font-semibold bg-gray-50">
+              <TableCell className={cn("border text-center font-semibold bg-gray-50", compact && "text-xs py-1 px-2")}>
                 {getBasicVariableName(i)}
               </TableCell>
               
@@ -146,7 +148,8 @@ const TableauVisualizer: React.FC<TableauVisualizerProps> = ({ step, showDetails
                   <TableCell
                     key={`cell-${i}-${j}`}
                     className={cn(
-                      "border text-right py-3 px-4",
+                      "border text-right",
+                      compact ? "text-xs py-1 px-2" : "py-3 px-4",
                       getCellClassName(i, j)
                     )}
                   >

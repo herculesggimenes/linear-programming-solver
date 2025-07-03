@@ -361,6 +361,11 @@ export function convertToStandardFormWithExplanation(lp: LinearProgram): {
   });
   explanation += `All variables (including slack/surplus variables) ≥ 0\n\n`;
   
+  // Preserve integer constraints if they exist
+  if (lp.integerConstraints) {
+    standardLP.integerConstraints = [...lp.integerConstraints];
+  }
+  
   return { originalLP, standardLP, explanation };
 }
 

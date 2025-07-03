@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import SimplexVisualizer from '@/components/SimplexVisualizer';
+import SolverVisualizer from '@/components/SolverVisualizer';
 import StructuredProblemForm from '@/components/StructuredProblemForm';
 import { DualityVisualizer } from '@/components/DualityVisualizer';
 import type { LinearProgram } from '@/components/types';
@@ -208,6 +208,133 @@ const EXAMPLE_PROBLEMS: { [key: string]: LinearProgram } = {
     ],
     variables: ['x1', 'x2', 'x3'],
     variableRestrictions: [true, true, true]
+  },
+  // Examples from exercise list
+  sapateiroExample: {
+    objective: [5, 2],
+    isMaximization: true,
+    constraints: [
+      { coefficients: [10, 12], rhs: 60, operator: '<=' },  // Couro disponível
+      { coefficients: [2, 1], rhs: 6, operator: '<=' }      // Tempo disponível
+    ],
+    variables: ['x1', 'x2'],  // x1: sapatos/hora, x2: cintos/hora
+    variableRestrictions: [true, true]
+  },
+  furnitureExample: {
+    objective: [12, 20, 18, 40],
+    isMaximization: true,
+    constraints: [
+      { coefficients: [4, 9, 7, 10], rhs: 6000, operator: '<=' },  // Carpintaria
+      { coefficients: [1, 1, 3, 40], rhs: 4000, operator: '<=' }   // Finalização
+    ],
+    variables: ['x1', 'x2', 'x3', 'x4'],  // Mesas tipo 1-4
+    variableRestrictions: [true, true, true, true]
+  },
+  matrixInverseExample: {
+    objective: [5, 2],
+    isMaximization: true,
+    constraints: [
+      { coefficients: [10, 12], rhs: 60, operator: '<=' },
+      { coefficients: [2, 1], rhs: 6, operator: '<=' }
+    ],
+    variables: ['x1', 'x2'],
+    variableRestrictions: [true, true]
+  },
+  // Dual Simplex example - optimal but infeasible after modification
+  dualSimplexExample: {
+    objective: [3, 2],
+    isMaximization: true,
+    constraints: [
+      { coefficients: [1, 1], rhs: 4, operator: '<=' },
+      { coefficients: [2, 1], rhs: 6, operator: '<=' },
+      { coefficients: [1, 0], rhs: -1, operator: '>=' }  // This will create negative RHS after conversion
+    ],
+    variables: ['x1', 'x2'],
+    variableRestrictions: [true, true]
+  },
+  // Re-optimization example - furniture factory
+  reoptimizationExample1: {
+    objective: [40, 30],
+    isMaximization: true,
+    constraints: [
+      { coefficients: [2, 1], rhs: 40, operator: '<=' },
+      { coefficients: [1, 2], rhs: 50, operator: '<=' },
+      { coefficients: [1, 0], rhs: 10, operator: '>=' }  // Minimum demand constraint
+    ],
+    variables: ['x', 'y'],
+    variableRestrictions: [true, true]
+  },
+  // Re-optimization example - reduced resources
+  reoptimizationExample2: {
+    objective: [5, 4],
+    isMaximization: true,
+    constraints: [
+      { coefficients: [2, 3], rhs: 80, operator: '<=' },   // Reduced from 120
+      { coefficients: [4, 2], rhs: 100, operator: '<=' },  // Reduced from 140
+    ],
+    variables: ['x', 'y'],
+    variableRestrictions: [true, true]
+  },
+  // Integer programming examples
+  integerExample1: {
+    objective: [3, 2],
+    isMaximization: true,
+    constraints: [
+      { coefficients: [2, 1], rhs: 6, operator: '<=' },
+      { coefficients: [1, 2], rhs: 6, operator: '<=' }
+    ],
+    variables: ['x', 'y'],
+    variableRestrictions: [true, true],
+    integerConstraints: [0, 1]  // both x and y must be integer
+  },
+  integerExample2: {
+    objective: [4, 3],
+    isMaximization: true,
+    constraints: [
+      { coefficients: [3, 2], rhs: 12, operator: '<=' },
+      { coefficients: [1, 2], rhs: 8, operator: '<=' }
+    ],
+    variables: ['x', 'y'],
+    variableRestrictions: [true, true],
+    integerConstraints: [0]  // only x must be integer (mixed integer)
+  },
+  knapsackExample: {
+    objective: [7, 9, 5, 12],
+    isMaximization: true,
+    constraints: [
+      { coefficients: [2, 3, 2, 4], rhs: 10, operator: '<=' }
+    ],
+    variables: ['x1', 'x2', 'x3', 'x4'],
+    variableRestrictions: [true, true, true, true],
+    integerConstraints: [0, 1, 2, 3]  // all variables must be integer
+  },
+  // Complex integer example that will create multiple branches
+  complexIntegerExample: {
+    objective: [8, 11, 6, 4],
+    isMaximization: true,
+    constraints: [
+      { coefficients: [5, 7, 4, 3], rhs: 14, operator: '<=' },
+      { coefficients: [1, 0, 0, 0], rhs: 2, operator: '<=' },  // x1 <= 2
+      { coefficients: [0, 1, 0, 0], rhs: 2, operator: '<=' },  // x2 <= 2
+      { coefficients: [0, 0, 1, 0], rhs: 2, operator: '<=' },  // x3 <= 2
+      { coefficients: [0, 0, 0, 1], rhs: 2, operator: '<=' }   // x4 <= 2
+    ],
+    variables: ['x1', 'x2', 'x3', 'x4'],
+    variableRestrictions: [true, true, true, true],
+    integerConstraints: [0, 1, 2, 3]  // all must be integer
+  },
+  // Another complex example with 3 variables
+  branchingExample: {
+    objective: [5, 7, 10],
+    isMaximization: true,
+    constraints: [
+      { coefficients: [2, 3, 5], rhs: 15, operator: '<=' },
+      { coefficients: [4, 2, 1], rhs: 12, operator: '<=' },
+      { coefficients: [1, 1, 1], rhs: 5, operator: '<=' }
+    ],
+    variables: ['x', 'y', 'z'],
+    variableRestrictions: [true, true, true],
+    integerConstraints: [0, 1, 2]  // all must be integer
   }
 };
 
@@ -283,6 +410,17 @@ function App() {
                    key === 'mixedConstraints' ? 'Restrições Mistas (≤, ≥, =)' :
                    key === 'dualityExample1' ? 'Dualidade: Produção' :
                    key === 'dualityExample2' ? 'Dualidade: Dieta' :
+                   key === 'sapateiroExample' ? 'Sapateiro (Matriz)' :
+                   key === 'furnitureExample' ? 'Indústria de Móveis' :
+                   key === 'matrixInverseExample' ? 'Inversa da Base' :
+                   key === 'dualSimplexExample' ? 'Dual Simplex' :
+                   key === 'reoptimizationExample1' ? 'Re-otimização: Fábrica' :
+                   key === 'reoptimizationExample2' ? 'Re-otimização: Recursos' :
+                   key === 'integerExample1' ? 'Programação Inteira' :
+                   key === 'integerExample2' ? 'Inteira Mista' :
+                   key === 'knapsackExample' ? 'Problema da Mochila' :
+                   key === 'complexIntegerExample' ? 'PI Complexa (4 var)' :
+                   key === 'branchingExample' ? 'PI com Ramificações' :
                    `Exemplo ${key.replace('example', '')}`}
                 </h3>
                 <div className="text-sm">
@@ -313,6 +451,14 @@ function App() {
                       )) : 
                       <li>{EXAMPLE_PROBLEMS[key].variables.join(', ')} ≥ 0</li>
                     }
+                    {EXAMPLE_PROBLEMS[key].integerConstraints && EXAMPLE_PROBLEMS[key].integerConstraints.length > 0 && (
+                      <li>
+                        {EXAMPLE_PROBLEMS[key].integerConstraints.length === EXAMPLE_PROBLEMS[key].variables.length
+                          ? `${EXAMPLE_PROBLEMS[key].variables.join(', ')} ∈ ℤ`
+                          : `${EXAMPLE_PROBLEMS[key].integerConstraints.map(i => EXAMPLE_PROBLEMS[key].variables[i]).join(', ')} ∈ ℤ`
+                        }
+                      </li>
+                    )}
                   </ul>
                 </div>
               </div>
@@ -335,7 +481,7 @@ function App() {
           <CardContent>
             <Tabs value={visualizationMode} onValueChange={(value) => setVisualizationMode(value as 'simplex' | 'duality')}>
               <TabsList className="grid w-full grid-cols-2">
-                <TabsTrigger value="simplex">Método Simplex</TabsTrigger>
+                <TabsTrigger value="simplex">Solver</TabsTrigger>
                 <TabsTrigger value="duality">Análise de Dualidade</TabsTrigger>
               </TabsList>
             </Tabs>
@@ -344,9 +490,9 @@ function App() {
       </div>
       
       {/* Visualization Content */}
-      <div className="mt-6 border border-gray-200 rounded-lg p-3 sm:p-5 bg-white shadow-sm overflow-hidden">
+      <div className="mt-6 border border-gray-200 rounded-lg p-3 sm:p-5 bg-white shadow-sm">
         {visualizationMode === 'simplex' ? (
-          <SimplexVisualizer lp={currentProblem} showGeometric={true} width={900} height={400} />
+          <SolverVisualizer lp={currentProblem} showGeometric={true} />
         ) : (
           <DualityVisualizer problem={currentProblem} />
         )}

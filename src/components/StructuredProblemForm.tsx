@@ -32,6 +32,9 @@ const StructuredProblemForm: React.FC<StructuredProblemFormProps> = ({ onSubmit 
     Array(DEFAULT_VARS_COUNT).fill(true)
   );
   
+  // Integer constraints (indices of variables that must be integer)
+  const [integerConstraints, setIntegerConstraints] = useState<number[]>([]);
+  
   // Objective function coefficients and RHS
   const [objectiveCoeffs, setObjectiveCoeffs] = useState<number[]>(
     Array(DEFAULT_VARS_COUNT).fill(1)
@@ -114,6 +117,15 @@ const StructuredProblemForm: React.FC<StructuredProblemFormProps> = ({ onSubmit 
     const newRestrictions = [...variableRestrictions];
     newRestrictions[index] = !newRestrictions[index];
     setVariableRestrictions(newRestrictions);
+  };
+  
+  // Toggle integer constraint
+  const toggleIntegerConstraint = (index: number) => {
+    if (integerConstraints.includes(index)) {
+      setIntegerConstraints(integerConstraints.filter(i => i !== index));
+    } else {
+      setIntegerConstraints([...integerConstraints, index]);
+    }
   };
   
   // Update objective coefficient
@@ -204,7 +216,8 @@ const StructuredProblemForm: React.FC<StructuredProblemFormProps> = ({ onSubmit 
         })),
         isMaximization: problemType === 'maximize',
         variables: [...variableNames],
-        variableRestrictions: [...variableRestrictions] // Add variable restrictions
+        variableRestrictions: [...variableRestrictions], // Add variable restrictions
+        integerConstraints: [...integerConstraints] // Add integer constraints
       };
       
       onSubmit(linearProgram);
@@ -248,7 +261,13 @@ const StructuredProblemForm: React.FC<StructuredProblemFormProps> = ({ onSubmit 
     }
     
     if (unrestrictedVars.length > 0) {
-      result += `${unrestrictedVars.join(', ')} livres`;
+      result += `${unrestrictedVars.join(', ')} livres\n`;
+    }
+    
+    // Add integer constraints
+    const integerVars = variableNames.filter((_, i) => integerConstraints.includes(i));
+    if (integerVars.length > 0) {
+      result += `${integerVars.join(', ')} ∈ ℤ`;
     }
     
     return result;
@@ -257,9 +276,19 @@ const StructuredProblemForm: React.FC<StructuredProblemFormProps> = ({ onSubmit 
   return (
     <Card className="w-full">
       <CardHeader>
-        <CardTitle className="text-xl mb-2">Criar Problema de Programação Linear Personalizado</CardTitle>
+        <CardTitle className="text-xl mb-2">
+          Criar Problema de Programação Linear Personalizado
+          {integerConstraints.length > 0 && (
+            <span className="ml-2 text-sm font-normal text-green-600">
+              (Programação Inteira)
+            </span>
+          )}
+        </CardTitle>
         <p className="text-gray-600 text-sm">
           Preencha o formulário abaixo para definir seu problema de programação linear.
+          {integerConstraints.length > 0 && (
+            <span className="text-green-600 font-medium"> O Branch and Bound será usado para variáveis inteiras.</span>
+          )}
         </p>
       </CardHeader>
       <CardContent>
@@ -311,13 +340,28 @@ const StructuredProblemForm: React.FC<StructuredProblemFormProps> = ({ onSubmit 
                   <div 
                     className={`cursor-pointer p-1 rounded-md border ${variableRestrictions[i] ? 'bg-blue-50 border-blue-200' : 'bg-gray-50 border-gray-200'}`} 
                     onClick={() => toggleVariableRestriction(i)}
+                    title="Clique para alternar entre não-negativa e livre"
                   >
                     <span className="text-sm">
                       {variableRestrictions[i] ? '≥ 0' : 'livre'}
                     </span>
                   </div>
+                  <div 
+                    className={`cursor-pointer p-1 rounded-md border ${integerConstraints.includes(i) ? 'bg-green-50 border-green-200' : 'bg-gray-50 border-gray-200'}`} 
+                    onClick={() => toggleIntegerConstraint(i)}
+                    title="Clique para alternar restrição de integralidade"
+                  >
+                    <span className="text-sm font-semibold">
+                      {integerConstraints.includes(i) ? 'ℤ' : 'ℝ'}
+                    </span>
+                  </div>
                 </div>
               ))}
+            </div>
+            
+            <div className="text-xs text-gray-500 mt-2 space-y-1">
+              <p>• <span className="font-semibold">≥ 0 / livre</span>: Clique para alternar entre variável não-negativa ou irrestrita</p>
+              <p>• <span className="font-semibold">ℝ / ℤ</span>: Clique para alternar entre variável real ou inteira</p>
             </div>
           </div>
           

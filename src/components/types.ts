@@ -14,6 +14,7 @@ export interface LinearProgram {
   isMaximization: boolean;
   variables: string[];
   variableRestrictions?: boolean[]; // true = non-negative, false = unrestricted
+  integerConstraints?: number[]; // indices of variables that must be integer
 }
 
 export interface BaseTableau {
@@ -47,6 +48,6 @@ export interface SimplexStep {
   enteringVariable: number | null;
   leavingVariable: number | null;
   pivotElement: [number, number] | null;
-  status: 'initial' | 'iteration' | 'optimal' | 'unbounded' | 'infeasible' | 'phase1_start' | 'phase2_start' | 'standard_form' | 'artificial_vars' | 'phase1_canonicalize' | 'phase1_negate';
+  status: 'initial' | 'iteration' | 'optimal' | 'unbounded' | 'infeasible' | 'phase1_start' | 'phase2_start' | 'standard_form' | 'artificial_vars' | 'phase1_canonicalize' | 'phase1_negate' | 'dual_start' | 'dual_iteration';
   explanation: string;
 }
