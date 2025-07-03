@@ -233,11 +233,14 @@ const MatrixCalculationSteps: React.FC<MatrixCalculationStepsProps> = ({
                 Calcular os custos reduzidos das variáveis não-básicas:
               </p>
               <div className="font-mono text-xs space-y-2">
-                <div>c'<sub>B</sub>B<sup>-1</sup> = [{c_B_B_inv.map(v => v.toFixed(2)).join(', ')}]</div>
+                <div>Primeiro, calcular c'<sub>B</sub>B<sup>-1</sup>:</div>
+                <div>c'<sub>B</sub>B<sup>-1</sup> = [{c_B.map(v => v.toFixed(1)).join(', ')}] × B<sup>-1</sup> = [{c_B_B_inv.map(v => v.toFixed(2)).join(', ')}]</div>
+                <div className="mt-3">Agora calcular os custos reduzidos para cada variável não-básica:</div>
                 <div className="mt-2">
                   {nonBasicIndices.map((idx, i) => (
-                    <div key={i}>
-                      {variableNames[idx]}: {c_N[i].toFixed(1)} - {(c_B_B_inv_N[i] || 0).toFixed(2)} = {reducedCosts[i].toFixed(2)}
+                    <div key={i} className={reducedCosts[i] < 0 ? 'text-green-600' : ''}>
+                      {variableNames[idx]}: c<sub>{idx+1}</sub> - (c'<sub>B</sub>B<sup>-1</sup>)a<sub>{idx+1}</sub> = {c_N[i].toFixed(1)} - {(c_B_B_inv_N[i] || 0).toFixed(2)} = {reducedCosts[i].toFixed(2)}
+                      {reducedCosts[i] < 0 && <span className="ml-2 text-xs">(pode entrar na base)</span>}
                     </div>
                   ))}
                 </div>
@@ -262,10 +265,19 @@ const MatrixCalculationSteps: React.FC<MatrixCalculationStepsProps> = ({
                 Calcular o valor atual da função objetivo:
               </p>
               <div className="font-mono text-xs space-y-2">
-                <div>-z = -c'<sub>B</sub>B<sup>-1</sup>b</div>
-                <div>-z = -[{c_B.map(v => v.toFixed(1)).join(', ')}] × [{B_inv_b.map(v => v.toFixed(2)).join(', ')}]<sup>T</sup></div>
-                <div>-z = -{objectiveValue.toFixed(2)}</div>
+                <div>z = c'<sub>B</sub>x<sub>B</sub> = c'<sub>B</sub>B<sup>-1</sup>b</div>
+                <div>z = [{c_B.map(v => v.toFixed(1)).join(', ')}] × [{B_inv_b.map(v => v.toFixed(2)).join(', ')}]<sup>T</sup></div>
+                <div>z = {c_B.map((c, i) => `(${c.toFixed(1)} × ${B_inv_b[i].toFixed(2)})`).join(' + ')}</div>
                 <div className="mt-2 font-semibold">z = {objectiveValue.toFixed(2)}</div>
+                {c_B.every(c => c === 0) && (
+                  <div className="mt-3 p-2 bg-yellow-100 rounded text-yellow-800">
+                    <p className="text-xs">
+                      <strong>Nota:</strong> O valor da função objetivo é zero porque as variáveis básicas atuais 
+                      ({basicIndices.map(idx => variableNames[idx]).join(', ')}) são variáveis de folga/excesso 
+                      com coeficientes zero na função objetivo.
+                    </p>
+                  </div>
+                )}
               </div>
             </div>
           )}

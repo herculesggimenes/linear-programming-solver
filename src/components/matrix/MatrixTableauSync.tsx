@@ -41,8 +41,11 @@ const MatrixTableauSync: React.FC<MatrixTableauSyncProps> = ({
     .filter(i => !selectedBasis.includes(i));
   const { B, N } = extractBasisMatrices(A, selectedBasis, nonBasicIndices);
   
-  // Calculate basis inverse
-  const B_inv = invertMatrix(B);
+  // Check if we have a valid basis (square matrix)
+  const hasValidBasis = B.length > 0 && B.length === B[0].length && B.length === A.length;
+  
+  // Calculate basis inverse only if basis is valid
+  const B_inv = hasValidBasis ? invertMatrix(B) : null;
   
   // Check feasibility
   const { feasible, solution } = B_inv 
@@ -231,6 +234,16 @@ const MatrixTableauSync: React.FC<MatrixTableauSyncProps> = ({
             </div>
 
             {/* Basis inverse and solution */}
+            {!hasValidBasis && selectedBasis.length > 0 && (
+              <div className="border-t pt-4">
+                <div className="p-3 bg-yellow-100 rounded-lg">
+                  <p className="text-sm text-yellow-800">
+                    <strong>Atenção:</strong> Selecione exatamente {A.length} variáveis para formar uma base válida. 
+                    Atualmente {selectedBasis.length} variável(eis) selecionada(s).
+                  </p>
+                </div>
+              </div>
+            )}
             {B_inv && (
               <div className="border-t pt-4">
                 <div className="flex items-center justify-between mb-2">
@@ -294,9 +307,10 @@ const MatrixTableauSync: React.FC<MatrixTableauSyncProps> = ({
               <strong>Interatividade:</strong>
             </p>
             <ul className="list-disc list-inside space-y-1 ml-4">
-              <li>Passe o mouse sobre as células do tableau para destacar correspondências</li>
-              <li>Clique nos nomes das variáveis para adicionar/remover da base</li>
-              <li>Observe como a inversa da base (B<sup>-1</sup>) é usada para calcular a solução</li>
+              <li>Passe o mouse sobre as células do tableau para destacar as variáveis básicas e suas relações</li>
+              <li>Clique nos nomes das variáveis (x₁, x₂, s₁, s₂...) para trocar a base - adiciona ou remova variáveis da base atual</li>
+              <li>A matriz B é formada pelas colunas das variáveis selecionadas (em azul)</li>
+              <li>Observe como a inversa da base (B<sup>-1</sup>) muda quando você altera as variáveis básicas</li>
               <li>Veja se a solução básica atual é factível (todos os valores ≥ 0)</li>
             </ul>
           </div>
@@ -304,7 +318,7 @@ const MatrixTableauSync: React.FC<MatrixTableauSyncProps> = ({
       </Card>
 
       {/* Matrix Calculation Steps */}
-      {showCalculationSteps && B_inv && (
+      {showCalculationSteps && B_inv && hasValidBasis && (
         <MatrixCalculationSteps
           B={B}
           N={N}
