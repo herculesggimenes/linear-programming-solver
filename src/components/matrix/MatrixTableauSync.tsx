@@ -36,10 +36,13 @@ const MatrixTableauSync: React.FC<MatrixTableauSyncProps> = ({
   // Extract matrix form from the original problem
   const { A, b, c } = extractMatrixForm(problem);
   
+  // Sort selected basis indices to maintain column order
+  const sortedSelectedBasis = [...selectedBasis].sort((a, b) => a - b);
+  
   // Extract basis matrices
   const nonBasicIndices = Array.from({ length: A[0].length }, (_, i) => i)
-    .filter(i => !selectedBasis.includes(i));
-  const { B, N } = extractBasisMatrices(A, selectedBasis, nonBasicIndices);
+    .filter(i => !sortedSelectedBasis.includes(i));
+  const { B, N } = extractBasisMatrices(A, sortedSelectedBasis, nonBasicIndices);
   
   // Check if we have a valid basis (square matrix)
   const hasValidBasis = B.length > 0 && B.length === B[0].length && B.length === A.length;
@@ -199,7 +202,7 @@ const MatrixTableauSync: React.FC<MatrixTableauSyncProps> = ({
               <div className="grid grid-cols-2 gap-4">
                 <div>
                   <h5 className="text-xs font-medium mb-1 text-blue-600">
-                    B = Colunas Básicas ({selectedBasis.map(i => tableau.variableNames[i]).join(', ')})
+                    B = Colunas Básicas ({sortedSelectedBasis.map(i => tableau.variableNames[i]).join(', ')})
                   </h5>
                   <div className="font-mono text-xs bg-blue-50 p-2 rounded">
                     <div className="inline-block border-l-2 border-r-2 border-blue-400 px-2">
@@ -279,7 +282,7 @@ const MatrixTableauSync: React.FC<MatrixTableauSyncProps> = ({
                     </h5>
                     {solution && (
                       <div className="font-mono text-xs space-y-1">
-                        {selectedBasis.map((varIdx, i) => (
+                        {sortedSelectedBasis.map((varIdx, i) => (
                           <div key={i} className={solution[i] < 0 ? 'text-red-600' : ''}>
                             {tableau.variableNames[varIdx]} = {solution[i].toFixed(2)}
                           </div>
@@ -308,7 +311,7 @@ const MatrixTableauSync: React.FC<MatrixTableauSyncProps> = ({
             </p>
             <ul className="list-disc list-inside space-y-1 ml-4">
               <li>Passe o mouse sobre as células do tableau para destacar as variáveis básicas e suas relações</li>
-              <li>Clique nos nomes das variáveis (x₁, x₂, s₁, s₂...) para trocar a base - adiciona ou remova variáveis da base atual</li>
+              <li>Clique nos nomes das variáveis (x₁, x₂, s₁, s₂...) para trocar a base - adicione ou remova variáveis da base atual</li>
               <li>A matriz B é formada pelas colunas das variáveis selecionadas (em azul)</li>
               <li>Observe como a inversa da base (B<sup>-1</sup>) muda quando você altera as variáveis básicas</li>
               <li>Veja se a solução básica atual é factível (todos os valores ≥ 0)</li>
@@ -324,13 +327,13 @@ const MatrixTableauSync: React.FC<MatrixTableauSyncProps> = ({
           N={N}
           B_inv={B_inv}
           b={b}
-          c_B={selectedBasis.map(idx => c[idx])}
+          c_B={sortedSelectedBasis.map(idx => c[idx])}
           c_N={nonBasicIndices.map(idx => c[idx])}
-          basicIndices={selectedBasis}
+          basicIndices={sortedSelectedBasis}
           nonBasicIndices={nonBasicIndices}
           variableNames={tableau.variableNames}
           basisMatrix={B}
-          basisVariableNames={selectedBasis.map(idx => tableau.variableNames[idx])}
+          basisVariableNames={sortedSelectedBasis.map(idx => tableau.variableNames[idx])}
         />
       )}
     </div>

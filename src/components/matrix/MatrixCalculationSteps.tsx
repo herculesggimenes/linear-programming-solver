@@ -159,6 +159,36 @@ const MatrixCalculationSteps: React.FC<MatrixCalculationStepsProps> = ({
                     ))}
                   </div>
                 </div>
+                
+                {/* Detailed calculation */}
+                <div className="mt-4 p-3 bg-blue-50 rounded">
+                  <p className="text-sm font-semibold mb-2">Cálculo detalhado:</p>
+                  {N[0].map((_, colIdx) => (
+                    <div key={colIdx} className="mb-3">
+                      <p className="text-xs font-medium mb-1">Coluna {colIdx + 1} do resultado:</p>
+                      {B_inv.map((row, rowIdx) => (
+                        <div key={rowIdx} className="ml-2 text-xs">
+                          Elemento [{rowIdx + 1},{colIdx + 1}] = 
+                          {row.map((val, k) => (
+                            <span key={k}>
+                              {k > 0 && ' + '}
+                              ({val.toFixed(2)} × {N[k][colIdx].toFixed(2)})
+                            </span>
+                          ))}
+                          {' = '}
+                          {row.map((val, k) => (
+                            <span key={k}>
+                              {k > 0 && ' + '}
+                              {(val * N[k][colIdx]).toFixed(2)}
+                            </span>
+                          ))}
+                          {' = '}
+                          <strong>{B_inv_N[rowIdx][colIdx].toFixed(2)}</strong>
+                        </div>
+                      ))}
+                    </div>
+                  ))}
+                </div>
               </div>
             </div>
           )}
@@ -204,11 +234,40 @@ const MatrixCalculationSteps: React.FC<MatrixCalculationStepsProps> = ({
                     ))}
                   </div>
                 </div>
+                
+                {/* Detailed calculation */}
+                <div className="mt-4 p-3 bg-blue-50 rounded">
+                  <p className="text-sm font-semibold mb-2">Cálculo detalhado:</p>
+                  {B_inv.map((row, rowIdx) => (
+                    <div key={rowIdx} className="ml-2 text-xs mb-2">
+                      x<sub>B</sub>[{rowIdx + 1}] = 
+                      {row.map((val, k) => (
+                        <span key={k}>
+                          {k > 0 && ' + '}
+                          ({val.toFixed(2)} × {b[k].toFixed(1)})
+                        </span>
+                      ))}
+                      {' = '}
+                      {row.map((val, k) => (
+                        <span key={k}>
+                          {k > 0 && ' + '}
+                          {(val * b[k]).toFixed(2)}
+                        </span>
+                      ))}
+                      {' = '}
+                      <strong className={B_inv_b[rowIdx] < 0 ? 'text-red-600' : ''}>
+                        {B_inv_b[rowIdx].toFixed(2)}
+                      </strong>
+                    </div>
+                  ))}
+                </div>
+                
                 <div className="mt-2">
-                  <p className="text-sm">Valores das variáveis básicas:</p>
+                  <p className="text-sm font-semibold">Valores das variáveis básicas:</p>
                   {basicIndices.map((idx, i) => (
-                    <div key={i} className={B_inv_b[i] < 0 ? 'text-red-600' : ''}>
+                    <div key={i} className={B_inv_b[i] < 0 ? 'text-red-600 font-semibold' : ''}>
                       {variableNames[idx]} = {B_inv_b[i].toFixed(2)}
+                      {B_inv_b[i] < 0 && <span className="ml-2 text-xs">(infactível - valor negativo!)</span>}
                     </div>
                   ))}
                 </div>
