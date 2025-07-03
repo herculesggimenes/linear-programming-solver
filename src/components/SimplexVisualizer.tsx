@@ -11,8 +11,9 @@ import BasisExplanation from './BasisExplanation';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { Skeleton } from '@/components/ui/skeleton';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import MatrixTableauSync from './matrix/MatrixTableauSync';
+import { Button } from '@/components/ui/button';
+import { ChevronDown, ChevronUp, Calculator } from 'lucide-react';
+import MatrixOperationsView from './matrix/MatrixOperationsView';
 import DualSimplexDetector from './dual/DualSimplexDetector';
 import { isDualSimplexCandidate } from '@/lib/dual-simplex-solver';
 
@@ -35,6 +36,7 @@ const SimplexVisualizer: React.FC<SimplexVisualizerProps> = ({
   const [currentStepIndex, setCurrentStepIndex] = useState(initialStep);
   const [isLoading, setIsLoading] = useState(true);
   const [standardFormData, setStandardFormData] = useState<{originalLP: LinearProgram, standardLP: LinearProgram} | null>(null);
+  const [showMatrixOperations, setShowMatrixOperations] = useState(false);
   
   // Solve LP on component mount
   useEffect(() => {
@@ -125,14 +127,8 @@ const SimplexVisualizer: React.FC<SimplexVisualizerProps> = ({
     <div className="w-full">
       <h2 className="text-2xl font-bold text-center text-gray-800 mb-6">Visualização do Método Simplex</h2>
       
-      <Tabs defaultValue="simplex" className="w-full">
-        <TabsList className="grid w-full grid-cols-2">
-          <TabsTrigger value="simplex">Método Simplex</TabsTrigger>
-          <TabsTrigger value="matrix-operations">Operações Matriciais</TabsTrigger>
-        </TabsList>
-        
-        <TabsContent value="simplex" className="mt-4">
-          <div className="flex flex-col gap-6">
+      <div className="w-full">
+        <div className="flex flex-col gap-6">
               {showGeometric && lp.variables.length <= 2 && (
                 <Card>
                   <CardHeader className="pb-2">
@@ -254,21 +250,42 @@ const SimplexVisualizer: React.FC<SimplexVisualizerProps> = ({
                   </CardContent>
                 </Card>
               )}
+              
+              {/* Matrix Operations Section */}
+              <Card>
+                <CardHeader className="pb-2">
+                  <div className="flex items-center justify-between">
+                    <CardTitle className="text-lg">Operações Matriciais</CardTitle>
+                    <Button
+                      onClick={() => setShowMatrixOperations(!showMatrixOperations)}
+                      variant="ghost"
+                      size="sm"
+                      className="gap-2"
+                    >
+                      <Calculator className="w-4 h-4" />
+                      {showMatrixOperations ? 'Ocultar' : 'Mostrar'} Matrizes
+                      {showMatrixOperations ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
+                    </Button>
+                  </div>
+                  {!showMatrixOperations && (
+                    <p className="text-sm text-gray-600 mt-2">
+                      Visualize como o Simplex funciona internamente através de operações matriciais: 
+                      decomposição da base, inversão de matrizes e cálculos algébricos.
+                    </p>
+                  )}
+                </CardHeader>
+                {showMatrixOperations && currentStep && standardFormData && (
+                  <CardContent>
+                    <MatrixOperationsView 
+                      tableau={currentStep.tableau} 
+                      problem={standardFormData.standardLP}
+                    />
+                  </CardContent>
+                )}
+              </Card>
             </div>
-        </TabsContent>
-        
-        <TabsContent value="matrix-operations" className="mt-4">
-          {currentStep && standardFormData && (
-            <MatrixTableauSync 
-              tableau={currentStep.tableau} 
-              problem={standardFormData.standardLP}
-              showGenericTableau={true}
-              showMatrixForm={true}
-            />
-          )}
-        </TabsContent>
-      </Tabs>
-    </div>
+        </div>
+      </div>
   );
 };
 

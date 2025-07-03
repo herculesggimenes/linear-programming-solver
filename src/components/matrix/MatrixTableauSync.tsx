@@ -1,9 +1,9 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Calculator, ArrowRight, X, GripVertical } from 'lucide-react';
-import type { SimplexTableau, LinearProgram } from '@/components/types';
+import type { SimplexTableau, LinearProgram, SimplexStep } from '@/components/types';
 import { 
   extractMatrixForm, 
   extractBasisMatrices,
@@ -11,6 +11,9 @@ import {
   invertMatrix,
   checkBasicFeasibility
 } from '@/lib/matrix-operations';
+import { solveWithSteps } from '@/lib/simplex-solver';
+import { convertToStandardFormWithExplanation } from '@/lib/standard-form-conversion';
+import StepController from '@/components/StepController';
 import BasisInverseCalculator from './BasisInverseCalculator';
 import GenericTableauDisplay from './GenericTableauDisplay';
 import MatrixFormConverter from './MatrixFormConverter';
@@ -33,6 +36,48 @@ const MatrixTableauSync: React.FC<MatrixTableauSyncProps> = ({
   const [orderedBasis, setOrderedBasis] = useState<number[]>(tableau.basicVariables);
   const [showCalculationSteps, setShowCalculationSteps] = useState(false);
   const [draggedIndex, setDraggedIndex] = useState<number | null>(null);
+  
+  // Simplex step navigation state
+  const [steps, setSteps] = useState<SimplexStep[]>([]);
+  const [currentStepIndex, setCurrentStepIndex] = useState(0);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+  
+  // Solve the problem and generate steps
+  useEffect(() => {
+    const solve = async () => {
+      try {
+        setIsLoading(true);
+        setError(null);
+        
+        // Convert to standard form
+        const { standardLP } = convertToStandardFormWithExplanation(problem);
+        
+        // Solve with steps - it returns an array of steps directly
+        const calculatedSteps = solveWithSteps(standardLP, true);
+        
+        if (calculatedSteps && calculatedSteps.length > 0) {
+          setSteps(calculatedSteps);
+          setCurrentStepIndex(0);
+          // Initialize basis with the first step's basis
+          if (calculatedSteps[0].tableau) {
+            setOrderedBasis(calculatedSteps[0].tableau.basicVariables);
+          }
+        } else {
+          setError('Não foi possível gerar os passos do simplex');
+        }
+      } catch (err) {
+        setError('Erro ao resolver o problema: ' + (err as Error).message);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+    
+    solve();
+  }, [problem]);
+  
+  // Get current step's tableau or use the provided tableau as fallback
+  const currentTableau = steps[currentStepIndex]?.tableau || tableau;
   
   // Extract matrix form from the original problem
   const { A, b, c } = extractMatrixForm(problem);
@@ -105,7 +150,55 @@ const MatrixTableauSync: React.FC<MatrixTableauSyncProps> = ({
   const removeFromBasis = (index: number) => {
     setOrderedBasis(orderedBasis.filter((_, i) => i !== index));
   };
+  
+  // Step navigation handlers
+  const handleStepChange = (newIndex: number) => {
+    if (newIndex >= 0 && newIndex < steps.length) {
+      setCurrentStepIndex(newIndex);
+      // Update basis to match the current step
+      if (steps[newIndex].tableau) {
+        setOrderedBasis(steps[newIndex].tableau.basicVariables);
+      }
+    }
+  };
+  
+  const handlePreviousStep = () => handleStepChange(currentStepIndex - 1);
+  const handleNextStep = () => handleStepChange(currentStepIndex + 1);
+  const handleFirstStep = () => handleStepChange(0);
+  const handleLastStep = () => handleStepChange(steps.length - 1);
 
+  // Show loading state
+  if (isLoading) {
+    return (
+      <div className="space-y-6">
+        <h2 className="text-2xl font-bold text-gray-800">Operações Matriciais no Simplex</h2>
+        <Card>
+          <CardContent className="p-8">
+            <div className="text-center">
+              <p className="text-gray-600">Resolvendo o problema...</p>
+            </div>
+          </CardContent>
+        </Card>
+      </div>
+    );
+  }
+  
+  // Show error state
+  if (error) {
+    return (
+      <div className="space-y-6">
+        <h2 className="text-2xl font-bold text-gray-800">Operações Matriciais no Simplex</h2>
+        <Card className="border-red-200">
+          <CardContent className="p-8">
+            <div className="text-center text-red-600">
+              <p>{error}</p>
+            </div>
+          </CardContent>
+        </Card>
+      </div>
+    );
+  }
+  
   return (
     <div className="space-y-6">
       <h2 className="text-2xl font-bold text-gray-800">Operações Matriciais no Simplex</h2>
@@ -120,6 +213,46 @@ const MatrixTableauSync: React.FC<MatrixTableauSyncProps> = ({
         </div>
       )}
       
+      {/* Step Controller */}
+      {steps.length > 0 && (
+        <>
+          <StepController
+            currentStep={currentStepIndex}
+            totalSteps={steps.length}
+            onStepChange={handleStepChange}
+          />
+          
+          {/* Step Information */}
+          <Card className="mb-4">
+            <CardContent className="pt-4">
+              <div className="flex items-center justify-between">
+                <div>
+                  <p className="text-sm font-semibold">
+                    {steps[currentStepIndex]?.phase === 1 ? 'Fase I' : 'Fase II'} - 
+                    {' '}{steps[currentStepIndex]?.status === 'initial' && 'Tableau Inicial'}
+                    {steps[currentStepIndex]?.status === 'iteration' && `Iteração ${steps[currentStepIndex]?.iterationCount || ''}`}
+                    {steps[currentStepIndex]?.status === 'optimal' && 'Solução Ótima'}
+                    {steps[currentStepIndex]?.status === 'unbounded' && 'Problema Ilimitado'}
+                    {steps[currentStepIndex]?.status === 'phase_one_complete' && 'Fase I Completa'}
+                  </p>
+                  {steps[currentStepIndex]?.enteringVariable !== undefined && (
+                    <p className="text-xs text-gray-600 mt-1">
+                      Variável entrante: {currentTableau.variableNames[steps[currentStepIndex].enteringVariable!]} | 
+                      Variável sainte: {steps[currentStepIndex].leavingVariable !== undefined ? 
+                        currentTableau.variableNames[currentTableau.basicVariables[steps[currentStepIndex].leavingVariable! - 1]] : 
+                        'N/A'}
+                    </p>
+                  )}
+                </div>
+                <Badge variant={steps[currentStepIndex]?.status === 'optimal' ? 'default' : 'secondary'}>
+                  Passo {currentStepIndex + 1} de {steps.length}
+                </Badge>
+              </div>
+            </CardContent>
+          </Card>
+        </>
+      )}
+      
       {/* Basis Selector */}
       <Card className="mb-6">
         <CardHeader>
@@ -127,6 +260,16 @@ const MatrixTableauSync: React.FC<MatrixTableauSyncProps> = ({
         </CardHeader>
         <CardContent>
           <div className="space-y-4">
+            {/* Step navigation info */}
+            {steps.length > 0 && (
+              <div className="p-3 bg-yellow-50 rounded-lg">
+                <p className="text-sm text-yellow-700">
+                  <strong>Modo de Navegação:</strong> A base é atualizada automaticamente conforme você navega pelos passos do Simplex.
+                  A edição manual está desabilitada durante a navegação.
+                </p>
+              </div>
+            )}
+            
             {/* Current Basis */}
             <div>
               <h4 className="text-sm font-semibold mb-2">Base Atual:</h4>
@@ -137,20 +280,24 @@ const MatrixTableauSync: React.FC<MatrixTableauSyncProps> = ({
                   orderedBasis.map((varIdx, index) => (
                     <div
                       key={varIdx}
-                      draggable
-                      onDragStart={() => handleDragStart(index)}
+                      draggable={steps.length === 0}
+                      onDragStart={() => steps.length === 0 && handleDragStart(index)}
                       onDragOver={handleDragOver}
-                      onDrop={() => handleDrop(index)}
-                      className="flex items-center gap-1 px-3 py-1 bg-blue-600 text-white rounded cursor-move hover:bg-blue-700 transition-colors"
+                      onDrop={() => steps.length === 0 && handleDrop(index)}
+                      className={`flex items-center gap-1 px-3 py-1 bg-blue-600 text-white rounded transition-colors ${
+                        steps.length === 0 ? 'cursor-move hover:bg-blue-700' : 'cursor-default'
+                      }`}
                     >
-                      <GripVertical className="h-3 w-3" />
-                      <span className="font-mono text-sm">{tableau.variableNames[varIdx]}</span>
-                      <button
-                        onClick={() => removeFromBasis(index)}
-                        className="ml-1 hover:text-red-200"
-                      >
-                        <X className="h-3 w-3" />
-                      </button>
+                      {steps.length === 0 && <GripVertical className="h-3 w-3" />}
+                      <span className="font-mono text-sm">{currentTableau.variableNames[varIdx]}</span>
+                      {steps.length === 0 && (
+                        <button
+                          onClick={() => removeFromBasis(index)}
+                          className="ml-1 hover:text-red-200"
+                        >
+                          <X className="h-3 w-3" />
+                        </button>
+                      )}
                     </div>
                   ))
                 )}
@@ -169,11 +316,15 @@ const MatrixTableauSync: React.FC<MatrixTableauSyncProps> = ({
                 {availableVariables.map(varIdx => (
                   <button
                     key={varIdx}
-                    onClick={() => addToBasis(varIdx)}
-                    className="px-3 py-1 bg-gray-200 hover:bg-gray-300 rounded font-mono text-sm transition-colors"
-                    disabled={orderedBasis.length >= A.length}
+                    onClick={() => steps.length === 0 && addToBasis(varIdx)}
+                    className={`px-3 py-1 rounded font-mono text-sm transition-colors ${
+                      steps.length > 0 
+                        ? 'bg-gray-100 text-gray-400 cursor-not-allowed' 
+                        : 'bg-gray-200 hover:bg-gray-300'
+                    }`}
+                    disabled={orderedBasis.length >= A.length || steps.length > 0}
                   >
-                    {tableau.variableNames[varIdx]}
+                    {currentTableau.variableNames[varIdx]}
                   </button>
                 ))}
               </div>
@@ -205,7 +356,7 @@ const MatrixTableauSync: React.FC<MatrixTableauSyncProps> = ({
                 <thead>
                   <tr className="border-b-2 border-gray-300">
                     <th className="px-3 py-2 text-left font-semibold">VB</th>
-                    {tableau.variableNames.map((name, idx) => (
+                    {currentTableau.variableNames.map((name, idx) => (
                       <th 
                         key={idx} 
                         className={`px-3 py-2 text-center font-semibold
@@ -218,10 +369,10 @@ const MatrixTableauSync: React.FC<MatrixTableauSyncProps> = ({
                   </tr>
                 </thead>
                 <tbody>
-                  {tableau.matrix.map((row, rowIdx) => (
+                  {currentTableau.matrix.map((row, rowIdx) => (
                     <tr key={rowIdx} className="border-b border-gray-200">
                       <td className="px-3 py-2 font-semibold">
-                        {rowIdx === 0 ? 'z' : tableau.variableNames[tableau.basicVariables[rowIdx - 1]]}
+                        {rowIdx === 0 ? 'z' : currentTableau.variableNames[currentTableau.basicVariables[rowIdx - 1]]}
                       </td>
                       {row.slice(0, -1).map((val, colIdx) => (
                         <td 
@@ -296,7 +447,7 @@ const MatrixTableauSync: React.FC<MatrixTableauSyncProps> = ({
               <div className="grid grid-cols-2 gap-4">
                 <div>
                   <h5 className="text-xs font-medium mb-1 text-blue-600">
-                    B = Colunas Básicas ({orderedBasis.map(i => tableau.variableNames[i]).join(', ')})
+                    B = Colunas Básicas ({orderedBasis.map(i => currentTableau.variableNames[i]).join(', ')})
                   </h5>
                   <div className="font-mono text-xs bg-blue-50 p-2 rounded">
                     <div className="inline-block border-l-2 border-r-2 border-blue-400 px-2">
@@ -378,7 +529,7 @@ const MatrixTableauSync: React.FC<MatrixTableauSyncProps> = ({
                       <div className="font-mono text-xs space-y-1">
                         {orderedBasis.map((varIdx, i) => (
                           <div key={i} className={solution[i] < 0 ? 'text-red-600' : ''}>
-                            {tableau.variableNames[varIdx]} = {solution[i].toFixed(2)}
+                            {currentTableau.variableNames[varIdx]} = {solution[i].toFixed(2)}
                           </div>
                         ))}
                         <div className="mt-2">
@@ -426,9 +577,9 @@ const MatrixTableauSync: React.FC<MatrixTableauSyncProps> = ({
           c_N={nonBasicIndices.map(idx => c[idx])}
           basicIndices={orderedBasis}
           nonBasicIndices={nonBasicIndices}
-          variableNames={tableau.variableNames}
+          variableNames={currentTableau.variableNames}
           basisMatrix={B}
-          basisVariableNames={orderedBasis.map(idx => tableau.variableNames[idx])}
+          basisVariableNames={orderedBasis.map(idx => currentTableau.variableNames[idx])}
         />
       )}
     </div>
