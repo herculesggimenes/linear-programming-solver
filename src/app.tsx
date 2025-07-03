@@ -240,6 +240,17 @@ const EXAMPLE_PROBLEMS: { [key: string]: LinearProgram } = {
     variables: ['x1', 'x2'],
     variableRestrictions: [true, true]
   },
+  // Matrix operations example from the exercise
+  matrixExerciseExample: {
+    objective: [-5, -2, 0, 0],
+    isMaximization: false,
+    constraints: [
+      { coefficients: [10, 12, 1, 0], rhs: 60, operator: '=' },
+      { coefficients: [2, 1, 0, 1], rhs: 6, operator: '=' }
+    ],
+    variables: ['x1', 'x2', 'x3', 'x4'],
+    variableRestrictions: [true, true, true, true]
+  },
   // Dual Simplex example - optimal but infeasible after modification
   dualSimplexExample: {
     objective: [3, 2],
@@ -413,6 +424,7 @@ function App() {
                    key === 'sapateiroExample' ? 'Sapateiro (Matriz)' :
                    key === 'furnitureExample' ? 'Indústria de Móveis' :
                    key === 'matrixInverseExample' ? 'Inversa da Base' :
+                   key === 'matrixExerciseExample' ? 'Exercício Matriz' :
                    key === 'dualSimplexExample' ? 'Dual Simplex' :
                    key === 'reoptimizationExample1' ? 'Re-otimização: Fábrica' :
                    key === 'reoptimizationExample2' ? 'Re-otimização: Recursos' :

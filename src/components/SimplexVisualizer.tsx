@@ -12,7 +12,6 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import MatrixFormConverter from './matrix/MatrixFormConverter';
 import MatrixTableauSync from './matrix/MatrixTableauSync';
 import DualSimplexDetector from './dual/DualSimplexDetector';
 import { isDualSimplexCandidate } from '@/lib/dual-simplex-solver';
@@ -127,10 +126,9 @@ const SimplexVisualizer: React.FC<SimplexVisualizerProps> = ({
       <h2 className="text-2xl font-bold text-center text-gray-800 mb-6">Visualização do Método Simplex</h2>
       
       <Tabs defaultValue="simplex" className="w-full">
-        <TabsList className="grid w-full grid-cols-3">
+        <TabsList className="grid w-full grid-cols-2">
           <TabsTrigger value="simplex">Método Simplex</TabsTrigger>
-          <TabsTrigger value="matrix-form">Forma Matricial</TabsTrigger>
-          <TabsTrigger value="matrix-tableau">Tableau ↔ Matriz</TabsTrigger>
+          <TabsTrigger value="matrix-operations">Operações Matriciais</TabsTrigger>
         </TabsList>
         
         <TabsContent value="simplex" className="mt-4">
@@ -259,15 +257,13 @@ const SimplexVisualizer: React.FC<SimplexVisualizerProps> = ({
             </div>
         </TabsContent>
         
-        <TabsContent value="matrix-form" className="mt-4">
-          <MatrixFormConverter problem={lp} />
-        </TabsContent>
-        
-        <TabsContent value="matrix-tableau" className="mt-4">
+        <TabsContent value="matrix-operations" className="mt-4">
           {currentStep && standardFormData && (
             <MatrixTableauSync 
               tableau={currentStep.tableau} 
               problem={standardFormData.standardLP}
+              showGenericTableau={true}
+              showMatrixForm={true}
             />
           )}
         </TabsContent>

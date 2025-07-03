@@ -12,16 +12,26 @@ import {
   checkBasicFeasibility
 } from '@/lib/matrix-operations';
 import BasisInverseCalculator from './BasisInverseCalculator';
+import GenericTableauDisplay from './GenericTableauDisplay';
+import MatrixFormConverter from './MatrixFormConverter';
+import MatrixCalculationSteps from './MatrixCalculationSteps';
 
 interface MatrixTableauSyncProps {
   tableau: SimplexTableau;
   problem: LinearProgram;
+  showGenericTableau?: boolean;
+  showMatrixForm?: boolean;
 }
 
-const MatrixTableauSync: React.FC<MatrixTableauSyncProps> = ({ tableau, problem }) => {
+const MatrixTableauSync: React.FC<MatrixTableauSyncProps> = ({ 
+  tableau, 
+  problem,
+  showGenericTableau = false,
+  showMatrixForm = false
+}) => {
   const [hoveredCell, setHoveredCell] = useState<{ row: number; col: number } | null>(null);
   const [selectedBasis, setSelectedBasis] = useState<number[]>(tableau.basicVariables);
-  const [showInverseCalculator, setShowInverseCalculator] = useState(false);
+  const [showCalculationSteps, setShowCalculationSteps] = useState(false);
   
   // Extract matrix form from the original problem
   const { A, b, c } = extractMatrixForm(problem);
@@ -61,7 +71,17 @@ const MatrixTableauSync: React.FC<MatrixTableauSyncProps> = ({ tableau, problem 
 
   return (
     <div className="space-y-6">
-      <h2 className="text-2xl font-bold text-gray-800">Visualização Tableau ↔ Matriz</h2>
+      <h2 className="text-2xl font-bold text-gray-800">Operações Matriciais no Simplex</h2>
+      
+      {/* Generic Tableau Display */}
+      {showGenericTableau && <GenericTableauDisplay />}
+      
+      {/* Matrix Form Converter */}
+      {showMatrixForm && (
+        <div className="mb-6">
+          <MatrixFormConverter problem={problem} />
+        </div>
+      )}
       
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* Tableau View */}
@@ -216,12 +236,12 @@ const MatrixTableauSync: React.FC<MatrixTableauSyncProps> = ({ tableau, problem 
                 <div className="flex items-center justify-between mb-2">
                   <h4 className="font-semibold text-sm">Inversa da Base e Solução</h4>
                   <Button
-                    onClick={() => setShowInverseCalculator(!showInverseCalculator)}
+                    onClick={() => setShowCalculationSteps(!showCalculationSteps)}
                     variant="outline"
                     size="sm"
                   >
                     <Calculator className="w-4 h-4 mr-2" />
-                    {showInverseCalculator ? 'Ocultar Cálculo' : 'Ver Cálculo Passo a Passo'}
+                    {showCalculationSteps ? 'Ocultar Cálculos' : 'Ver Cálculos Detalhados'}
                   </Button>
                 </div>
                 <div className="grid grid-cols-2 gap-4">
@@ -283,11 +303,20 @@ const MatrixTableauSync: React.FC<MatrixTableauSyncProps> = ({ tableau, problem 
         </CardContent>
       </Card>
 
-      {/* Basis Inverse Calculator */}
-      {showInverseCalculator && B_inv && (
-        <BasisInverseCalculator 
+      {/* Matrix Calculation Steps */}
+      {showCalculationSteps && B_inv && (
+        <MatrixCalculationSteps
+          B={B}
+          N={N}
+          B_inv={B_inv}
+          b={b}
+          c_B={selectedBasis.map(idx => c[idx])}
+          c_N={nonBasicIndices.map(idx => c[idx])}
+          basicIndices={selectedBasis}
+          nonBasicIndices={nonBasicIndices}
+          variableNames={tableau.variableNames}
           basisMatrix={B}
-          variableNames={selectedBasis.map(idx => tableau.variableNames[idx])}
+          basisVariableNames={selectedBasis.map(idx => tableau.variableNames[idx])}
         />
       )}
     </div>
