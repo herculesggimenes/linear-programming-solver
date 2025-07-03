@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import { Calculator } from 'lucide-react';
+import { Calculator, ArrowRight, X, GripVertical } from 'lucide-react';
 import type { SimplexTableau, LinearProgram } from '@/components/types';
 import { 
   extractMatrixForm, 
@@ -30,19 +30,21 @@ const MatrixTableauSync: React.FC<MatrixTableauSyncProps> = ({
   showMatrixForm = false
 }) => {
   const [hoveredCell, setHoveredCell] = useState<{ row: number; col: number } | null>(null);
-  const [selectedBasis, setSelectedBasis] = useState<number[]>(tableau.basicVariables);
+  const [orderedBasis, setOrderedBasis] = useState<number[]>(tableau.basicVariables);
   const [showCalculationSteps, setShowCalculationSteps] = useState(false);
+  const [draggedIndex, setDraggedIndex] = useState<number | null>(null);
   
   // Extract matrix form from the original problem
   const { A, b, c } = extractMatrixForm(problem);
   
-  // Sort selected basis indices to maintain column order
-  const sortedSelectedBasis = [...selectedBasis].sort((a, b) => a - b);
+  // Get available variables (not in basis)
+  const availableVariables = Array.from({ length: A[0].length }, (_, i) => i)
+    .filter(i => !orderedBasis.includes(i));
   
-  // Extract basis matrices
+  // Extract basis matrices using the ordered basis
   const nonBasicIndices = Array.from({ length: A[0].length }, (_, i) => i)
-    .filter(i => !sortedSelectedBasis.includes(i));
-  const { B, N } = extractBasisMatrices(A, sortedSelectedBasis, nonBasicIndices);
+    .filter(i => !orderedBasis.includes(i));
+  const { B, N } = extractBasisMatrices(A, orderedBasis, nonBasicIndices);
   
   // Check if we have a valid basis (square matrix)
   const hasValidBasis = B.length > 0 && B.length === B[0].length && B.length === A.length;
@@ -62,7 +64,7 @@ const MatrixTableauSync: React.FC<MatrixTableauSyncProps> = ({
     }
     if (hoveredCell) {
       // Check if this cell is in a basic column
-      if (row > 0 && selectedBasis.includes(col)) {
+      if (row > 0 && orderedBasis.includes(col)) {
         if (hoveredCell.col === col || 
             (hoveredCell.row === 0 && col < tableau.matrix[0].length - 1)) {
           return 'bg-blue-100';
@@ -73,7 +75,36 @@ const MatrixTableauSync: React.FC<MatrixTableauSyncProps> = ({
   };
 
   // Helper to check if a column is basic
-  const isBasicColumn = (col: number) => selectedBasis.includes(col);
+  const isBasicColumn = (col: number) => orderedBasis.includes(col);
+  
+  // Drag and drop handlers
+  const handleDragStart = (index: number) => {
+    setDraggedIndex(index);
+  };
+  
+  const handleDragOver = (e: React.DragEvent) => {
+    e.preventDefault();
+  };
+  
+  const handleDrop = (dropIndex: number) => {
+    if (draggedIndex === null) return;
+    
+    const newBasis = [...orderedBasis];
+    const [removed] = newBasis.splice(draggedIndex, 1);
+    newBasis.splice(dropIndex, 0, removed);
+    setOrderedBasis(newBasis);
+    setDraggedIndex(null);
+  };
+  
+  const addToBasis = (varIndex: number) => {
+    if (orderedBasis.length < A.length) {
+      setOrderedBasis([...orderedBasis, varIndex]);
+    }
+  };
+  
+  const removeFromBasis = (index: number) => {
+    setOrderedBasis(orderedBasis.filter((_, i) => i !== index));
+  };
 
   return (
     <div className="space-y-6">
@@ -88,6 +119,76 @@ const MatrixTableauSync: React.FC<MatrixTableauSyncProps> = ({
           <MatrixFormConverter problem={problem} />
         </div>
       )}
+      
+      {/* Basis Selector */}
+      <Card className="mb-6">
+        <CardHeader>
+          <CardTitle className="text-lg">Seleção de Base</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <div className="space-y-4">
+            {/* Current Basis */}
+            <div>
+              <h4 className="text-sm font-semibold mb-2">Base Atual:</h4>
+              <div className="flex items-center gap-2 p-3 bg-blue-50 rounded-lg min-h-[60px]">
+                {orderedBasis.length === 0 ? (
+                  <p className="text-sm text-gray-500">Arraste variáveis aqui para formar a base</p>
+                ) : (
+                  orderedBasis.map((varIdx, index) => (
+                    <div
+                      key={varIdx}
+                      draggable
+                      onDragStart={() => handleDragStart(index)}
+                      onDragOver={handleDragOver}
+                      onDrop={() => handleDrop(index)}
+                      className="flex items-center gap-1 px-3 py-1 bg-blue-600 text-white rounded cursor-move hover:bg-blue-700 transition-colors"
+                    >
+                      <GripVertical className="h-3 w-3" />
+                      <span className="font-mono text-sm">{tableau.variableNames[varIdx]}</span>
+                      <button
+                        onClick={() => removeFromBasis(index)}
+                        className="ml-1 hover:text-red-200"
+                      >
+                        <X className="h-3 w-3" />
+                      </button>
+                    </div>
+                  ))
+                )}
+              </div>
+              {orderedBasis.length > 0 && orderedBasis.length !== A.length && (
+                <p className="text-xs text-yellow-600 mt-1">
+                  Selecione {A.length - orderedBasis.length} variável(eis) adicional(is) para completar a base
+                </p>
+              )}
+            </div>
+            
+            {/* Available Variables */}
+            <div>
+              <h4 className="text-sm font-semibold mb-2">Variáveis Disponíveis:</h4>
+              <div className="flex flex-wrap gap-2">
+                {availableVariables.map(varIdx => (
+                  <button
+                    key={varIdx}
+                    onClick={() => addToBasis(varIdx)}
+                    className="px-3 py-1 bg-gray-200 hover:bg-gray-300 rounded font-mono text-sm transition-colors"
+                    disabled={orderedBasis.length >= A.length}
+                  >
+                    {tableau.variableNames[varIdx]}
+                  </button>
+                ))}
+              </div>
+            </div>
+            
+            {/* Instructions */}
+            <div className="text-xs text-gray-600 space-y-1 border-t pt-3">
+              <p>• Clique nas variáveis disponíveis para adicioná-las à base</p>
+              <p>• Arraste as variáveis na base para reordenar (a ordem define as colunas de B)</p>
+              <p>• Clique no × para remover uma variável da base</p>
+              <p>• A matriz B será formada pelas colunas na ordem mostrada</p>
+            </div>
+          </div>
+        </CardContent>
+      </Card>
       
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* Tableau View */}
@@ -107,15 +208,8 @@ const MatrixTableauSync: React.FC<MatrixTableauSyncProps> = ({
                     {tableau.variableNames.map((name, idx) => (
                       <th 
                         key={idx} 
-                        className={`px-3 py-2 text-center font-semibold cursor-pointer
+                        className={`px-3 py-2 text-center font-semibold
                           ${isBasicColumn(idx) ? 'text-blue-600' : ''}`}
-                        onClick={() => {
-                          if (selectedBasis.includes(idx)) {
-                            setSelectedBasis(selectedBasis.filter(i => i !== idx));
-                          } else if (selectedBasis.length < A.length) {
-                            setSelectedBasis([...selectedBasis, idx]);
-                          }
-                        }}
                       >
                         {name}
                       </th>
@@ -202,7 +296,7 @@ const MatrixTableauSync: React.FC<MatrixTableauSyncProps> = ({
               <div className="grid grid-cols-2 gap-4">
                 <div>
                   <h5 className="text-xs font-medium mb-1 text-blue-600">
-                    B = Colunas Básicas ({sortedSelectedBasis.map(i => tableau.variableNames[i]).join(', ')})
+                    B = Colunas Básicas ({orderedBasis.map(i => tableau.variableNames[i]).join(', ')})
                   </h5>
                   <div className="font-mono text-xs bg-blue-50 p-2 rounded">
                     <div className="inline-block border-l-2 border-r-2 border-blue-400 px-2">
@@ -237,12 +331,12 @@ const MatrixTableauSync: React.FC<MatrixTableauSyncProps> = ({
             </div>
 
             {/* Basis inverse and solution */}
-            {!hasValidBasis && selectedBasis.length > 0 && (
+            {!hasValidBasis && orderedBasis.length > 0 && (
               <div className="border-t pt-4">
                 <div className="p-3 bg-yellow-100 rounded-lg">
                   <p className="text-sm text-yellow-800">
                     <strong>Atenção:</strong> Selecione exatamente {A.length} variáveis para formar uma base válida. 
-                    Atualmente {selectedBasis.length} variável(eis) selecionada(s).
+                    Atualmente {orderedBasis.length} variável(eis) selecionada(s).
                   </p>
                 </div>
               </div>
@@ -282,7 +376,7 @@ const MatrixTableauSync: React.FC<MatrixTableauSyncProps> = ({
                     </h5>
                     {solution && (
                       <div className="font-mono text-xs space-y-1">
-                        {sortedSelectedBasis.map((varIdx, i) => (
+                        {orderedBasis.map((varIdx, i) => (
                           <div key={i} className={solution[i] < 0 ? 'text-red-600' : ''}>
                             {tableau.variableNames[varIdx]} = {solution[i].toFixed(2)}
                           </div>
@@ -310,10 +404,11 @@ const MatrixTableauSync: React.FC<MatrixTableauSyncProps> = ({
               <strong>Interatividade:</strong>
             </p>
             <ul className="list-disc list-inside space-y-1 ml-4">
-              <li>Passe o mouse sobre as células do tableau para destacar as variáveis básicas e suas relações</li>
-              <li>Clique nos nomes das variáveis (x₁, x₂, s₁, s₂...) para trocar a base - adicione ou remova variáveis da base atual</li>
-              <li>A matriz B é formada pelas colunas das variáveis selecionadas (em azul)</li>
-              <li>Observe como a inversa da base (B<sup>-1</sup>) muda quando você altera as variáveis básicas</li>
+              <li>Use o seletor de base acima para escolher e ordenar as variáveis básicas</li>
+              <li>A ordem das variáveis no seletor define a ordem das colunas na matriz B</li>
+              <li>Arraste as variáveis para reordenar a base - isso afeta os cálculos!</li>
+              <li>Passe o mouse sobre as células do tableau para destacar as variáveis básicas</li>
+              <li>Observe como B<sup>-1</sup> e a solução mudam com diferentes bases e ordens</li>
               <li>Veja se a solução básica atual é factível (todos os valores ≥ 0)</li>
             </ul>
           </div>
@@ -327,13 +422,13 @@ const MatrixTableauSync: React.FC<MatrixTableauSyncProps> = ({
           N={N}
           B_inv={B_inv}
           b={b}
-          c_B={sortedSelectedBasis.map(idx => c[idx])}
+          c_B={orderedBasis.map(idx => c[idx])}
           c_N={nonBasicIndices.map(idx => c[idx])}
-          basicIndices={sortedSelectedBasis}
+          basicIndices={orderedBasis}
           nonBasicIndices={nonBasicIndices}
           variableNames={tableau.variableNames}
           basisMatrix={B}
-          basisVariableNames={sortedSelectedBasis.map(idx => tableau.variableNames[idx])}
+          basisVariableNames={orderedBasis.map(idx => tableau.variableNames[idx])}
         />
       )}
     </div>
