@@ -1,7 +1,7 @@
 {
-  "name": "Simplex Solver - Learn Simplex Online",
+  "name": "Simplex Solver - Aprenda Simplex Online",
   "short_name": "Simplex Solver",
-  "description": "Free simplex solver to learn simplex method. Interactive calculator with step-by-step visualization for linear programming.",
+  "description": "Aprenda simplex e programação linear de um jeito visual. Ferramenta educacional gratuita com visualização passo a passo.",
   "start_url": "/",
   "display": "standalone",
   "background_color": "#ffffff",

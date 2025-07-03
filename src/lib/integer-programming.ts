@@ -257,12 +257,12 @@ export function solveBranchAndBound(
         
       if (canPrune) {
         currentNode.status = 'fathomed';
-        currentNode.reason = 'Limitado por incumbent';
+        currentNode.reason = 'Limitado por melhor solução';
         steps.push({
           currentNode,
           tree: [...tree],
           incumbentSolution,
-          explanation: `Bound ${solution.objectiveValue.toFixed(2)} não é melhor que incumbent ${incumbentSolution.objectiveValue.toFixed(2)}`,
+          explanation: `Bound ${solution.objectiveValue.toFixed(2)} não é melhor que a melhor solução ${incumbentSolution.objectiveValue.toFixed(2)}`,
           action: 'fathom'
         });
         iteration++;

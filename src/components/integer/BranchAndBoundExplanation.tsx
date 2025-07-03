@@ -161,7 +161,7 @@ const BranchAndBoundExplanation: React.FC<BranchAndBoundExplanationProps> = ({
                   <p className="mt-1">
                     {currentNode.reason === 'Infactível' 
                       ? 'O subproblema não tem solução viável (as restrições são contraditórias).'
-                      : currentNode.reason === 'Limitado por incumbent'
+                      : currentNode.reason === 'Limitado por melhor solução'
                       ? `O bound deste nó (${currentNode.bound.toFixed(2)}) não é melhor que a melhor solução inteira já encontrada (${step.incumbentSolution?.objectiveValue.toFixed(2)}). Portanto, este ramo não pode conter a solução ótima.`
                       : currentNode.reason}
                   </p>
@@ -187,7 +187,7 @@ const BranchAndBoundExplanation: React.FC<BranchAndBoundExplanationProps> = ({
               {step.incumbentSolution && (
                 <>
                   <div className="bg-green-50 p-3 rounded">
-                    <p className="font-semibold">Nova solução incumbent:</p>
+                    <p className="font-semibold">Nova melhor solução:</p>
                     <p className="text-2xl font-bold text-green-600 mt-1">
                       Valor objetivo = {step.incumbentSolution.objectiveValue.toFixed(2)}
                     </p>
@@ -297,7 +297,7 @@ const BranchAndBoundExplanation: React.FC<BranchAndBoundExplanationProps> = ({
             {step.incumbentSolution && (
               <div className="flex items-center gap-2 ml-auto">
                 <Badge variant="default" className="bg-green-600">
-                  Incumbent: {step.incumbentSolution.objectiveValue.toFixed(2)}
+                  Melhor solução: {step.incumbentSolution.objectiveValue.toFixed(2)}
                 </Badge>
               </div>
             )}
